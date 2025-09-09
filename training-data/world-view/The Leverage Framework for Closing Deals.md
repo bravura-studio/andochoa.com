@@ -1,5 +1,5 @@
 ---
-title: Thread by @Codie_Sanchez
+title: The Leverage Framework for Closing Deals
 source: https://x.com/Codie_Sanchez/status/1963006804574511303
 author:
   - "[[@Codie_Sanchez]]"
@@ -9,7 +9,7 @@ description: From side hustle to full time real estate operator. Building @tycoo
 tags:
   - bookmarks
 ---
-**Codie Sanchez** @Codie\_Sanchez [2025-09-02](https://x.com/Codie_Sanchez/status/1963006804574511303)
+@Codie\_Sanchez [2025-09-02](https://x.com/Codie_Sanchez/status/1963006804574511303)
 
 Meet Taylor Sheridan.
 
