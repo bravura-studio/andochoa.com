@@ -42,3 +42,5 @@ Both together? That's how you stop chasing deals and start closing them.
 ---
 
 *Start with value. Build leverage. Structure for multiplication. Everything else is noise.*
+
+[[The Leverage Framework for Closing Deals]]
