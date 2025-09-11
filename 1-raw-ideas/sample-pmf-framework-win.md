@@ -1,3 +1,17 @@
+---
+claude_analysis:
+  topics: ["product-market fit", "customer retention", "activation metrics", "value realization", "leading indicators"]
+  content_type: "win"
+  entities: ["Sarah (confidence: 0.9)", "Superhuman (confidence: 0.9)"]
+  quality_score: 8
+  analysis_date: "2025-09-11"
+  key_insights: ["PMF is a spectrum not binary state", "Leading indicators more valuable than lagging ones", "Focus on journey toward value not post-delivery satisfaction", "Essential workflow integration creates irreplaceability"]
+  training_data_connections:
+    great_writing_matches: ["founder-stories/superhuman-pmf-story.md"]
+    worldview_matches: ["growth-strategies/retention-frameworks.md", "product-philosophy/pmf-measurement.md"]
+    style_similarity_score: 0.8
+---
+
 # Product-Market Fit Framework Win
 
 Just had a breakthrough conversation with Sarah about how we should think about product-market fit. We've been measuring it all wrong.

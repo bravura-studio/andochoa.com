@@ -1,12 +1,13 @@
 ---
-title: "Write Simply"
-source: "https://www.paulgraham.com/simply.html"
+title: Write Simply
+source: https://www.paulgraham.com/simply.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 March 2021  
   

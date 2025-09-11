@@ -1,13 +1,13 @@
 ---
 title: "Avoid blundering: 80% of a winning strategy"
-source: "https://longform.asmartbear.com/avoid-blundering/"
+source: https://longform.asmartbear.com/avoid-blundering/
 author:
   - "[[Jason Cohen]]"
 published: 2024-03-31
 created: 2025-09-10
-description: "Why do startups typically fail?  It turns out that \"avoiding those things\" is already a plan for success."
+description: Why do startups typically fail?  It turns out that "avoiding those things" is already a plan for success.
 tags:
-  - "smart-bear"
+  - smart-bear
 ---
 by Jason Cohen on March 31, 2024
 

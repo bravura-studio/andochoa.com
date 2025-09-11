@@ -1,12 +1,13 @@
 ---
-title: "Keep Your Identity Small"
-source: "https://www.paulgraham.com/identity.html"
+title: Keep Your Identity Small
+source: https://www.paulgraham.com/identity.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 February 2009  
   

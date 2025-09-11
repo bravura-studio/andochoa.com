@@ -1,12 +1,13 @@
 ---
-title: "Billionaires Build"
-source: "https://www.paulgraham.com/ace.html"
+title: Billionaires Build
+source: https://www.paulgraham.com/ace.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 December 2020  
   

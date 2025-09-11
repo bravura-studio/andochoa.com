@@ -1,12 +1,13 @@
 ---
-title: "Do Things that Don't Scale"
-source: "https://www.paulgraham.com/ds.html"
+title: Do Things that Don't Scale
+source: https://www.paulgraham.com/ds.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 | **Want to start a startup?** Get funded by [Y Combinator](http://ycombinator.com/apply.html). |
 | --- |

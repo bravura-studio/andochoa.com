@@ -1,12 +1,13 @@
 ---
-title: "Six Principles for Making New Things"
-source: "https://www.paulgraham.com/newthings.html"
+title: Six Principles for Making New Things
+source: https://www.paulgraham.com/newthings.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 [![](https://s.turbifycdn.com/aah/paulgraham/six-principles-for-making-new-things-12.gif)](https://s.turbifycdn.com/aah/paulgraham/six-principles-for-making-new-things-11.gif)  
   

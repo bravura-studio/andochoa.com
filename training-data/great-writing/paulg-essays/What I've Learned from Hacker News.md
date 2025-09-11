@@ -1,12 +1,13 @@
 ---
-title: "What I've Learned from Hacker News"
-source: "https://www.paulgraham.com/hackernews.html"
+title: What I've Learned from Hacker News
+source: https://www.paulgraham.com/hackernews.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 February 2009  
   

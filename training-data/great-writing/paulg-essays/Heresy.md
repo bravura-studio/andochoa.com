@@ -1,12 +1,13 @@
 ---
-title: "Heresy"
-source: "https://www.paulgraham.com/heresy.html"
+title: Heresy
+source: https://www.paulgraham.com/heresy.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 April 2022  
   

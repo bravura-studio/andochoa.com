@@ -1,12 +1,13 @@
 ---
-title: "How to Work Hard"
-source: "https://www.paulgraham.com/hwh.html"
+title: How to Work Hard
+source: https://www.paulgraham.com/hwh.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 June 2021  
   

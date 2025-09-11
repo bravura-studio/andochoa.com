@@ -1,3 +1,17 @@
+---
+claude_analysis:
+  topics: ["user onboarding", "signup flow optimization", "conversion rates", "ux design", "progressive disclosure"]
+  content_type: "struggle"
+  entities: ["Stripe (confidence: 0.9)", "sales team (confidence: 0.8)"]
+  quality_score: 7
+  analysis_date: "2025-09-11"
+  key_insights: ["40% drop-off in first step indicates critical UX issue", "Progressive disclosure beats upfront data collection", "Internal processes shouldn't dictate user experience", "Behavioral data can replace form fields"]
+  training_data_connections:
+    great_writing_matches: []
+    worldview_matches: ["growth-strategies/user-onboarding-best-practices.md"]
+    style_similarity_score: 0.7
+---
+
 # User Onboarding Challenge
 
 Been thinking about our signup flow after watching users struggle in yesterday's session. We're losing 40% of people in the first step - that's brutal.

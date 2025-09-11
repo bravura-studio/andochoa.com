@@ -1,12 +1,13 @@
 ---
-title: "Is There Such a Thing as Good Taste?"
-source: "https://www.paulgraham.com/goodtaste.html"
+title: Is There Such a Thing as Good Taste?
+source: https://www.paulgraham.com/goodtaste.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 November 2021  
   

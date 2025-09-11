@@ -1,12 +1,13 @@
 ---
-title: "The Right Kind of Stubborn"
-source: "https://www.paulgraham.com/persistence.html"
+title: The Right Kind of Stubborn
+source: https://www.paulgraham.com/persistence.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 July 2024  
   

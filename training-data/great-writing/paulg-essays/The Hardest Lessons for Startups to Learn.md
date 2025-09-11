@@ -1,12 +1,13 @@
 ---
-title: "The Hardest Lessons for Startups to Learn"
-source: "https://www.paulgraham.com/startuplessons.html"
+title: The Hardest Lessons for Startups to Learn
+source: https://www.paulgraham.com/startuplessons.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 April 2006  
   

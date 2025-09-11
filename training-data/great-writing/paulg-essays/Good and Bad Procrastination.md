@@ -1,12 +1,13 @@
 ---
-title: "Good and Bad Procrastination"
-source: "https://www.paulgraham.com/procrastination.html"
+title: Good and Bad Procrastination
+source: https://www.paulgraham.com/procrastination.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 December 2005  
   

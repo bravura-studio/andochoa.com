@@ -1,12 +1,13 @@
 ---
-title: "A Way to Detect Bias"
-source: "https://www.paulgraham.com/bias.html"
+title: A Way to Detect Bias
+source: https://www.paulgraham.com/bias.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 October 2015  
   

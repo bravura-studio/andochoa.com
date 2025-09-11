@@ -1,12 +1,13 @@
 ---
-title: "A Project of One's Own"
-source: "https://www.paulgraham.com/own.html"
+title: A Project of One's Own
+source: https://www.paulgraham.com/own.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 June 2021  
   

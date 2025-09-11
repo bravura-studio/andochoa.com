@@ -1,12 +1,13 @@
 ---
-title: "See Randomness"
-source: "https://www.paulgraham.com/randomness.html"
+title: See Randomness
+source: https://www.paulgraham.com/randomness.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 April 2006, rev August 2009  
   

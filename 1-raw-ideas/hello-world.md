@@ -21,19 +21,6 @@ claude_analysis:
       - learning new skills and being productive
     style_similarity_score: 0.3
 ---
----
-claude_analysis:
-  topics: ["product building journey", "digital legacy and creation", "personal documentation", "overcoming analysis paralysis", "learning through building"]
-  content_type: "struggle"
-  entities: []
-  quality_score: 4
-  analysis_date: "2025-09-11"
-  key_insights: ["Analysis paralysis around perfect tools prevents starting - 'path of least resistance' approach is more effective", "Personal documentation serves dual purpose of reflection and legacy building", "Using building projects as learning vehicles creates compound value beyond the main goal"]
-  training_data_connections:
-    great_writing_matches: []
-    worldview_matches: ["building products", "learning new skills and being productive"]
-    style_similarity_score: 0.3
----
 # Hello World
 
 Finally! Welcome. 

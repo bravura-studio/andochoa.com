@@ -1,12 +1,13 @@
 ---
-title: "Ramen Profitable"
-source: "https://www.paulgraham.com/ramenprofitable.html"
+title: Ramen Profitable
+source: https://www.paulgraham.com/ramenprofitable.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 | **Want to start a startup?** Get funded by [Y Combinator](http://ycombinator.com/apply.html). |
 | --- |

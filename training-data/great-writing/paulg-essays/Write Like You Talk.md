@@ -1,12 +1,13 @@
 ---
-title: "Write Like You Talk"
-source: "https://www.paulgraham.com/talk.html"
+title: Write Like You Talk
+source: https://www.paulgraham.com/talk.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 October 2015  
   

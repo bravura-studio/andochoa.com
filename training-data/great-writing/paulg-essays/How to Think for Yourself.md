@@ -1,12 +1,13 @@
 ---
-title: "How to Think for Yourself"
-source: "https://www.paulgraham.com/think.html"
+title: How to Think for Yourself
+source: https://www.paulgraham.com/think.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 November 2020  
   

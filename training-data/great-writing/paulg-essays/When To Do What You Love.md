@@ -1,12 +1,13 @@
 ---
-title: "When To Do What You Love"
-source: "https://www.paulgraham.com/when.html"
+title: When To Do What You Love
+source: https://www.paulgraham.com/when.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 September 2024  
   

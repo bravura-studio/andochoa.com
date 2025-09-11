@@ -1,12 +1,13 @@
 ---
-title: "Be Good"
-source: "https://www.paulgraham.com/good.html"
+title: Be Good
+source: https://www.paulgraham.com/good.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 [![](https://s.turbifycdn.com/aah/paulgraham/be-good-12.gif)](https://s.turbifycdn.com/aah/paulgraham/be-good-11.gif)  
   

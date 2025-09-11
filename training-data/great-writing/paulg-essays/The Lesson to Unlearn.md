@@ -1,12 +1,13 @@
 ---
-title: "The Lesson to Unlearn"
-source: "https://www.paulgraham.com/lesson.html"
+title: The Lesson to Unlearn
+source: https://www.paulgraham.com/lesson.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 December 2019  
   

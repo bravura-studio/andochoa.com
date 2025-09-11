@@ -1,12 +1,13 @@
 ---
-title: "The Need to Read"
-source: "https://www.paulgraham.com/read.html"
+title: The Need to Read
+source: https://www.paulgraham.com/read.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 November 2022  
   

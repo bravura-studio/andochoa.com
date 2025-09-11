@@ -1,12 +1,13 @@
 ---
-title: "The Age of the Essay"
-source: "https://www.paulgraham.com/essay.html"
+title: The Age of the Essay
+source: https://www.paulgraham.com/essay.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 [![](https://s.turbifycdn.com/aah/paulgraham/the-age-of-the-essay-12.gif)](https://s.turbifycdn.com/aah/paulgraham/the-age-of-the-essay-11.gif)  
   

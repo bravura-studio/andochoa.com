@@ -1,12 +1,13 @@
 ---
-title: "How to Write Usefully"
-source: "https://www.paulgraham.com/useful.html"
+title: How to Write Usefully
+source: https://www.paulgraham.com/useful.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 February 2020  
   

@@ -1,12 +1,13 @@
 ---
-title: "Default Alive or Default Dead?"
-source: "https://www.paulgraham.com/aord.html"
+title: Default Alive or Default Dead?
+source: https://www.paulgraham.com/aord.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 October 2015  
   

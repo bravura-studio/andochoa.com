@@ -1,12 +1,13 @@
 ---
-title: "How to Lose Time and Money"
-source: "https://www.paulgraham.com/selfindulgence.html"
+title: How to Lose Time and Money
+source: https://www.paulgraham.com/selfindulgence.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 July 2010  
   

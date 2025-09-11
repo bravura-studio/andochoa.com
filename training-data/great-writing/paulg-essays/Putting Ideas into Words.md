@@ -1,12 +1,13 @@
 ---
-title: "Putting Ideas into Words"
-source: "https://www.paulgraham.com/words.html"
+title: Putting Ideas into Words
+source: https://www.paulgraham.com/words.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 February 2022  
   

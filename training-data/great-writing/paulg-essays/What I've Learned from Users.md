@@ -1,12 +1,13 @@
 ---
-title: "What I've Learned from Users"
-source: "https://www.paulgraham.com/users.html"
+title: What I've Learned from Users
+source: https://www.paulgraham.com/users.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 September 2022  
   

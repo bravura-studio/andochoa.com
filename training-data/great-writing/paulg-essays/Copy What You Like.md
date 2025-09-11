@@ -1,12 +1,13 @@
 ---
-title: "Copy What You Like"
-source: "https://www.paulgraham.com/copy.html"
+title: Copy What You Like
+source: https://www.paulgraham.com/copy.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 [![](https://s.turbifycdn.com/aah/paulgraham/copy-what-you-like-12.gif)](https://s.turbifycdn.com/aah/paulgraham/copy-what-you-like-11.gif)  
   

@@ -1,12 +1,13 @@
 ---
-title: "Founder Mode"
-source: "https://www.paulgraham.com/foundermode.html"
+title: Founder Mode
+source: https://www.paulgraham.com/foundermode.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 September 2024  
   

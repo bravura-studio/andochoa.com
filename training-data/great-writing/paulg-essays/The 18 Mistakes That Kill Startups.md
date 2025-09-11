@@ -1,12 +1,13 @@
 ---
-title: "The 18 Mistakes That Kill Startups"
-source: "https://www.paulgraham.com/startupmistakes.html"
+title: The 18 Mistakes That Kill Startups
+source: https://www.paulgraham.com/startupmistakes.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 | **Want to start a startup?** Get funded by [Y Combinator](http://ycombinator.com/apply.html). |
 | --- |

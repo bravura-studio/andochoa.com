@@ -1,12 +1,13 @@
 ---
-title: "You Weren't Meant to Have a Boss"
-source: "https://www.paulgraham.com/boss.html"
+title: You Weren't Meant to Have a Boss
+source: https://www.paulgraham.com/boss.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 [![](https://s.turbifycdn.com/aah/paulgraham/you-weren-t-meant-to-have-a-boss-12.gif)](https://s.turbifycdn.com/aah/paulgraham/you-weren-t-meant-to-have-a-boss-11.gif)  
   

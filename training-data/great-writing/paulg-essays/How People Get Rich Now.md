@@ -1,12 +1,13 @@
 ---
-title: "How People Get Rich Now"
-source: "https://www.paulgraham.com/richnow.html"
+title: How People Get Rich Now
+source: https://www.paulgraham.com/richnow.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 April 2021  
   

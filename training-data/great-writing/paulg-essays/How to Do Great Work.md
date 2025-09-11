@@ -2,6 +2,7 @@
 title: How to Do Great Work
 source: https://www.paulgraham.com/greatwork.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:

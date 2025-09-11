@@ -1,12 +1,13 @@
 ---
-title: "The Island Test"
-source: "https://www.paulgraham.com/island.html"
+title: The Island Test
+source: https://www.paulgraham.com/island.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 [![](https://s.turbifycdn.com/aah/paulgraham/the-island-test-12.gif)](https://s.turbifycdn.com/aah/paulgraham/the-island-test-11.gif)  
   

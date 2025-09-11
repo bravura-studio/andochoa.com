@@ -1,12 +1,13 @@
 ---
-title: "How to Get New Ideas"
-source: "https://www.paulgraham.com/getideas.html"
+title: How to Get New Ideas
+source: https://www.paulgraham.com/getideas.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 January 2023  
   

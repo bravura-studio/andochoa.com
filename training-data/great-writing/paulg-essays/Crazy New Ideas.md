@@ -1,12 +1,13 @@
 ---
-title: "Crazy New Ideas"
-source: "https://www.paulgraham.com/newideas.html"
+title: Crazy New Ideas
+source: https://www.paulgraham.com/newideas.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 May 2021  
   

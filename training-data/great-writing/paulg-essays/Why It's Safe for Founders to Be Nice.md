@@ -1,12 +1,13 @@
 ---
-title: "Why It's Safe for Founders to Be Nice"
-source: "https://www.paulgraham.com/safe.html"
+title: Why It's Safe for Founders to Be Nice
+source: https://www.paulgraham.com/safe.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 August 2015  
   

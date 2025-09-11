@@ -1,12 +1,13 @@
 ---
-title: "Mind the Gap"
-source: "https://www.paulgraham.com/gap.html"
+title: Mind the Gap
+source: https://www.paulgraham.com/gap.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 May 2004  
   

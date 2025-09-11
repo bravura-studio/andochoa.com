@@ -1,12 +1,13 @@
 ---
-title: "Writing,  Briefly"
-source: "https://www.paulgraham.com/writing44.html"
+title: Writing,  Briefly
+source: https://www.paulgraham.com/writing44.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 March 2005  
   

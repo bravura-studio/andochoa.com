@@ -1,12 +1,13 @@
 ---
-title: "Why to Start a Startup in a Bad Economy"
-source: "https://www.paulgraham.com/badeconomy.html"
+title: Why to Start a Startup in a Bad Economy
+source: https://www.paulgraham.com/badeconomy.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 | **Want to start a startup?** Get funded by [Y Combinator](http://ycombinator.com/apply.html). |
 | --- |

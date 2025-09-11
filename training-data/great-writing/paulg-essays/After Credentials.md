@@ -1,12 +1,13 @@
 ---
-title: "After Credentials"
-source: "https://www.paulgraham.com/credentials.html"
+title: After Credentials
+source: https://www.paulgraham.com/credentials.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 [![](https://s.turbifycdn.com/aah/paulgraham/after-credentials-12.gif)](https://s.turbifycdn.com/aah/paulgraham/after-credentials-11.gif)  
   

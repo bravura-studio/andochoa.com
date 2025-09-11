@@ -1,12 +1,13 @@
 ---
-title: "Writes and Write-Nots"
-source: "https://www.paulgraham.com/writes.html"
+title: Writes and Write-Nots
+source: https://www.paulgraham.com/writes.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 October 2024  
   

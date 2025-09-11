@@ -1,12 +1,13 @@
 ---
-title: "The Shape of the Essay Field"
-source: "https://www.paulgraham.com/field.html"
+title: The Shape of the Essay Field
+source: https://www.paulgraham.com/field.html
 author:
+  - "[[Paul Graham]]"
 published:
 created: 2025-09-10
 description:
 tags:
-  - "paulg-essays"
+  - paulg-essays
 ---
 June 2025  
   
