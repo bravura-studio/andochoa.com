@@ -20,6 +20,8 @@ The traditional approach is surveys and NPS scores - asking people "how would yo
 
 Sarah shared Superhuman's approach: they focus on leading indicators instead of lagging ones. The key insight is that PMF isn't a binary state - it's a spectrum you climb.
 
+Similar narrative approach: [[training-data/founder-stories/superhuman-pmf-story|Superhuman PMF Story]]
+
 Their framework:
 1. **Activation rate**: % of signups that complete the core workflow
 2. **Retention cohorts**: Weekly active usage patterns
@@ -37,3 +39,5 @@ For us, this means tracking:
 The real revelation: PMF isn't about having happy customers. It's about having customers who can't imagine working without you because you've become essential to their daily workflow.
 
 This changes everything about how we prioritize features. Instead of asking "what do customers want?" we should ask "what makes us irreplaceable in their workflow?"
+
+Related frameworks: [[training-data/product-philosophy/pmf-measurement|PMF Measurement Methodologies]] and [[training-data/growth-strategies/retention-frameworks|Retention Frameworks]]

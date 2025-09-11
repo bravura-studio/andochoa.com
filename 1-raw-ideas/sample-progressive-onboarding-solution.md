@@ -14,7 +14,7 @@ claude_analysis:
 
 # Progressive Onboarding Solution Framework
 
-After analyzing our onboarding challenges and studying successful patterns, I've developed a framework that balances user experience with business needs.
+After analyzing our [[sample-user-onboarding-struggle|onboarding challenges]] and studying successful patterns, I've developed a framework that balances user experience with business needs.
 
 ## The Progressive Disclosure Strategy
 
@@ -46,6 +46,8 @@ The key insight: don't ask for information upfront - earn the right to ask by de
 
 **HubSpot**: Minimal signup, then progressive feature unlocks based on usage.
 
+Structure inspired by: [[training-data/technical-writing/progressive-disclosure-patterns|Progressive Disclosure Patterns]]
+
 ## Implementation Plan
 
 ### Immediate Changes
@@ -63,7 +65,7 @@ Instead of asking, observe:
 
 ### Success Metrics
 - First step completion: 60% → 85% target
-- Full activation: 24% → 45% target  
+- Full activation: 24% → 45% target, supporting our [[sample-pmf-framework-win|broader PMF measurement framework]]
 - Time to first value: <1 day
 - Behavioral qualification accuracy: >70%
 
@@ -80,3 +82,5 @@ Data shows:
 - Conversion: Nearly doubled
 
 The framework creates a win-win: users get faster value, we get better data.
+
+See also: [[training-data/ux-principles/progressive-onboarding|Progressive Onboarding Principles]] and [[training-data/growth-strategies/activation-optimization|Activation Optimization Strategies]]

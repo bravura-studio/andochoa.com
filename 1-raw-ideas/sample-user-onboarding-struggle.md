@@ -23,7 +23,7 @@ The problem seems to be information overload. We're asking for:
 - Use case selection from 8 options (definitely too much)
 - Integration preferences (way too early)
 
-Watched how Stripe does it - they basically ask for email and you're in. Everything else happens progressively as you need it.
+Watched how [[sample-progressive-onboarding-solution|Stripe does it - here's the complete framework]] - they basically ask for email and you're in. Everything else happens progressively as you need it.
 
 But our sales team is freaking out about losing lead qualification data. They want to know company size and role upfront for their scoring algorithm.
 
@@ -38,5 +38,7 @@ The real insight: users don't care about our internal processes. They want to ge
 Metrics to track:
 - First step completion rate (currently 60%)
 - Full signup completion (currently 24%) 
-- Time to first value
+- Time to first value (connects to our [[sample-pmf-framework-win|PMF measurement approach]])
 - Sales qualified lead rate
+
+Learn more: [[training-data/growth-strategies/user-onboarding-best-practices|User Onboarding Best Practices]]
