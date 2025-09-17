@@ -1,13 +1,28 @@
 ---
-title: "Good Product Manager/Bad Product Manager"
-source: "https://a16z.com/good-product-manager-bad-product-manager/"
+title: >-
+  claude_analysis:
+    topics: ["product management", "leadership principles", "accountability", "product strategy", "execution excellence"]
+    content_type: "theory"
+    entities: ["Ben Horowitz (confidence: 1.0)", "Barksdale (confidence: 0.8)", "Microsoft (confidence: 0.9)"]
+    quality_score: 9
+    analysis_date: "2025-09-17"
+    key_insights: ["Good PMs are CEOs of their product", "No excuses mentality defines success", "Clear written communication over informal direction"]
+    training_data_connections:
+      great_writing_matches: []
+      worldview_matches: []
+      style_similarity_score: 0.7Good Product Manager/Bad Product Manager
+source: https://a16z.com/good-product-manager-bad-product-manager/
 author:
   - "[[Ben Horowitz]]"
 published: 2012-06-15
 created: 2025-09-11
-description: "Warning: This document was written 15 years ago and is probably not relevant for today’s product managers. I present it here merely as an example of a useful training document. Good product managers know the market, the product, the product line and the competition extremely well and operate from a strong basis of knowledge and..."
+description: "Warning: This document was written 15 years ago and is probably
+  not relevant for today’s product managers. I present it here merely as an
+  example of a useful training document. Good product managers know the market,
+  the product, the product line and the competition extremely well and operate
+  from a strong basis of knowledge and..."
 tags:
-  - "world-view"
+  - world-view
 ---
 *Warning: This document was written 15 years ago and is probably not relevant for today’s product managers. I present it here merely as an example of a useful training document.*
 
@@ -31,3 +46,11 @@ Good product managers send their status reports in on time every week, because t
 
 - - [X](https://twitter.com/bhorowitz)
 	- [Linkedin](https://www.linkedin.com/in/behorowitz/)
+
+
+## PM Development Framework
+
+These principles form the foundation for training new PMs:
+- [[Minimum Viable Product Manager|The Minimum Viable PM framework]] - How to develop junior talent with these principles
+- Start with vertical slices of responsibility to build complete PM skills
+- Emphasizes the same ownership mindset from day one

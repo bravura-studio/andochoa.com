@@ -1,13 +1,26 @@
 ---
-title: "The Bullseye Framework for Getting Traction"
-source: "https://medium.com/@yegg/the-bullseye-framework-for-getting-traction-ef49d05bfd7e"
+title: >-
+  claude_analysis:
+    topics: ["traction channels", "growth strategy", "distribution strategy", "customer acquisition", "channel testing"]
+    content_type: "theory"
+    entities: ["Gabriel Weinberg (confidence: 1.0)", "Peter Thiel (confidence: 0.9)", "PayPal (confidence: 0.9)", "Facebook (confidence: 0.8)"]
+    quality_score: 9
+    analysis_date: "2025-09-17"
+    key_insights: ["Poor distribution is the #1 cause of failure", "Focus on one optimal channel at a time", "Test multiple channels but commit to the winner"]
+    training_data_connections:
+      great_writing_matches: []
+      worldview_matches: []
+      style_similarity_score: 0.8The Bullseye Framework for Getting Traction
+source: https://medium.com/@yegg/the-bullseye-framework-for-getting-traction-ef49d05bfd7e
 author:
   - "[[Gabriel Weinberg]]"
 published: 2015-09-27
 created: 2025-09-11
-description: "The Bullseye Framework for Getting Traction 2019 UPDATE: I’ve co-authored a new book called Super Thinking: The Big Book of Mental Models, and I’m highly confident that knowing the mental models …"
+description: "The Bullseye Framework for Getting Traction 2019 UPDATE: I’ve
+  co-authored a new book called Super Thinking: The Big Book of Mental Models,
+  and I’m highly confident that knowing the mental models …"
 tags:
-  - "world-view"
+  - world-view
 ---
 [Sitemap](https://medium.com/sitemap/sitemap.xml)
 

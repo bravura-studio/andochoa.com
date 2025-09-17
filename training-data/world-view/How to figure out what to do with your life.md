@@ -1,12 +1,23 @@
 ---
-title: "How to figure out what to do with your life"
-source: "https://www.julian.com/blog/life-planning"
-author:
-published:
+title: How to figure out what to do with your life
+source: https://www.julian.com/blog/life-planning
+author: null
+published: null
 created: 2025-09-11
-description: "How to decide which business and creative projects you should work on. Make life decisions using a mental model instead of instincts and momentum."
+description: >-
+  claude_analysis:
+    topics: ["life planning", "personal values", "career decisions", "regret minimization", "hedonistic adaptation"]
+    content_type: "theory"
+    entities: ["Julian Shapiro (confidence: 1.0)", "Bill Gates (confidence: 0.9)", "Michael Seibel (confidence: 0.8)"]
+    quality_score: 10
+    analysis_date: "2025-09-17"
+    key_insights: ["Values change over time requiring periodic reassessment", "Regret minimization helps overcome past ambitions", "Money has diminishing returns beyond $80-150k"]
+    training_data_connections:
+      great_writing_matches: []
+      worldview_matches: []
+      style_similarity_score: 0.9How to decide which business and creative projects you should work on. Make life decisions using a mental model instead of instincts and momentum.
 tags:
-  - "world-view"
+  - world-view
 ---
 [
 

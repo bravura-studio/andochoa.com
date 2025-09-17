@@ -1,13 +1,26 @@
 ---
-title: "Minimum Viable Product Manager"
-source: "https://medium.com/swlh/minimum-viable-product-manager-852e744f041d"
+title: >-
+  claude_analysis:
+    topics: ["junior PM development", "career progression", "product management training", "vertical vs horizontal roles", "impostor syndrome"]
+    content_type: "theory"
+    entities: ["Susana Videira Lopes (confidence: 1.0)", "Melissa Perri (confidence: 0.9)", "Google (confidence: 0.9)", "Facebook (confidence: 0.9)"]
+    quality_score: 9
+    analysis_date: "2025-09-17"
+    key_insights: ["Vertical slice approach beats horizontal role division", "Junior PMs should touch all layers with smaller scope", "Impostor syndrome is inevitable for first-time PMs"]
+    training_data_connections:
+      great_writing_matches: []
+      worldview_matches: ["Good Product ManagerBad Product Manager.md"]
+      style_similarity_score: 0.8Minimum Viable Product Manager
+source: https://medium.com/swlh/minimum-viable-product-manager-852e744f041d
 author:
   - "[[Susana Videira Lopes]]"
 published: 2020-05-05
 created: 2025-09-11
-description: "Minimum Viable Product Manager Bringing up first time product managers Despite a recent explosion in paid courses to develop product management talent such as General Assembly, Product School and …"
+description: Minimum Viable Product Manager Bringing up first time product
+  managers Despite a recent explosion in paid courses to develop product
+  management talent such as General Assembly, Product School and …
 tags:
-  - "world-view"
+  - world-view
 ---
 [Sitemap](https://medium.com/sitemap/sitemap.xml)
 
@@ -183,3 +196,11 @@ Interesting and thought-provoking article around the Minimum Viable Product Mana
 See more recommendations
 
 ](https://medium.com/?source=post_page---read_next_recirc--852e744f041d---------------------------------------)
+
+
+## Connected PM Philosophy
+
+This framework for developing junior PMs connects directly to:
+- [[Good Product ManagerBad Product Manager|Ben Horowitz's PM principles]] - The foundation of what makes a great PM
+- Both emphasize ownership, clear communication, and avoiding excuses
+- The vertical slice approach ensures junior PMs develop the "CEO of product" mindset early

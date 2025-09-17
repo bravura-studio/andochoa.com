@@ -38,3 +38,10 @@ The best time was yesterday. Now, is the second best time to start.
 I have all the tech available to power me in this journey and I'm taking full advantage of it. My writing setup might be an overkill - but more about that someday later.
 
 **Build.Fun.Free**
+
+
+## Related Frameworks
+
+This personal journey connects to deeper life planning concepts:
+- [[training-data/world-view/How to figure out what to do with your life|Life Planning Framework]] - Breaking through analysis paralysis to identify what truly matters
+- The importance of starting with "path of least resistance" aligns with regret minimization - better to start imperfectly than never start at all

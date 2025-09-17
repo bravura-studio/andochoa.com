@@ -1,13 +1,24 @@
 ---
-title: "$80M within 6 months"
-source: "https://x.com/benln/status/1942585462914158954"
+title: >-
+  claude_analysis:
+    topics: ["rapid startup growth", "solo founder success", "customer feedback", "lean startup methodology", "acquisition strategy"]
+    content_type: "win"
+    entities: ["Maor Shlomo (confidence: 0.9)", "Ben Lang (confidence: 0.9)", "Tony Stark (confidence: 0.7)"]
+    quality_score: 8
+    analysis_date: "2025-09-17"
+    key_insights: ["Solo founder sold for $80M in 6 months", "Direct user feedback is a cheat code", "Don't scale until organic growth is proven"]
+    training_data_connections:
+      great_writing_matches: []
+      worldview_matches: []
+      style_similarity_score: 0.5$80M within 6 months
+source: https://x.com/benln/status/1942585462914158954
 author:
   - "[[@benln]]"
 published: 2025-07-08
 created: 2025-09-11
-description:
+description: null
 tags:
-  - "world-view"
+  - world-view
 ---
 **Ben Lang** @benln [2025-07-08](https://x.com/benln/status/1942585462914158954)
 

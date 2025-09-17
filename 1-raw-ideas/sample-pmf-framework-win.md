@@ -41,3 +41,10 @@ The real revelation: PMF isn't about having happy customers. It's about having c
 This changes everything about how we prioritize features. Instead of asking "what do customers want?" we should ask "what makes us irreplaceable in their workflow?"
 
 Related frameworks: [[training-data/product-philosophy/pmf-measurement|PMF Measurement Methodologies]] and [[training-data/growth-strategies/retention-frameworks|Retention Frameworks]]
+
+
+## Additional Connections
+
+This PMF framework connects to broader growth strategies:
+- [[training-data/world-view/The Bullseye Framework for Getting Traction|The Bullseye Framework]] - Finding your one optimal channel mirrors finding your core value proposition
+- [[training-data/world-view/$80M within 6 months|Rapid growth playbook]] - Customer feedback loops are critical for both PMF and rapid scaling
