@@ -1,13 +1,24 @@
 ---
-title: "Amazon Has a Secret Weapon Known as \"Working Backwards\"--and It Will Transform the Way You Work"
-source: "https://www.inc.com/justin-bariso/amazon-uses-a-secret-process-for-launching-new-ideas-and-it-can-transform-way-you-work.html"
+title: >-
+  claude_analysis:
+    topics: ["working backwards", "customer-centric design", "product development", "internal press release", "amazon methodology"]
+    content_type: "theory"
+    entities: ["Amazon (confidence: 1.0)", "Jeff Bezos (confidence: 1.0)", "Ian McAllister (confidence: 1.0)"]
+    quality_score: 9
+    analysis_date: "2025-09-17"
+    key_insights: ["Start with customer problem not product idea", "Write press release before building", "Iterate on press release cheaper than product"]
+    training_data_connections:
+      great_writing_matches: []
+      worldview_matches: []
+      style_similarity_score: 0.6Amazon Has a Secret Weapon Known as "Working Backwards"--and It Will Transform the Way You Work
+source: https://www.inc.com/justin-bariso/amazon-uses-a-secret-process-for-launching-new-ideas-and-it-can-transform-way-you-work.html
 author:
   - "[[Justin Bariso]]"
 published: 2019-12-16
 created: 2025-09-11
-description: "Learn how the process works and how it can help you and your business."
+description: Learn how the process works and how it can help you and your business.
 tags:
-  - "world-view"
+  - world-view
 ---
 [Inc. Best in Business Awards Final Deadline This Friday, 9/12!Apply now](https://incbestinbusiness.secure-platform.com/bib)
 
@@ -90,3 +101,11 @@ The opinions expressed here by Inc.com columnists are their own, not those of In
 Top Tech
 
 Weekly roundup of the latest in tech news
+
+
+## Strategic Connections
+
+This "working backwards" methodology connects to:
+- [[sample-progressive-onboarding-solution|Progressive Onboarding]] - Both start with end user experience
+- [[sample-user-onboarding-struggle|User Onboarding Challenge]] - Customer-centric problem identification
+- Product development philosophy that prioritizes customer needs over features

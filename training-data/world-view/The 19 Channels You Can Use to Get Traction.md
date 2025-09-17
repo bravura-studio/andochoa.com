@@ -1,13 +1,26 @@
 ---
-title: "The 19 Channels You Can Use to Get Traction"
-source: "https://medium.com/@yegg/the-19-channels-you-can-use-to-get-traction-93c762d19339"
+title: >-
+  claude_analysis:
+    topics: ["traction channels", "customer acquisition", "marketing strategy", "channel diversification", "growth tactics"]
+    content_type: "theory"
+    entities: ["Gabriel Weinberg (confidence: 1.0)", "Noah Kagan (confidence: 0.9)", "Ryan Holiday (confidence: 0.8)", "Rand Fishkin (confidence: 0.9)"]
+    quality_score: 9
+    analysis_date: "2025-09-17"
+    key_insights: ["19 distinct traction channels available to startups", "Underutilized channels often most effective", "Each channel works for all types and phases"]
+    training_data_connections:
+      great_writing_matches: []
+      worldview_matches: ["The Bullseye Framework for Getting Traction.md"]
+      style_similarity_score: 0.7The 19 Channels You Can Use to Get Traction
+source: https://medium.com/@yegg/the-19-channels-you-can-use-to-get-traction-93c762d19339
 author:
   - "[[Gabriel Weinberg]]"
 published: 2015-09-20
 created: 2025-09-11
-description: "The 19 Channels You Can Use to Get Traction 2019 UPDATE: I’ve co-authored a new book called Super Thinking: The Big Book of Mental Models, and I’m highly confident that knowing the mental models …"
+description: "The 19 Channels You Can Use to Get Traction 2019 UPDATE: I’ve
+  co-authored a new book called Super Thinking: The Big Book of Mental Models,
+  and I’m highly confident that knowing the mental models …"
 tags:
-  - "world-view"
+  - world-view
 ---
 [Sitemap](https://medium.com/sitemap/sitemap.xml)
 
@@ -253,3 +266,12 @@ Traction was one of the best marketing books I’ve read. Succinct, practical, a
 See more recommendations
 
 ](https://medium.com/?source=post_page---read_next_recirc--93c762d19339---------------------------------------)
+
+
+## Cross-References & Connections
+
+### Traction & Growth Theme Cluster
+This document connects to broader growth strategies:
+- [[The Bullseye Framework for Getting Traction|Bullseye Framework]] - Parent framework for channel selection
+- [[32 Fast and Cheap Marketing Tests You Should Consider Running|32 Marketing Tests]] - Practical test ideas for each channel
+- [[sample-pmf-framework-win|PMF Framework]] - Measuring success of traction efforts

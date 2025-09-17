@@ -1,13 +1,26 @@
 ---
-title: "32 Fast and Cheap Marketing Tests You Should Consider Running"
-source: "https://medium.com/@yegg/32-fast-cheap-marketing-test-ideas-across-all-19-traction-channels-24e227c3a8e3"
+title: >-
+  claude_analysis:
+    topics: ["marketing tests", "traction testing", "customer acquisition", "channel validation", "growth experiments"]
+    content_type: "theory"
+    entities: ["Gabriel Weinberg (confidence: 1.0)", "Bing Ads (confidence: 0.8)", "Twitter (confidence: 0.9)", "Facebook (confidence: 0.9)"]
+    quality_score: 9
+    analysis_date: "2025-09-17"
+    key_insights: ["32 concrete test ideas across 19 channels", "Tests should cost <$1000 and take <1 month", "Focus on speed to get data and prove assumptions"]
+    training_data_connections:
+      great_writing_matches: []
+      worldview_matches: ["The 19 Channels You Can Use to Get Traction.md", "The Bullseye Framework for Getting Traction.md"]
+      style_similarity_score: 0.832 Fast and Cheap Marketing Tests You Should Consider Running
+source: https://medium.com/@yegg/32-fast-cheap-marketing-test-ideas-across-all-19-traction-channels-24e227c3a8e3
 author:
   - "[[Gabriel Weinberg]]"
 published: 2015-10-02
 created: 2025-09-11
-description: "32 Fast and Cheap Marketing Tests You Should Consider Running 2019 UPDATE: I’ve co-authored a new book called Super Thinking: The Big Book of Mental Models, and I’m highly confident that knowing …"
+description: "32 Fast and Cheap Marketing Tests You Should Consider Running 2019
+  UPDATE: I’ve co-authored a new book called Super Thinking: The Big Book of
+  Mental Models, and I’m highly confident that knowing …"
 tags:
-  - "world-view"
+  - world-view
 ---
 [Sitemap](https://medium.com/sitemap/sitemap.xml)
 
