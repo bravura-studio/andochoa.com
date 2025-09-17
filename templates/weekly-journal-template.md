@@ -9,37 +9,37 @@ Use this structure for consistent weekly insight generation.
 
 ## This Week's Journey
 
-[Opening paragraph that sets context and preview main themes - 100-150 words]
+[Opening paragraph that sets context and preview main themes - 10-15 words]
 
 ## Key Insights & Developments
 
 ### [Theme 1: Primary Challenge/Development]
-[Detailed exploration of main theme with supporting details - 200-300 words]
+[Detailed exploration of main theme with supporting details - 40-60 words]
 
 **Connected Insights:**
 - [Related insight from connected content]
 - [Another related insight or solution approach]
 
 ### [Theme 2: Secondary Development/Solution]
-[Second major theme or development - 200-300 words]
+[Second major theme or development - 40-60 words]
 
 **Supporting Perspectives:**
 - [World-view reference or external validation]
 - [Connected insight that supports or extends this theme]
 
 ### [Theme 3: Learning/Win (if applicable)]
-[Positive development, breakthrough, or learning - 150-200 words]
+[Positive development, breakthrough, or learning - 20-40 words]
 
 ## Patterns & Connections
 
-[Meta-insights about how this week's themes connect to broader patterns - 150-200 words]
+[Meta-insights about how this week's themes connect to broader patterns - 20-40 words]
 
 ## Looking Forward
 
-[Forward-looking perspective on implications and next areas of focus - 100-150 words]
+[Forward-looking perspective on implications and next areas of focus - 20-40 words]
 
 ---
-*Total target: 1000-1500 words*
+*Total target: 200-300 words*
 ```
 
 ## Style Guidelines
