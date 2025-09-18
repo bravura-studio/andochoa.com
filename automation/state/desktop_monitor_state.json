@@ -1,0 +1,12 @@
+{
+  "status": "stopped",
+  "monitor_started": "2025-09-18T13:21:17.651655",
+  "monitor_stopped": "2025-09-18T14:02:27.926172",
+  "last_heartbeat": "2025-09-18T14:02:20.125816",
+  "total_events_processed": 0,
+  "version": "1.0-desktop",
+  "_metadata": {
+    "last_updated": "2025-09-18T14:02:27.926291",
+    "version": "1.0"
+  }
+}

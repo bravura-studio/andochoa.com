@@ -2,6 +2,7 @@
 """
 Configuration Management for Vault Automation System
 Handles environment variables, settings, and system configuration
+Supports both Claude API and Claude Desktop integration modes
 """
 
 import os
@@ -31,7 +32,10 @@ class Config:
         self.automation_dir = Path(__file__).parent.parent
         self.vault_path = self._get_vault_path()
         
-        # Claude API Configuration
+        # Integration mode (desktop vs API)
+        self.desktop_mode = os.getenv('DESKTOP_MODE', 'true').lower() == 'true'
+        
+        # Claude API Configuration (optional for desktop mode)
         self.claude_api_key = os.getenv('CLAUDE_API_KEY')
         self.claude_model = os.getenv('CLAUDE_MODEL', 'claude-3-sonnet-20241022')
         self.claude_api_url = os.getenv('CLAUDE_API_URL', 'https://api.anthropic.com/v1/messages')
@@ -41,11 +45,16 @@ class Config:
         self.auto_analysis = os.getenv('AUTO_ANALYSIS', 'true').lower() == 'true'
         self.background_processing = os.getenv('BACKGROUND_PROCESSING', 'true').lower() == 'true'
         
+        # Desktop specific settings
+        self.desktop_notifications = os.getenv('DESKTOP_NOTIFICATIONS', 'true').lower() == 'true'
+        self.auto_process_training_data = os.getenv('AUTO_PROCESS_TRAINING_DATA', 'true').lower() == 'true'
+        self.notify_new_content = os.getenv('NOTIFY_NEW_CONTENT', 'true').lower() == 'true'
+        
         # Workflow Configuration
         self.weekly_draft_day = os.getenv('WEEKLY_DRAFT_DAY', 'friday').lower()
         self.weekly_draft_time = os.getenv('WEEKLY_DRAFT_TIME', '14:00')
         self.max_concurrent_workflows = int(os.getenv('MAX_CONCURRENT_WORKFLOWS', '1'))
-        self.workflow_timeout = int(os.getenv('WORKFLOW_TIMEOUT', '600'))  # seconds
+        self.workflow_timeout = int(os.getenv('WORKFLOW_TIMEOUT', '1800'))  # 30 minutes for desktop mode
         
         # Performance Configuration
         self.debounce_time = int(os.getenv('DEBOUNCE_TIME', '2'))  # seconds
@@ -54,7 +63,7 @@ class Config:
         
         # Logging Configuration
         self.log_level = getattr(logging, os.getenv('LOG_LEVEL', 'INFO').upper())
-        self.log_file = os.getenv('LOG_FILE', 'automation.log')
+        self.log_file = os.getenv('LOG_FILE', 'desktop_automation.log' if self.desktop_mode else 'automation.log')
         self.log_max_size = int(os.getenv('LOG_MAX_SIZE', '10485760'))  # 10MB
         self.log_backup_count = int(os.getenv('LOG_BACKUP_COUNT', '5'))
         
@@ -66,6 +75,13 @@ class Config:
         # State Management
         self.state_dir = self.automation_dir / 'state'
         self.logs_dir = self.automation_dir / 'logs'
+        
+        # Desktop mode specific directories
+        if self.desktop_mode:
+            self.prompts_dir = self.automation_dir / 'prompts'
+            self.responses_dir = self.automation_dir / 'responses'
+            self.contexts_dir = self.automation_dir / 'contexts'
+            self.notifications_dir = self.automation_dir / 'notifications'
         
         # Ensure directories exist
         self._ensure_directories()
@@ -80,9 +96,10 @@ class Config:
         if not vault_path:
             # Try to auto-detect based on common locations
             possible_paths = [
+                Path(__file__).parent.parent.parent,  # Assume automation is in vault
+                Path.home() / 'Documents' / 'Build in public' / 'Content Bank',
                 Path.home() / 'Documents' / 'Obsidian' / 'Content Bank',
-                Path.home() / 'Obsidian' / 'Content Bank',  
-                Path(__file__).parent.parent.parent  # Assume automation is in vault
+                Path.home() / 'Obsidian' / 'Content Bank'
             ]
             
             for path in possible_paths:
@@ -107,6 +124,15 @@ class Config:
             self.logs_dir
         ]
         
+        # Desktop mode specific directories
+        if self.desktop_mode:
+            directories.extend([
+                self.prompts_dir,
+                self.responses_dir,
+                self.contexts_dir,
+                self.notifications_dir
+            ])
+        
         for directory in directories:
             directory.mkdir(parents=True, exist_ok=True)
     
@@ -114,9 +140,10 @@ class Config:
         """Validate configuration values"""
         errors = []
         
-        # Check Claude API key
-        if not self.claude_api_key:
-            errors.append("CLAUDE_API_KEY not set in environment")
+        # Check Claude API key (only required if not in desktop mode)
+        if not self.desktop_mode and not self.claude_api_key:
+            errors.append("CLAUDE_API_KEY not set in environment (required for API mode)")
+            errors.append("Hint: Set DESKTOP_MODE=true to use Claude Desktop integration")
         
         # Check vault path and structure
         vault = Path(self.vault_path)
@@ -129,11 +156,15 @@ class Config:
                 if not (vault / req_dir).exists():
                     errors.append(f"Required vault directory missing: {req_dir}")
         
-        # Check monitor paths
+        # Check monitor paths (warn but don't fail)
+        missing_paths = []
         for monitor_path in self.monitor_paths:
             full_path = Path(self.vault_path) / monitor_path
             if not full_path.exists():
-                errors.append(f"Monitor path does not exist: {full_path}")
+                missing_paths.append(str(full_path))
+        
+        if missing_paths:
+            print(f"⚠️  Warning: Some monitor paths don't exist yet: {', '.join(missing_paths)}")
         
         # Check workflow timing
         if self.weekly_draft_day not in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
@@ -168,13 +199,27 @@ class Config:
         """Get full path to log file"""
         return self.logs_dir / self.log_file
     
+    def get_prompt_file(self, workflow_name: str) -> Path:
+        """Get full path to prompt file (desktop mode)"""
+        if not self.desktop_mode:
+            raise ValueError("Prompt files only available in desktop mode")
+        return self.prompts_dir / f"{workflow_name}_prompt.md"
+    
+    def get_response_file(self, workflow_name: str) -> Path:
+        """Get full path to response file (desktop mode)"""
+        if not self.desktop_mode:
+            raise ValueError("Response files only available in desktop mode")
+        return self.responses_dir / f"{workflow_name}_response.md"
+    
     def to_dict(self) -> dict:
         """Convert configuration to dictionary"""
         return {
+            'integration_mode': 'desktop' if self.desktop_mode else 'api',
             'vault_path': self.vault_path,
             'monitor_paths': self.monitor_paths,
             'auto_analysis': self.auto_analysis,
             'background_processing': self.background_processing,
+            'desktop_notifications': self.desktop_notifications if self.desktop_mode else 'N/A',
             'weekly_draft_day': self.weekly_draft_day,
             'weekly_draft_time': self.weekly_draft_time,
             'claude_model': self.claude_model,
@@ -188,7 +233,8 @@ class Config:
         """String representation of configuration"""
         config_dict = self.to_dict()
         # Hide sensitive information
-        config_dict['claude_api_key'] = '*' * 8 if self.claude_api_key else 'NOT_SET'
+        if not self.desktop_mode:
+            config_dict['claude_api_key'] = '*' * 8 if self.claude_api_key else 'NOT_SET'
         
         return f"VaultAutomationConfig(\n" + \
                "\n".join(f"  {key}: {value}" for key, value in config_dict.items()) + \
@@ -212,10 +258,14 @@ def validate_environment() -> bool:
     try:
         config = get_config()
         print("✅ Configuration validation passed")
+        print(f"🔧 Integration mode: {'Desktop' if config.desktop_mode else 'API'}")
         print(f"📁 Vault path: {config.vault_path}")
         print(f"👁️ Monitor paths: {', '.join(config.monitor_paths)}")
-        print(f"🤖 Claude model: {config.claude_model}")
+        if not config.desktop_mode:
+            print(f"🤖 Claude model: {config.claude_model}")
         print(f"📅 Weekly draft: {config.weekly_draft_day} at {config.weekly_draft_time}")
+        if config.desktop_mode:
+            print("🖥️ Desktop notifications: Enabled")
         return True
     except Exception as e:
         print(f"❌ Configuration validation failed: {e}")

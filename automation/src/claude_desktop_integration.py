@@ -3,6 +3,7 @@
 Claude Desktop Integration Module
 Handles workflow preparation and response processing for Claude Desktop app
 instead of direct API calls, using existing Claude Pro subscription
+Creates markdown files for seamless Obsidian integration
 """
 
 import json
@@ -48,11 +49,11 @@ class ClaudeDesktopIntegration:
             # Prepare complete prompt with context
             complete_prompt = self._prepare_complete_prompt(agent_prompt, context, workflow_id)
             
-            # Save prompt file for user
-            prompt_file = self.prompts_dir / f"{workflow_id}_{agent_name}_prompt.txt"
+            # Save prompt file for user (now in markdown format)
+            prompt_file = self.prompts_dir / f"{workflow_id}_{agent_name}_prompt.md"
             context_file = self.contexts_dir / f"{workflow_id}_{agent_name}_context.json"
             
-            # Save prompt
+            # Save prompt in markdown format
             with open(prompt_file, 'w', encoding='utf-8') as f:
                 f.write(complete_prompt)
             
@@ -67,7 +68,7 @@ class ClaudeDesktopIntegration:
                 'status': 'prompt_ready',
                 'prompt_file': str(prompt_file),
                 'context_file': str(context_file),
-                'response_file': str(self.responses_dir / f"{workflow_id}_{agent_name}_response.txt"),
+                'response_file': str(self.responses_dir / f"{workflow_id}_{agent_name}_response.md"),
                 'created_at': datetime.now().isoformat(),
                 'context': context
             }
@@ -89,7 +90,7 @@ class ClaudeDesktopIntegration:
     def check_for_response(self, workflow_id: str, agent_name: str, timeout: int = 300) -> Optional[Dict]:
         """Check for user-provided response from Claude Desktop"""
         
-        response_file = self.responses_dir / f"{workflow_id}_{agent_name}_response.txt"
+        response_file = self.responses_dir / f"{workflow_id}_{agent_name}_response.md"
         context_file = self.contexts_dir / f"{workflow_id}_{agent_name}_context.json"
         
         start_time = time.time()
@@ -107,7 +108,7 @@ class ClaudeDesktopIntegration:
                             context = json.load(f)
                     
                     # Mark as processed by renaming
-                    processed_file = self.responses_dir / f"{workflow_id}_{agent_name}_processed.txt"
+                    processed_file = self.responses_dir / f"{workflow_id}_{agent_name}_processed.md"
                     response_file.rename(processed_file)
                     
                     result = {
@@ -199,39 +200,58 @@ class ClaudeDesktopIntegration:
             self.logger.warning(f"Missing context variable {e}, using original prompt")
             formatted_prompt = agent_prompt
         
-        # Create complete prompt with instructions
-        complete_prompt = f"""# Claude Desktop Workflow Instructions
+        # Get response filename for instructions
+        response_filename = f"{workflow_id}_{context.get('agent', 'unknown')}_response.md"
+        
+        # Create complete prompt in proper markdown format for Obsidian
+        complete_prompt = f"""# 🤖 Claude Desktop Workflow
+> **Workflow ID**: `{workflow_id}`  
+> **Agent**: {context.get('agent', 'unknown').title()}  
+> **Timestamp**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}  
+> **Status**: Ready for Claude Desktop
 
-**Workflow ID**: {workflow_id}
-**Agent**: {context.get('agent', 'unknown')}
-**Timestamp**: {datetime.now().isoformat()}
+## 📋 Instructions for You
 
-## Instructions for You:
-1. Copy this entire message and paste it into Claude Desktop
-2. After Claude responds, copy the ENTIRE response
-3. Save Claude's response to: `{self.responses_dir}/{workflow_id}_{context.get('agent', 'unknown')}_response.txt`
-4. The automation system will process the response automatically
+1. **Copy Agent Prompt**: Copy everything in the "Agent Prompt" section below
+2. **Paste to Claude Desktop**: Open Claude Desktop app and paste the copied content  
+3. **Get Response**: Wait for Claude to provide complete response
+4. **Copy Full Response**: Select and copy Claude's ENTIRE response (including formatting)
+5. **Save Response**: Create file `{response_filename}` in the `responses/` folder with Claude's response
+6. **System Processes**: The automation system will detect and process the response automatically
 
-## Context Information:
-- **Vault Path**: {self.config.vault_path}
-- **Trigger**: {context.get('trigger_event', 'manual')}
-- **File**: {context.get('file_path', 'none')}
-- **Workflow Type**: {context.get('workflow_type', 'unknown')}
+## 📊 Workflow Context
+
+- **🗂 Vault Path**: `{self.config.vault_path}`
+- **🔄 Trigger**: {context.get('trigger_event', 'manual')}
+- **📄 File**: {context.get('file_path', 'none')}  
+- **⚙️ Workflow Type**: {context.get('workflow_type', 'unknown')}
 
 ---
 
-# Agent Prompt (Copy everything below this line to Claude Desktop)
+## 🤖 Agent Prompt
+> Copy everything below this line to Claude Desktop
 
 {formatted_prompt}
 
-## Current Context Data:
+---
+
+## 🗃 Context Data
+> This context is provided to the agent for processing
+
 ```json
 {json.dumps(context, indent=2)}
 ```
 
 ---
 
-**Remember**: After Claude responds, copy the ENTIRE response and save it to the response file specified above!
+## ✅ Next Steps
+
+1. Copy the Agent Prompt section above
+2. Paste into Claude Desktop
+3. After Claude responds, save the response to:
+   **`{self.responses_dir}/{response_filename}`**
+
+> **💡 Tip**: Keep this file open in Obsidian for reference while working with Claude Desktop!
 """
         
         return complete_prompt
@@ -248,7 +268,7 @@ class ClaudeDesktopIntegration:
                 os.system(f'''
                 osascript -e 'display notification "{message}" with title "{title}"'
                 ''')
-                # Auto-open the prompt file
+                # Auto-open the prompt file in Obsidian if possible, otherwise default app
                 os.system(f'open "{prompt_file}"')
                 
             elif system == "Windows":  # Windows
@@ -274,9 +294,9 @@ class ClaudeDesktopIntegration:
         except Exception as e:
             self.logger.warning(f"Could not send desktop notification: {e}")
             # Fallback: create a notification file
-            notification_file = self.prompts_dir / "NOTIFICATION.txt"
+            notification_file = self.prompts_dir / "NOTIFICATION.md"
             with open(notification_file, 'w') as f:
-                f.write(f"{title}\n\n{message}\n\nPrompt file: {prompt_file}")
+                f.write(f"# 🔔 {title}\n\n{message}\n\n**Prompt file**: `{prompt_file}`\n")
     
     def _send_reminder_notification(self, workflow_info: Dict):
         """Send reminder notification after waiting"""
@@ -309,41 +329,97 @@ class ClaudeDesktopIntegration:
         # Main instructions file
         instructions_file = self.prompts_dir / "HOW_TO_USE.md"
         if not instructions_file.exists():
-            instructions_content = """# How to Use Claude Desktop Integration
+            instructions_content = """# 🚀 How to Use Claude Desktop Integration
 
-## Quick Start:
+## Quick Start Workflow
 
-1. **When you get a notification**: A prompt is ready for Claude Desktop
-2. **Open the prompt file**: It will auto-open, or check the `prompts/` folder
-3. **Copy the prompt**: Copy everything after "Agent Prompt" line
-4. **Paste to Claude Desktop**: Open Claude Desktop and paste
-5. **Copy Claude's response**: Copy the ENTIRE response from Claude
-6. **Save response**: Save to the specified response file in `responses/` folder
+### 1. 🔔 **Get Notification**
+- System detects new content or workflow trigger
+- Desktop notification appears: *"Claude Prompt Ready: [Agent] Agent"*
+- Prompt file auto-opens in your default markdown editor
 
-## File Structure:
+### 2. 📋 **Copy Agent Prompt** 
+- Open the auto-opened `.md` file in the `prompts/` folder
+- Find the **"Agent Prompt"** section
+- Copy everything under that section (the actual prompt for Claude)
 
-- `prompts/` - Ready-to-use prompts for Claude Desktop
-- `responses/` - Save Claude Desktop responses here
-- `contexts/` - System context files (don't modify)
+### 3. 🤖 **Paste to Claude Desktop**
+- Open Claude Desktop app
+- Paste the copied prompt
+- Wait for Claude to provide complete response
 
-## Tips:
+### 4. 📄 **Save Response**
+- Select and copy Claude's ENTIRE response
+- Create new file in `responses/` folder with exact name specified in prompt
+- Paste Claude's response and save
+- **Important**: Copy everything including formatting, code blocks, etc.
 
-- Keep Claude Desktop app open during workflows
-- Copy ENTIRE responses, including any markdown formatting
-- File names matter - use exact names specified in prompts
-- System processes responses automatically after you save them
+### 5. ⚙️ **System Processes**
+- System automatically detects your saved response
+- Processes the response and updates your vault
+- Moves to next agent if needed, or completes workflow
 
-## Workflow Example:
+---
 
-1. System detects new file in vault
-2. 🔔 Notification: "Claude Prompt Ready: Analyzer Agent"
-3. Open auto-opened prompt file
-4. Copy prompt → Paste to Claude Desktop
-5. Copy Claude's response → Save to response file
-6. System automatically processes response and updates vault
-7. 🔔 Next agent notification (if needed)
+## 📁 File Structure
 
-That's it! The system handles everything else automatically.
+```
+automation/
+├── prompts/          # 📋 Ready-to-use prompts (auto-opened)
+├── responses/        # 💾 Save Claude Desktop responses here  
+├── contexts/         # 🗃 System context (don't modify)
+└── logs/            # 📊 System activity logs
+```
+
+---
+
+## 🎯 Workflow Examples
+
+### **New Content Analysis**
+1. Add file to `1-raw-ideas/`
+2. 🔔 "Analyzer Agent prompt ready" 
+3. Copy prompt → Claude Desktop → Save response
+4. 🔔 "Connector Agent prompt ready"
+5. Copy prompt → Claude Desktop → Save response
+6. ✅ Content analyzed and connected automatically
+
+### **Weekly Draft Generation**  
+1. Run: `python run_desktop_workflow.py --workflow generate_weekly_draft`
+2. 🔔 "Draftsmith Agent prompt ready"
+3. Copy prompt → Claude Desktop → Save response
+4. ✅ Complete draft saved to `3-article-drafts/`
+
+---
+
+## 💡 Pro Tips
+
+- **Keep both apps open**: Obsidian and Claude Desktop for fastest workflow
+- **Use exact filenames**: Response files must match names in prompts exactly
+- **Copy everything**: Include all markdown formatting from Claude's responses
+- **Files auto-open**: Prompt files should open automatically when ready
+- **Watch notifications**: System guides you through each step
+- **Check logs**: `logs/` folder has detailed activity if troubleshooting needed
+
+---
+
+## 🆘 Troubleshooting
+
+**Prompt doesn't open automatically?**
+- Check `prompts/` folder manually
+- Look for newest `.md` file
+
+**Response not detected?**  
+- Verify exact filename matches prompt instructions
+- Make sure file is in `responses/` folder
+- Check that you saved as `.md` format
+
+**Workflow stuck?**
+- Check `logs/desktop_automation.log` for errors
+- Restart with: `python run_desktop_workflow.py --status`
+
+---
+
+That's it! The system handles all the coordination - you just copy/paste between the files and Claude Desktop! 🎉
 """
             
             with open(instructions_file, 'w', encoding='utf-8') as f:
@@ -352,22 +428,40 @@ That's it! The system handles everything else automatically.
         # Create response folder README
         response_readme = self.responses_dir / "README.md"
         if not response_readme.exists():
-            response_content = """# Response Folder
+            response_content = """# 📁 Response Folder
 
-Save Claude Desktop responses here using the exact filenames specified in the prompts.
+Save Claude Desktop responses here using the **exact filenames** specified in the prompt files.
 
-## File Naming Pattern:
-`{workflow_id}_{agent_name}_response.txt`
+## 📝 File Naming Pattern
+```
+{workflow_id}_{agent_name}_response.md
+```
 
-## Example:
-If prompt says: "Save response to: abc123_analyzer_response.txt"
-Then save Claude's response exactly to that filename.
+## 📋 Example Process
+1. Prompt says: *"Save response to: `abc123_analyzer_response.md`"*
+2. Copy Claude's entire response from Claude Desktop
+3. Create file `abc123_analyzer_response.md` in this folder
+4. Paste Claude's response and save
+5. System automatically processes and renames to `*_processed.md`
 
-## Tips:
-- Copy ENTIRE responses from Claude Desktop
-- Include all formatting, markdown, code blocks, etc.
-- Don't modify Claude's response
-- System will automatically process responses and rename them when complete
+## ✅ Important Notes
+
+- **Copy EVERYTHING**: Include all formatting, markdown, code blocks, etc.
+- **Exact filenames**: Must match exactly what prompt specifies
+- **Full responses**: Don't edit or truncate Claude's responses
+- **Save as .md**: Always use markdown format for Obsidian compatibility
+
+## 🔄 Processing Flow
+
+```
+response.md → system detects → processes content → *_processed.md
+```
+
+After processing, your original response file gets renamed to `*_processed.md` to show it's been handled by the system.
+
+---
+
+💡 **Tip**: You can keep processed response files as reference, or delete them to keep the folder clean!
 """
             with open(response_readme, 'w', encoding='utf-8') as f:
                 f.write(response_content)
@@ -676,7 +770,7 @@ class DesktopWorkflowCoordinator:
                 system = platform.system()
                 
                 if system == "Darwin":  # macOS
-                    os.system(f'''osascript -e 'display notification "Weekly draft generated and saved!" with title "Workflow Complete"' ''')
+                    os.system(f'''osascript -e 'display notification "Weekly draft generated and saved to {draft_file.name}!" with title "🎉 Workflow Complete"' ''')
                     os.system(f'open "{draft_file}"')
             except Exception:
                 pass

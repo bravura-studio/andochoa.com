@@ -1,0 +1,13 @@
+{
+  "workflow_id": "analyze_new_content_1758199574",
+  "trigger_event": "manual",
+  "file_path": null,
+  "queued_at": "2025-09-18T13:46:14.486775",
+  "priority": "high",
+  "workflow_type": "analyze_new_content",
+  "workflow_started": "2025-09-18T13:46:14.486785",
+  "previous_agents": [],
+  "file_content": "",
+  "analysis_mode": "automated",
+  "agent": "analyzer"
+}

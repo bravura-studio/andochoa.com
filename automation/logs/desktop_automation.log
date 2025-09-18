@@ -1,0 +1,36 @@
+2025-09-18 13:21:17,619 - desktop_workflow_engine - INFO - Desktop workflow engine initialized
+2025-09-18 13:21:17,620 - root - INFO - Starting desktop vault monitoring...
+2025-09-18 13:21:17,620 - root - INFO - Monitoring: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas
+2025-09-18 13:21:17,620 - root - INFO - Monitoring: /Users/ochoa/Documents/Build in public/Content Bank/training-data
+2025-09-18 13:21:17,620 - root - INFO - Monitoring: /Users/ochoa/Documents/Build in public/Content Bank/4-published-content
+2025-09-18 13:21:17,652 - root - INFO - Desktop vault monitoring started successfully
+2025-09-18 13:24:43,995 - desktop_vault_monitor - INFO - Processing created event for: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:24:43,996 - desktop_vault_monitor - INFO - New content detected: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:24:44,198 - desktop_vault_monitor - INFO - Created workflow notification: /Users/ochoa/Documents/Build in public/Content Bank/automation/notifications/workflow_available_1758198284.md
+2025-09-18 13:24:44,199 - desktop_vault_monitor - INFO - Processing modified event for: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:24:44,199 - desktop_vault_monitor - INFO - New content detected: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:24:44,282 - desktop_vault_monitor - INFO - Created workflow notification: /Users/ochoa/Documents/Build in public/Content Bank/automation/notifications/workflow_available_1758198284.md
+2025-09-18 13:25:29,869 - desktop_vault_monitor - INFO - Processing modified event for: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:25:29,870 - desktop_vault_monitor - INFO - New content detected: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:25:30,071 - desktop_vault_monitor - INFO - Created workflow notification: /Users/ochoa/Documents/Build in public/Content Bank/automation/notifications/workflow_available_1758198330.md
+2025-09-18 13:44:30,781 - desktop_vault_monitor - INFO - Processing modified event for: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:30,785 - desktop_vault_monitor - INFO - New content detected: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:30,967 - desktop_vault_monitor - INFO - Created workflow notification: /Users/ochoa/Documents/Build in public/Content Bank/automation/notifications/workflow_available_1758199470.md
+2025-09-18 13:44:33,099 - desktop_vault_monitor - INFO - Processing modified event for: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:33,099 - desktop_vault_monitor - INFO - New content detected: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:33,225 - desktop_vault_monitor - INFO - Created workflow notification: /Users/ochoa/Documents/Build in public/Content Bank/automation/notifications/workflow_available_1758199473.md
+2025-09-18 13:44:35,166 - desktop_vault_monitor - INFO - Processing modified event for: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:35,166 - desktop_vault_monitor - INFO - New content detected: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:35,290 - desktop_vault_monitor - INFO - Created workflow notification: /Users/ochoa/Documents/Build in public/Content Bank/automation/notifications/workflow_available_1758199475.md
+2025-09-18 13:44:37,414 - desktop_vault_monitor - INFO - Processing modified event for: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:37,414 - desktop_vault_monitor - INFO - New content detected: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:37,538 - desktop_vault_monitor - INFO - Created workflow notification: /Users/ochoa/Documents/Build in public/Content Bank/automation/notifications/workflow_available_1758199477.md
+2025-09-18 13:44:39,761 - desktop_vault_monitor - INFO - Processing modified event for: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:39,762 - desktop_vault_monitor - INFO - New content detected: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:39,884 - desktop_vault_monitor - INFO - Created workflow notification: /Users/ochoa/Documents/Build in public/Content Bank/automation/notifications/workflow_available_1758199479.md
+2025-09-18 13:44:41,770 - desktop_vault_monitor - INFO - Processing modified event for: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:41,771 - desktop_vault_monitor - INFO - New content detected: /Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas/test-validation.md
+2025-09-18 13:44:41,890 - desktop_vault_monitor - INFO - Created workflow notification: /Users/ochoa/Documents/Build in public/Content Bank/automation/notifications/workflow_available_1758199481.md
+2025-09-18 14:02:27,917 - root - INFO - Received interrupt signal, stopping monitor...
+2025-09-18 14:02:27,921 - root - INFO - Stopping desktop vault monitoring...
+2025-09-18 14:02:27,927 - root - INFO - Desktop vault monitoring stopped

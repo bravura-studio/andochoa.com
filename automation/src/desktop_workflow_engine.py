@@ -32,11 +32,7 @@ class DesktopWorkflowEngine:
         self.processing = False
         self.worker_thread = None
         
-        # State management
-        self.state_file = self.config.get_state_file('desktop_workflow_engine')
-        self.state = self._load_state()
-        
-        # Performance tracking
+        # Performance tracking (initialize BEFORE loading state)
         self.metrics = {
             'workflows_processed': 0,
             'workflows_successful': 0,
@@ -45,6 +41,10 @@ class DesktopWorkflowEngine:
             'last_processed': None,
             'user_interaction_time': 0
         }
+        
+        # State management (load AFTER metrics initialization)
+        self.state_file = self.config.get_state_file('desktop_workflow_engine')
+        self.state = self._load_state()
         
         # Don't auto-start processing for desktop workflows
         # User interaction required
