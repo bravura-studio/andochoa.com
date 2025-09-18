@@ -86,7 +86,7 @@ Build something that matters to you.
 
 Have fun doing it.  
 
-Free yourself from the prison of perfection.
+Free yourself from your own prison.
 
 Stop waiting -> Start building.
 
