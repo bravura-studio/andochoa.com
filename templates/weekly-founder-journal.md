@@ -1,6 +1,6 @@
 ## Weekly Founder Journal
 
-**Format:** Raw, reflective essays (500-800 words).  
+**Format:** Raw, reflective essays (200-300 words).  
 **Key Sections to Always Include:**
 
 - **🔥 This Week’s Fire:** (1-2 sentences) What urgent problem dominated?  
