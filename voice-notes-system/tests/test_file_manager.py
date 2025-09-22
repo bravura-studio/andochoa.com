@@ -7,13 +7,21 @@ import os
 from pathlib import Path
 from datetime import datetime
 from unittest.mock import Mock
+import unittest
 
 # Add the src directory to the path for imports
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from file_manager import FileManager, SaveResult
-from markdown_formatter import ConversationMetadata
+# Import with absolute path handling
+try:
+    from file_manager import FileManager, SaveResult
+    from markdown_formatter import ConversationMetadata
+except ImportError:
+    # Handle relative imports by adjusting the import path
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+    from src.file_manager import FileManager, SaveResult
+    from src.markdown_formatter import ConversationMetadata
 
 
 def test_file_manager_import():
@@ -69,7 +77,7 @@ def test_clean_title_for_filename():
         ("Struggle: Learning Python Programming", "Learning-Python-Programming"),
         ("Idea: Building a New App", "Building-a-New-App"),
         ("My Voice Note Session", "My-Voice-Note-Session"),
-        ("Test with special chars: <>/\\|?*", "Test-with-special-chars"),
+        ("Test with special chars <>/\\|?*", "Test-with-special-chars"),
         ("", "voice-note"),  # Empty title fallback
     ]
 

@@ -12,7 +12,11 @@ from pathlib import Path
 import logging
 from dataclasses import dataclass
 
-from .markdown_formatter import MarkdownFormatter, ConversationMetadata
+try:
+    from .markdown_formatter import MarkdownFormatter, ConversationMetadata
+except ImportError:
+    # Handle case when module is run directly (not as package)
+    from markdown_formatter import MarkdownFormatter, ConversationMetadata
 
 logger = logging.getLogger(__name__)
 
@@ -91,8 +95,8 @@ class FileManager:
         # Remove topic type prefix if present (e.g., "Struggle: " -> "")
         title = re.sub(r'^[^:]+:\s*', '', title)
 
-        # Replace invalid filename characters
-        clean_title = re.sub(r'[<>:"/\\|?*]', '', title)
+        # Replace invalid filename characters with spaces first
+        clean_title = re.sub(r'[<>:"/\\|?*]', ' ', title)
 
         # Replace spaces and multiple dashes with single dashes
         clean_title = re.sub(r'[\s\-]+', '-', clean_title)

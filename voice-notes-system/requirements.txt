@@ -30,4 +30,4 @@ black
 flake8
 
 # MCP (Model Context Protocol) server
-mcp
+# mcp  # Commented out due to availability issues
