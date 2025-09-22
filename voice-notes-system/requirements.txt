@@ -1,0 +1,33 @@
+# Audio recording and processing
+sounddevice
+soundfile
+numpy
+
+# Speech-to-text
+openai
+SpeechRecognition
+
+# Global hotkeys and system tray
+pynput
+pystray
+Pillow
+
+# Configuration and file management
+PyYAML
+python-dotenv
+
+# Desktop notifications
+plyer
+
+# HTTP requests and async processing
+requests
+aiohttp
+
+# Testing and development
+pytest
+pytest-asyncio
+black
+flake8
+
+# MCP (Model Context Protocol) server
+mcp

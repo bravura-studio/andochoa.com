@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "voice-notes": {
+      "command": "python",
+      "args": [
+        "start_mcp_server.py"
+      ],
+      "cwd": "/Users/ochoa/code/content-bank/voice-notes-system",
+      "env": {
+        "PYTHONPATH": "/Users/ochoa/code/content-bank/voice-notes-system",
+        "VOICE_NOTES_OUTPUT_DIR": "/Users/ochoa/Documents/Build in public/Content Bank/1-raw-ideas",
+        "VOICE_NOTES_CONFIG_DIR": "/Users/ochoa/code/content-bank/voice-notes-system/config"
+      }
+    }
+  }
+}

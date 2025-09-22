@@ -1,0 +1,162 @@
+# Voice Notes Conversation Prompt Templates
+
+# Topic Analysis Prompt
+topic_analysis: |
+  Analyze this transcript and determine the primary topic type. Classify as one of:
+  - "struggle": Personal challenges, problems, obstacles, or difficulties
+  - "win": Achievements, successes, positive outcomes, or accomplishments
+  - "reflection": Thoughts, insights, philosophical musings, or learning
+  - "planning": Goals, strategies, future plans, or task organization
+  - "idea": Creative concepts, innovations, or brainstorming
+  - "update": Status reports, progress updates, or informational content
+  - "other": Doesn't clearly fit other categories
+
+  Transcript: "{transcript}"
+
+  Respond with just the classification and a brief reason (1-2 sentences).
+
+# Conversation Styles by Topic Type
+conversation_styles:
+  struggle:
+    initial_prompt: |
+      I notice you're sharing something challenging. I'd like to understand this better to help you work through it.
+
+      What specifically about this situation feels most difficult right now?
+
+    follow_up_prompts:
+      - "What have you tried so far to address this?"
+      - "What would need to change for this to feel more manageable?"
+      - "Who or what could support you with this challenge?"
+      - "What's one small step you could take today?"
+
+  win:
+    initial_prompt: |
+      That sounds like a meaningful achievement! I'd love to hear more about this success.
+
+      What made this outcome particularly significant for you?
+
+    follow_up_prompts:
+      - "What key factors contributed to this success?"
+      - "How does this connect to your larger goals?"
+      - "What did you learn from this experience?"
+      - "How might you build on this momentum?"
+
+  reflection:
+    initial_prompt: |
+      These are interesting thoughts you're exploring. Let me dig deeper into this with you.
+
+      What sparked this particular line of thinking?
+
+    follow_up_prompts:
+      - "How does this connect to your past experiences?"
+      - "What questions does this raise for you?"
+      - "Where do you see this insight leading?"
+      - "What would you like to explore further?"
+
+  planning:
+    initial_prompt: |
+      It sounds like you're thinking strategically about something important. Let's explore this plan together.
+
+      What's driving the need for this planning right now?
+
+    follow_up_prompts:
+      - "What resources or constraints should we consider?"
+      - "What potential obstacles might you encounter?"
+      - "How will you know if this plan is working?"
+      - "What's your timeline for these next steps?"
+
+  idea:
+    initial_prompt: |
+      This is an intriguing concept! I'm curious to explore this creative thinking with you.
+
+      What inspired this particular idea or direction?
+
+    follow_up_prompts:
+      - "How might this idea solve current problems?"
+      - "What would it take to test or develop this further?"
+      - "What variations or alternatives come to mind?"
+      - "Who else might benefit from this concept?"
+
+  update:
+    initial_prompt: |
+      Thanks for the update. I'd like to understand the broader context of what you're sharing.
+
+      What's the most significant aspect of this update for you?
+
+    follow_up_prompts:
+      - "How does this compare to your expectations?"
+      - "What implications does this have going forward?"
+      - "What questions or concerns does this raise?"
+      - "What would be helpful to focus on next?"
+
+  other:
+    initial_prompt: |
+      I'd like to understand more about what you're sharing. Let me ask some clarifying questions.
+
+      What's the main thing you want to explore or work through here?
+
+    follow_up_prompts:
+      - "Can you tell me more about the context?"
+      - "What's most important to you about this topic?"
+      - "What outcome would be most helpful?"
+      - "What aspects would you like to dive deeper into?"
+
+# Conversation Management
+conversation_flow:
+  # Maximum number of follow-up questions per session
+  max_follow_ups: 5
+
+  # Signals that conversation should end
+  completion_indicators:
+    - "I think that covers it"
+    - "That's all for now"
+    - "Thanks, that helps"
+    - "I feel good about this"
+    - "I'm done thinking about this"
+
+  # Adaptive depth triggers
+  depth_triggers:
+    minimal: ["quick update", "just noting", "fyi"]
+    standard: ["thinking about", "working on", "dealing with"]
+    deep: ["struggling with", "really excited", "major decision", "big change"]
+
+# Conversation Closing
+closing_prompts:
+  summary_request: |
+    Based on our conversation, let me summarize the key points and any action items that emerged:
+
+  final_check: |
+    Is there anything else about this topic you'd like to capture or explore before we wrap up?
+
+# Analysis Prompts for Output Generation
+output_generation:
+  title_generation: |
+    Based on this conversation, generate a concise, descriptive title (4-8 words) that captures the main topic or insight.
+
+    Conversation: {conversation}
+
+    Title:
+
+  action_items_extraction: |
+    Review this conversation and extract any clear action items, next steps, or commitments mentioned.
+    Format as a bullet list. If no action items, respond with "None identified."
+
+    Conversation: {conversation}
+
+    Action Items:
+
+  key_insights: |
+    Identify the 2-3 most important insights, realizations, or key points from this conversation.
+    Focus on substantive content, not just summary.
+
+    Conversation: {conversation}
+
+    Key Insights:
+
+  related_topics: |
+    Based on this conversation content, suggest 3-5 related topics or themes that might connect to existing notes.
+    These should be general enough to match potential existing content.
+
+    Conversation: {conversation}
+
+    Related Topics:

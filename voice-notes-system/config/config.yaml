@@ -1,0 +1,137 @@
+# Voice Notes System Configuration
+
+# API Configuration
+api:
+  openai:
+    # Add your OpenAI API key here or set via environment variable OPENAI_API_KEY
+    api_key: ""
+    model: "whisper-1"
+    max_retries: 3
+    timeout: 30
+
+# MCP Server Configuration (now running as MCP server for Claude Desktop)
+mcp:
+  # Server mode configuration
+  mode: "server"  # Changed from "client" to "server"
+
+  # Server settings
+  host: "localhost"
+  port: 8000
+
+  # Server capabilities
+  capabilities:
+    - "voice_recording"
+    - "transcription"
+    - "note_creation"
+    - "note_search"
+
+  # Legacy client settings (kept for backward compatibility)
+  server_url: ""
+  api_key: ""
+  timeout: 30
+  max_connections: 5
+  max_retries: 3
+  retry_delay: 1.0
+  use_mock: false
+  pool_size: 5
+  keep_alive: true
+
+# Audio Settings
+audio:
+  # Recording settings
+  sample_rate: 44100
+  channels: 1
+  format: "WAV"
+
+  # Silence detection
+  silence_threshold: 0.01
+  silence_duration: 2.0  # seconds
+
+  # Audio device (leave empty for default)
+  input_device: ""
+
+# Global Hotkeys
+hotkeys:
+  # Global hotkey to start/stop recording
+  record_toggle: "cmd+shift+r"
+  # Hotkey to cancel recording
+  cancel: "escape"
+  # Enable audio feedback on start/stop
+  audio_feedback: true
+
+# Processing Options
+processing:
+  # Processing modes: "quick", "standard", "deep"
+  default_mode: "standard"
+
+  # Automatic processing (vs manual trigger)
+  auto_process: true
+
+  # Maximum conversation depth
+  max_conversation_depth: 5
+
+# File Management
+files:
+  # Directory to save voice notes (relative to user's Documents or absolute path)
+  output_directory: "~/Documents/Voice Notes"
+
+  # File naming pattern: "date", "topic", "hybrid"
+  naming_pattern: "hybrid"
+
+  # Create daily subfolders
+  daily_folders: true
+
+  # Clean up temporary audio files after processing
+  cleanup_temp_files: true
+
+# UI Settings
+ui:
+  # System tray notifications
+  show_notifications: true
+  notification_duration: 3  # seconds
+
+  # Status indicator colors
+  ready_color: "green"
+  recording_color: "red"
+  processing_color: "yellow"
+  error_color: "gray"
+
+# Logging
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+
+  # Log file location
+  file: "logs/voice_notes.log"
+
+  # Maximum log file size (MB)
+  max_size: 10
+
+  # Number of backup files
+  backup_count: 5
+
+# Privacy & Security
+privacy:
+  # Local-only mode (no API calls)
+  local_only: false
+
+  # Encrypt temporary audio files
+  encrypt_temp: false
+
+  # Require confirmation before API calls
+  confirm_api_calls: false
+
+# Cost Management
+cost_management:
+  # Daily API cost limit (USD)
+  daily_limit: 5.00
+
+  # Monthly API cost limit (USD)
+  monthly_limit: 50.00
+
+  # Track usage
+  track_usage: true
+
+  # Alert thresholds (percentage of limit)
+  warning_threshold: 80
+  critical_threshold: 95
