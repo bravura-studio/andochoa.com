@@ -258,11 +258,13 @@ class MarkdownFormatter:
 
 **Description**: Save formatted notes to Obsidian vault
 **Acceptance Criteria**:
-- [ ] Create hybrid filename (date + topic)
-- [ ] Save to correct directory structure
-- [ ] Handle file conflicts gracefully
-- [ ] Create daily subfolders when needed
-- [ ] Clean up temporary audio files
+- [x] Create hybrid filename (date + topic)
+- [x] Save to correct directory structure
+- [x] Handle file conflicts gracefully
+- [x] Create daily subfolders when needed
+- [x] Clean up temporary audio files
+
+**STATUS**: ✅ COMPLETE - Committed as dee6321
 
 ---
 
@@ -279,6 +281,8 @@ class MarkdownFormatter:
 - [ ] Add "Related Notes" section
 - [ ] Respect existing link conventions
 
+**STATUS**: 🚫 DEFERRED - Manual connector agent already available for wikilink generation
+
 ---
 
 ## User Interface
@@ -290,17 +294,28 @@ class MarkdownFormatter:
 
 **Description**: Create system tray app with status indicator
 **Acceptance Criteria**:
-- [ ] System tray icon with status colors
-- [ ] Right-click menu for options
-- [ ] Recording timer display
-- [ ] Processing status indicator
-- [ ] Quick access to recent notes
+- [x] System tray icon with status colors
+- [x] Right-click menu for options
+- [x] Recording timer display
+- [x] Processing status indicator
+- [x] Quick access to recent notes
+
+**STATUS**: ✅ COMPLETE - Full system tray implementation with comprehensive test suite (30 tests passing)
 
 **UI States**:
 - Green icon: Ready
 - Red icon + timer: Recording
 - Yellow icon: Processing
 - Gray icon: Error/Offline
+
+**Implementation Details**:
+- Complete VoiceNotesSystemTray class with all callback methods
+- Dynamic icon generation with PIL for all status states
+- Comprehensive right-click menu with status display, recording controls, recent notes, processing modes, and tools
+- Timer display during recording with real-time updates
+- System notifications for all major actions
+- Graceful error handling and fallback behaviors
+- 30 unit tests covering all functionality
 
 ---
 
