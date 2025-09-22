@@ -135,3 +135,82 @@ cost_management:
   # Alert thresholds (percentage of limit)
   warning_threshold: 80
   critical_threshold: 95
+
+# Error Recovery System
+error_recovery:
+  # Enable error recovery system
+  enabled: true
+
+  # Data directory for error logs and recovery queue
+  data_directory: "logs"
+
+  # Maximum number of failed operations to queue
+  max_queue_size: 100
+
+  # Retry settings
+  retry:
+    # Base delay for first retry (seconds)
+    base_delay: 1
+
+    # Maximum delay between retries (seconds)
+    max_delay: 300
+
+    # Backoff multiplier for exponential backoff
+    backoff_multiplier: 2
+
+    # Default maximum retries per operation
+    max_retries: 3
+
+  # Cleanup settings
+  cleanup:
+    # Maximum age of error logs to keep (days)
+    max_log_age_days: 7
+
+    # Maximum age of recovery queue items (days)
+    max_queue_age_days: 3
+
+  # Error notification settings
+  notifications:
+    # Show user-friendly error messages
+    show_user_messages: true
+
+    # Show system notifications for errors
+    system_notifications: true
+
+    # Error severity levels to notify about
+    notify_levels: ["medium", "high", "critical"]
+
+# Graceful Degradation Settings
+degradation:
+  # Enable graceful degradation
+  enabled: true
+
+  # Services that can be degraded
+  fallback_services:
+    # Transcription fallbacks
+    transcription:
+      # Use local speech recognition if API fails
+      enable_local_fallback: true
+      # Minimum confidence for local transcription
+      min_confidence: 0.6
+
+    # MCP/Conversation fallbacks
+    conversation:
+      # Use mock conversations if MCP unavailable
+      enable_mock_fallback: true
+      # Skip conversation if all methods fail
+      skip_on_failure: true
+
+    # File saving fallbacks
+    file_system:
+      # Alternative output directories if primary fails
+      backup_directories:
+        - "~/Desktop/Voice Notes Backup"
+        - "/tmp/voice_notes_backup"
+
+  # Service timeout settings (seconds)
+  timeouts:
+    transcription: 60
+    mcp_connection: 30
+    file_save: 10
+    audio_device: 5
