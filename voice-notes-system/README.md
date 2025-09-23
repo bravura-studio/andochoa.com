@@ -14,6 +14,8 @@ An intelligent voice recording and conversation system that captures audio, tran
 
 ## Quick Start
 
+### Production Setup (Recommended)
+
 1. **Set up the environment**:
    ```bash
    python3 -m venv venv
@@ -26,10 +28,22 @@ An intelligent voice recording and conversation system that captures audio, tran
    python setup_config.py
    ```
 
-3. **Validate setup**:
+3. **Grant macOS accessibility permissions**:
+   - Go to System Settings > Privacy & Security > Accessibility
+   - Add Terminal or your terminal application to the list
+   - This enables global hotkey functionality
+
+4. **Start the voice notes system**:
    ```bash
-   python validate_config.py
+   cd voice-notes-system && source venv/bin/activate && python -m src.voice_notes_app
    ```
+
+5. **Begin recording**:
+   - Press `Cmd+Shift+R` to start/stop recording
+   - Press `Escape` to cancel recording
+   - Files are saved to your configured output directory
+
+### Claude Desktop Integration (Optional)
 
 4. **Set up Claude Desktop integration**:
    ```bash

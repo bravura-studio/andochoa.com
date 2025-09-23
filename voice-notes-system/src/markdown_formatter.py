@@ -497,6 +497,48 @@ class MarkdownFormatter:
 
         return "\n".join(lines)
 
+    def format_complete_note(self, metadata: Dict[str, Any]) -> str:
+        """
+        Format a complete note with YAML frontmatter and all content sections.
+
+        Args:
+            metadata: Dictionary containing all note metadata including transcript and conversation
+
+        Returns:
+            Complete formatted markdown note
+        """
+        # Build YAML frontmatter
+        yaml_lines = ["---"]
+        yaml_lines.append(f"title: \"{metadata.get('title', 'Voice Note')}\"")
+        yaml_lines.append(f"created: {metadata.get('created', '')}")
+        yaml_lines.append(f"duration: {metadata.get('duration', 0)}")
+        yaml_lines.append(f"topic: {metadata.get('topic', 'general')}")
+        yaml_lines.append(f"source: voice_recording")
+        if metadata.get('degraded_mode'):
+            yaml_lines.append(f"degraded_mode: true")
+            yaml_lines.append(f"unavailable_services: {metadata.get('unavailable_services', [])}")
+        yaml_lines.append("---")
+        yaml_lines.append("")
+
+        # Add main content
+        content_lines = []
+
+        # Add transcript
+        content_lines.append("## Original Transcript")
+        content_lines.append("")
+        content_lines.append(metadata.get('transcript', 'No transcript available.'))
+        content_lines.append("")
+
+        # Add conversation if available
+        if metadata.get('conversation_result'):
+            conversation_lines = self.format_conversation(
+                metadata['conversation_result'].get('exchanges', [])
+            )
+            content_lines.append(conversation_lines)
+
+        # Combine all parts
+        return "\n".join(yaml_lines + content_lines)
+
     def generate_title(self, key_insight: str, topic_type: str = None,
                       fallback_words: List[str] = None) -> str:
         """

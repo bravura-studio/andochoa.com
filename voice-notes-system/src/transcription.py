@@ -15,7 +15,6 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass, asdict
 import hashlib
 
-import openai
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -229,10 +228,14 @@ class TranscriptionService:
         self.monthly_limit = cost_config.get('monthly_limit', 50.0)
         self.track_usage_enabled = cost_config.get('track_usage', True)
 
-        # Initialize OpenAI client
+        # Initialize OpenAI v1 client only (no legacy fallback)
         if self.api_key:
-            openai.api_key = self.api_key
-            self.openai_client = openai
+            try:
+                from openai import OpenAI
+                self.openai_client = OpenAI(api_key=self.api_key)
+            except Exception as e:
+                self.logger.error(f"Failed to initialize OpenAI v1 client: {e}")
+                self.openai_client = None
         else:
             self.logger.warning("No OpenAI API key found. Transcription will not work.")
             self.openai_client = None
@@ -434,43 +437,57 @@ class TranscriptionService:
         """Call Whisper API with retry logic."""
         for attempt in range(self.max_retries + 1):
             try:
-                response = self.openai_client.Audio.transcribe(
+                # Require v1 client with audio.transcriptions.create
+                if not (self.openai_client and hasattr(self.openai_client, "audio") and hasattr(self.openai_client.audio, "transcriptions")):
+                    raise RuntimeError("OpenAI client not initialized with v1 SDK; cannot transcribe")
+
+                response = self.openai_client.audio.transcriptions.create(
                     model=self.model,
                     file=audio_file,
                     response_format="json"
                 )
-                return response
-
-            except openai.error.RateLimitError as e:
-                if attempt < self.max_retries:
-                    wait_time = 2 ** attempt  # Exponential backoff
-                    self.logger.warning(f"Rate limit hit, retrying in {wait_time}s (attempt {attempt + 1})")
-                    time.sleep(wait_time)
-                    continue
-                else:
-                    raise RuntimeError(f"Rate limit exceeded after {self.max_retries} retries") from e
-
-            except openai.error.APIConnectionError as e:
-                if attempt < self.max_retries:
-                    wait_time = 2 ** attempt
-                    self.logger.warning(f"API connection error, retrying in {wait_time}s (attempt {attempt + 1})")
-                    time.sleep(wait_time)
-                    continue
-                else:
-                    raise RuntimeError(f"API connection failed after {self.max_retries} retries") from e
-
-            except openai.error.APIError as e:
-                if attempt < self.max_retries and e.http_status >= 500:
-                    wait_time = 2 ** attempt
-                    self.logger.warning(f"API error {e.http_status}, retrying in {wait_time}s (attempt {attempt + 1})")
-                    time.sleep(wait_time)
-                    continue
-                else:
-                    raise RuntimeError(f"API error: {e}") from e
+                # Convert client object to dict when needed
+                if isinstance(response, dict):
+                    return response
+                # Some clients use pydantic with model_dump
+                if hasattr(response, "model_dump"):
+                    return response.model_dump(mode="json")
+                # Fallback: try common attributes
+                return {k: getattr(response, k) for k in ("text", "language") if hasattr(response, k)}
 
             except Exception as e:
-                self.logger.error(f"Unexpected error during API call: {e}")
-                raise RuntimeError(f"Unexpected error: {e}") from e
+                # Handle OpenAI API errors
+                error_message = str(e).lower()
+
+                if "rate limit" in error_message or "429" in str(e):
+                    if attempt < self.max_retries:
+                        wait_time = 2 ** attempt
+                        self.logger.warning(f"Rate limit hit, retrying in {wait_time}s (attempt {attempt + 1})")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise RuntimeError(f"Rate limit exceeded after {self.max_retries} retries") from e
+
+                elif "connection" in error_message or "network" in error_message:
+                    if attempt < self.max_retries:
+                        wait_time = 2 ** attempt
+                        self.logger.warning(f"API connection error, retrying in {wait_time}s (attempt {attempt + 1})")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise RuntimeError(f"API connection failed after {self.max_retries} retries") from e
+
+                elif str(e).strip().startswith("5"):  # crude server-error detection
+                    if attempt < self.max_retries:
+                        wait_time = 2 ** attempt
+                        self.logger.warning(f"Server error, retrying in {wait_time}s (attempt {attempt + 1})")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise RuntimeError(f"Server error after {self.max_retries} retries: {e}") from e
+                else:
+                    self.logger.error(f"Transcription API error: {e}")
+                    raise RuntimeError(f"Transcription failed: {e}") from e
 
     def fallback_transcription(self, audio_file: str) -> TranscriptionResult:
         """Fallback transcription using local speech recognition.

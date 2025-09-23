@@ -44,8 +44,8 @@ audio:
   format: "WAV"
 
   # Silence detection
-  silence_threshold: 0.01
-  silence_duration: 2.0  # seconds
+  silence_threshold: 0.005
+  silence_duration: 10.0  # seconds
 
   # Audio device (leave empty for default)
   input_device: ""

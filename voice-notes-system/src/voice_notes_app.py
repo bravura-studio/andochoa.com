@@ -368,7 +368,7 @@ class VoiceNotesApp:
             return None
 
         # Analyze topic and generate conversation
-        topic_type = self.conversation_manager.analyze_topic_type(transcript)
+        topic_type, topic_reasoning = self.conversation_manager.analyze_topic_type(transcript)
         conversation_style = self.conversation_manager.select_conversation_style(topic_type)
 
         # Start conversation with MCP
@@ -410,7 +410,8 @@ class VoiceNotesApp:
             'conversation_id': conversation_id,
             'exchanges': exchanges,
             'summary': summary,
-            'topic_type': topic_type
+            'topic_type': topic_type,
+            'topic_reasoning': topic_reasoning
         }
 
     async def _save_processed_note(self, transcript_result, conversation_result, audio_file: str):
@@ -418,30 +419,62 @@ class VoiceNotesApp:
         if not self.file_manager:
             raise RuntimeError("File manager not available")
 
-        # Create metadata
-        metadata = {
-            'transcript': transcript_result,
-            'conversation': conversation_result,
-            'audio_file': audio_file,
-            'processing_time': datetime.now(),
-            'degraded_mode': self.degraded_mode,
-            'unavailable_services': self.unavailable_services
-        }
+        # Prepare conversation_data for MarkdownFormatter/FileManager
+        conversation_data = {}
+        exchanges = []
 
-        # Format using MarkdownFormatter
-        formatter = MarkdownFormatter()
-        formatted_content = formatter.format_complete_note(metadata)
+        # Initial transcript as first exchange for formatting
+        transcript_text = getattr(transcript_result, 'text', str(transcript_result))
+        exchanges.append({'speaker': 'Initial', 'content': transcript_text})
+
+        # Include conversation exchanges if available
+        if conversation_result and isinstance(conversation_result, dict):
+            # conversation_result['exchanges'] are dicts with 'prompt' and 'response'
+            conv_exchanges = []
+            for ex in conversation_result.get('exchanges', []):
+                # Convert to ConversationExchange-like shape
+                conv_exchanges.append({'speaker': 'AI', 'content': ex.get('prompt', '')})
+                conv_exchanges.append({'speaker': 'User', 'content': ex.get('response', '')})
+            conversation_data['exchanges'] = conv_exchanges
+            # Also include raw context history if present
+            if 'summary' in conversation_result:
+                conversation_data['summary'] = conversation_result['summary']
+            conversation_data['topic_type'] = conversation_result.get('topic_type').value if conversation_result.get('topic_type') else None
+        else:
+            # Minimal conversation data containing only transcript
+            conversation_data['text'] = transcript_text
+
+        # Build ConversationMetadata
+        from markdown_formatter import ConversationMetadata  # Local import to avoid cycles
+        created_at = datetime.now()
+        total_exchanges = len(conversation_data.get('exchanges', [])) // 2  # AI/User pairs
+        conversation_text = transcript_text
+        if 'exchanges' in conversation_data:
+            conversation_text = "\n".join([ex['content'] for ex in conversation_data['exchanges'] if ex.get('content')])
+
+        topic_type = conversation_result.get('topic_type').value if isinstance(conversation_result, dict) and conversation_result.get('topic_type') else 'other'
+        depth_level = 'standard'
+        completion_reason = 'conversation not started' if not conversation_result else 'conversation processed'
+
+        metadata_obj = ConversationMetadata(
+            topic_type=topic_type,
+            depth_level=depth_level,
+            total_exchanges=total_exchanges,
+            conversation_length=len(conversation_text),
+            completion_reason=completion_reason,
+            created_at=created_at
+        )
 
         # Save using FileManager
-        result = self.file_manager.save_voice_note(formatted_content, metadata)
+        save_result = self.file_manager.save_voice_note(conversation_data, metadata_obj, temp_files=[audio_file])
 
-        if not result.success:
-            raise RuntimeError(f"Failed to save note: {result.error}")
+        if not save_result.success:
+            raise RuntimeError(f"Failed to save note: {save_result.error}")
 
-        logger.info(f"Note saved successfully: {result.file_path}")
+        logger.info(f"Note saved successfully: {save_result.file_path}")
 
-        # Clean up temporary audio file
-        if result.cleanup_performed:
+        # Clean up temporary audio file if FileManager didn't already
+        if not save_result.cleanup_performed:
             try:
                 Path(audio_file).unlink()
                 logger.info("Temporary audio file cleaned up")
@@ -458,8 +491,21 @@ class VoiceNotesApp:
         """Callback when recording stops via hotkey."""
         logger.info(f"Hotkey recording stopped: {session_id}, duration: {duration}s")
         self.current_status = "processing"
-        # Process the recorded audio
-        asyncio.create_task(self._process_audio_file(file_path))
+        # Process the recorded audio in a separate thread
+        import threading
+        thread = threading.Thread(target=self._process_audio_file_sync, args=(file_path,))
+        thread.daemon = True
+        thread.start()
+
+    def _process_audio_file_sync(self, audio_file: str):
+        """Synchronous wrapper for _process_audio_file."""
+        try:
+            # Run the async method in a new event loop
+            import asyncio
+            asyncio.run(self._process_audio_file(audio_file))
+        except Exception as e:
+            logger.error(f"Error in sync audio processing: {e}")
+            self.current_status = "error"
 
     def _on_hotkey_error(self, exception: Exception):
         """Callback when hotkey system encounters an error."""

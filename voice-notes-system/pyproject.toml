@@ -59,7 +59,6 @@ dependencies = [
     "requests",
     "aiohttp"
 ]
-dynamic = ["version"]
 
 [project.optional-dependencies]
 dev = [
@@ -105,7 +104,7 @@ voice-notes-server = "voice_notes_system.mcp_server:main"
 voice-notes-tray = "voice_notes_system.system_tray:main"
 
 [project.gui-scripts]
-"Voice Notes System" = "voice_notes_system.voice_notes_app:main"
+voice-notes-app = "voice_notes_system.voice_notes_app:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

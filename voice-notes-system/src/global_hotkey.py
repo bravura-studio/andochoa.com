@@ -135,8 +135,21 @@ class GlobalHotkeyManager:
                     app_name="Voice Notes",
                     timeout=2
                 )
+                return
             except Exception as e:
                 self.logger.warning(f"Failed to show notification: {e}")
+        
+        # Fallback: macOS AppleScript via osascript
+        try:
+            if sys.platform == "darwin":
+                # Escape quotes and newlines for AppleScript
+                safe_title = title.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", " ")
+                safe_message = message.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", " ")
+                sound_clause = "sound name \"Glass\""
+                script = f'display notification "{safe_message}" with title "{safe_title}" {sound_clause}'
+                os.system(f"osascript -e \"{script}\" >/dev/null 2>&1")
+        except Exception as e:
+            self.logger.debug(f"Notification fallback failed: {e}")
 
     def _play_audio_feedback(self, sound_type: str):
         """Play audio feedback for recording events."""
@@ -247,8 +260,12 @@ class GlobalHotkeyManager:
         try:
             self.logger.info("Stopping voice recording via hotkey")
 
-            # Stop audio recording
-            audio_file = self.audio_recorder.stop_recording()
+            # Stop audio recording and save file
+            recording_stopped = self.audio_recorder.stop_recording()
+            if recording_stopped:
+                audio_file = self.audio_recorder.save_audio()
+            else:
+                audio_file = None
 
             self.is_recording = False
             duration = time.time() - self.recording_start_time if self.recording_start_time else 0
