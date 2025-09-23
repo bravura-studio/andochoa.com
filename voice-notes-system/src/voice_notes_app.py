@@ -55,7 +55,8 @@ class VoiceNotesApp:
             config_path: Path to configuration file
         """
         # Initialize configuration
-        self.config_manager = ConfigManager(config_path)
+        config_dir = Path(config_path).parent
+        self.config_manager = ConfigManager(config_dir)
         self.config = self.config_manager.config
 
         # Initialize error recovery system
@@ -155,8 +156,14 @@ class VoiceNotesApp:
         # Global Hotkey Manager
         try:
             self.hotkey_manager = GlobalHotkeyManager(
-                hotkey=self.config.get('hotkey', {}).get('combination', 'cmd+shift+r'),
-                callback=self._hotkey_triggered
+                config_manager=self.config_manager,
+                audio_recorder=self.audio_recorder
+            )
+            # Set up callbacks for hotkey events
+            self.hotkey_manager.set_callbacks(
+                on_recording_start=self._on_recording_start,
+                on_recording_stop=self._on_recording_stop,
+                on_error=self._on_hotkey_error
             )
             logger.info("Global hotkey manager initialized")
         except Exception as e:
@@ -441,8 +448,26 @@ class VoiceNotesApp:
             except Exception as e:
                 logger.warning(f"Could not clean up audio file: {e}")
 
+    def _on_recording_start(self, session_id: str):
+        """Callback when recording starts via hotkey."""
+        logger.info(f"Hotkey recording started: {session_id}")
+        self.current_status = "recording"
+        self.recording_start_time = datetime.now()
+
+    def _on_recording_stop(self, session_id: str, file_path: str, duration: float):
+        """Callback when recording stops via hotkey."""
+        logger.info(f"Hotkey recording stopped: {session_id}, duration: {duration}s")
+        self.current_status = "processing"
+        # Process the recorded audio
+        asyncio.create_task(self._process_audio_file(file_path))
+
+    def _on_hotkey_error(self, exception: Exception):
+        """Callback when hotkey system encounters an error."""
+        logger.error(f"Hotkey error: {exception}")
+        self.current_status = "error"
+
     def _hotkey_triggered(self):
-        """Handle global hotkey trigger."""
+        """Handle global hotkey trigger (legacy method)."""
         if self.current_status == "recording":
             asyncio.create_task(self._stop_recording())
         else:

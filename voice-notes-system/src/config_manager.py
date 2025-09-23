@@ -26,6 +26,16 @@ class ConfigManager:
         self._config = self._load_yaml_config(self.config_file)
         self._prompts = self._load_yaml_config(self.prompts_file)
 
+    @property
+    def config(self) -> Dict[str, Any]:
+        """Get the full configuration dictionary."""
+        return self._config
+
+    @property
+    def prompts(self) -> Dict[str, Any]:
+        """Get the prompts configuration dictionary."""
+        return self._prompts
+
     def _load_yaml_config(self, file_path: Path) -> Dict[str, Any]:
         """Load YAML configuration file.
 
