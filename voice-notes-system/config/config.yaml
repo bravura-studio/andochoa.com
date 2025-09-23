@@ -73,7 +73,7 @@ processing:
 # File Management
 files:
   # Directory to save voice notes (relative to user's Documents or absolute path)
-  output_directory: "~/Documents/Voice Notes"
+  output_directory: "~/Documents/Build in public/Content Bank/1-raw-ideas"
 
   # File naming pattern: "date", "topic", "hybrid"
   naming_pattern: "hybrid"
@@ -95,6 +95,54 @@ ui:
   recording_color: "red"
   processing_color: "yellow"
   error_color: "gray"
+
+# Desktop Notifications Configuration
+notifications:
+  # Enable/disable all notifications
+  enabled: true
+
+  # Enable sound with notifications
+  sound_enabled: true
+
+  # Show specific types of notifications
+  show_recording: true        # Recording start/stop notifications
+  show_processing: true       # Processing status updates
+  show_errors: true          # Error notifications
+  show_success: true         # Success notifications
+
+  # Default notification duration (seconds)
+  default_duration: 4
+
+  # Non-intrusive mode (shorter durations, no sounds for low priority)
+  non_intrusive: false
+
+  # Platform-specific settings
+  platform:
+    # macOS specific settings
+    macos:
+      # Use different sounds for different notification types
+      use_notification_sounds: true
+      sound_mapping:
+        error: "Basso"
+        warning: "Sosumi"
+        success: "Glass"
+        info: "Blow"
+
+    # Linux specific settings
+    linux:
+      # Use desktop environment's notification system
+      use_desktop_notifications: true
+      # Notification urgency levels
+      urgency_levels:
+        low: "low"
+        normal: "normal"
+        high: "normal"
+        critical: "critical"
+
+    # Windows specific settings
+    windows:
+      # Use Windows toast notifications
+      use_toast_notifications: true
 
 # Logging
 logging:

@@ -1,0 +1,233 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "voice-notes-system"
+version = "1.0.0"
+description = "AI-powered voice recording and conversation system with Claude Desktop integration"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+maintainers = [
+    {name = "Voice Notes Team", email = "team@voicenotes.example.com"}
+]
+keywords = [
+    "voice", "notes", "audio", "recording", "transcription", "whisper",
+    "ai", "claude", "productivity", "speech-to-text", "voice-to-text",
+    "note-taking", "conversation", "mcp", "desktop", "system-tray"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
+    "Topic :: Office/Business :: Productivity",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Environment :: MacOS X",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: X11 Applications",
+    "Natural Language :: English"
+]
+requires-python = ">=3.9"
+dependencies = [
+    "sounddevice",
+    "soundfile",
+    "numpy",
+    "openai",
+    "SpeechRecognition",
+    "pynput",
+    "pystray",
+    "Pillow",
+    "PyYAML",
+    "python-dotenv",
+    "plyer",
+    "requests",
+    "aiohttp"
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "black>=23.0.0",
+    "flake8>=5.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+    "bandit>=1.7.0"
+]
+performance = [
+    "psutil>=5.9.0",
+    "memory-profiler>=0.60.0"
+]
+encryption = [
+    "cryptography>=3.4.8"
+]
+cloud = [
+    "boto3>=1.26.0",
+    "google-cloud-storage>=2.7.0",
+    "azure-storage-blob>=12.14.0"
+]
+all = [
+    "voice-notes-system[dev,performance,encryption,cloud]"
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/voice-notes-system"
+Documentation = "https://github.com/your-org/voice-notes-system/blob/main/docs/"
+Repository = "https://github.com/your-org/voice-notes-system.git"
+"Bug Tracker" = "https://github.com/your-org/voice-notes-system/issues"
+Changelog = "https://github.com/your-org/voice-notes-system/blob/main/CHANGELOG.md"
+Funding = "https://github.com/sponsors/your-org"
+
+[project.scripts]
+voice-notes = "voice_notes_system.cli:main"
+voice-notes-setup = "voice_notes_system.setup_config:main"
+voice-notes-validate = "voice_notes_system.validate_config:main"
+voice-notes-server = "voice_notes_system.mcp_server:main"
+voice-notes-tray = "voice_notes_system.system_tray:main"
+
+[project.gui-scripts]
+"Voice Notes System" = "voice_notes_system.voice_notes_app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+voice_notes_system = [
+    "config/*.yaml",
+    "config/*.yml",
+    "assets/*.png",
+    "assets/*.ico",
+    "templates/*.md",
+    "templates/*.txt"
+]
+
+# Black configuration
+[tool.black]
+line-length = 88
+target-version = ['py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | __pycache__
+)/
+'''
+
+# isort configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["voice_notes_system"]
+skip = ["venv", ".venv", "build", "dist"]
+
+# mypy configuration
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "sounddevice",
+    "soundfile",
+    "pynput.*",
+    "pystray.*",
+    "plyer.*"
+]
+ignore_missing_imports = true
+
+# pytest configuration
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--disable-warnings",
+    "--cov=src",
+    "--cov-branch",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov"
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "performance: Performance tests",
+    "slow: Tests that take more than 1 second",
+    "api: Tests that require API access"
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/build/*",
+    "*/dist/*",
+    "*/__pycache__/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod"
+]
+
+# Bandit security linting
+[tool.bandit]
+exclude_dirs = ["tests", "venv", "build", "dist"]
+skips = ["B101", "B601"]  # Skip assert_used and shell_injection_process_params
+
+# Flake8 configuration (in setup.cfg since flake8 doesn't support pyproject.toml)

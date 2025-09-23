@@ -1,0 +1,63 @@
+# Include documentation files
+include README.md
+include CHANGELOG.md
+include CONTRIBUTING.md
+include LICENSE
+
+# Include configuration files
+recursive-include config *.yaml *.yml
+include .env.template
+
+# Include documentation
+recursive-include docs *.md *.rst *.txt
+
+# Include assets and icons
+recursive-include assets *.png *.ico *.svg
+recursive-include packaging *.desktop *.spec *.iss
+
+# Include templates
+recursive-include templates *.md *.txt *.yaml *.yml
+
+# Include scripts
+include scripts/*.py
+include scripts/*.sh
+include scripts/*.bat
+
+# Include test fixtures (but not test code)
+recursive-include tests/fixtures *.wav *.mp3 *.json *.yaml
+
+# Include setup and configuration scripts
+include setup_config.py
+include validate_config.py
+include start_mcp_server.py
+
+# Exclude development and build artifacts
+exclude .gitignore
+exclude .env
+exclude *.pyc
+exclude *~
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude .git *
+recursive-exclude .pytest_cache *
+recursive-exclude venv *
+recursive-exclude build *
+recursive-exclude dist *
+recursive-exclude htmlcov *
+recursive-exclude logs *
+recursive-exclude temp_audio *
+
+# Include package metadata
+include pyproject.toml
+include setup.py
+include requirements.txt
+include requirements-dev.txt
+
+# Include CI/CD configurations
+include .github/workflows/*.yml
+include .pre-commit-config.yaml
+
+# Include Docker files
+include Dockerfile
+include docker-compose.yml
+include .dockerignore

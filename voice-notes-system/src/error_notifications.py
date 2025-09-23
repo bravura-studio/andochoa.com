@@ -13,7 +13,11 @@ from datetime import datetime
 from dataclasses import dataclass
 from enum import Enum
 
-from .error_recovery import ErrorType, ErrorSeverity, ErrorInfo
+try:
+    from .error_recovery import ErrorType, ErrorSeverity, ErrorInfo
+except ImportError:
+    # Fallback for when running as standalone script or in tests
+    from error_recovery import ErrorType, ErrorSeverity, ErrorInfo
 
 logger = logging.getLogger(__name__)
 
