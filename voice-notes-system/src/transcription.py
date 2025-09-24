@@ -6,6 +6,7 @@ with retry logic, cost tracking, and comprehensive error handling.
 """
 
 import os
+import sys
 import time
 import json
 import logging
@@ -72,8 +73,22 @@ class CostTracker:
             data_dir: Directory to store usage data
         """
         self.data_dir = Path(data_dir)
-        self.data_dir.mkdir(exist_ok=True)
-        self.usage_file = self.data_dir / "usage_metrics.json"
+
+        # Try to create directory with fallback for read-only systems
+        try:
+            self.data_dir.mkdir(exist_ok=True)
+        except (OSError, PermissionError) as e:
+            # Fallback to system temp directory if project dir is read-only
+            import tempfile
+            self.data_dir = Path(tempfile.gettempdir()) / "voice_notes_logs"
+            try:
+                self.data_dir.mkdir(exist_ok=True)
+            except Exception as fallback_error:
+                # If even temp directory fails, disable file logging
+                self.data_dir = None
+                print(f"Warning: Could not create logs directory, usage tracking disabled: {e}", file=sys.stderr)
+
+        self.usage_file = self.data_dir / "usage_metrics.json" if self.data_dir else None
         self.logger = logging.getLogger(__name__)
 
         # Load existing metrics
@@ -82,7 +97,7 @@ class CostTracker:
     def _load_metrics(self) -> UsageMetrics:
         """Load usage metrics from file."""
         try:
-            if self.usage_file.exists():
+            if self.usage_file and self.usage_file.exists():
                 with open(self.usage_file, 'r') as f:
                     data = json.load(f)
                     # Convert timestamp strings back to datetime objects
@@ -96,6 +111,10 @@ class CostTracker:
 
     def _save_metrics(self):
         """Save usage metrics to file."""
+        if not self.usage_file:
+            # File logging disabled, skip saving
+            return
+
         try:
             data = asdict(self.metrics)
             # Convert datetime to string for JSON serialization
@@ -246,9 +265,22 @@ class TranscriptionService:
         # Setup retry strategy
         self.session = self._create_session()
 
-        # Cache for preventing duplicate requests
-        self.cache_dir = Path("temp_audio") / "cache"
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        # Cache for preventing duplicate requests - use absolute path
+        project_root = Path(__file__).parent.parent
+        self.cache_dir = project_root / "temp_audio" / "cache"
+
+        try:
+            self.cache_dir.mkdir(parents=True, exist_ok=True)
+        except (OSError, PermissionError) as e:
+            # Fallback to system temp directory if project dir is read-only
+            import tempfile
+            self.cache_dir = Path(tempfile.gettempdir()) / "voice_notes_cache"
+            try:
+                self.cache_dir.mkdir(parents=True, exist_ok=True)
+            except Exception as fallback_error:
+                # If even temp directory fails, disable caching
+                self.cache_dir = None
+                print(f"Warning: Could not create cache directory, caching disabled: {e}", file=sys.stderr)
 
     def _create_session(self) -> requests.Session:
         """Create HTTP session with retry strategy."""
@@ -281,6 +313,9 @@ class TranscriptionService:
 
     def _get_cached_result(self, file_hash: str) -> Optional[TranscriptionResult]:
         """Get cached transcription result if available."""
+        if not self.cache_dir:
+            return None
+
         cache_file = self.cache_dir / f"{file_hash}.json"
         try:
             if cache_file.exists():
@@ -296,6 +331,9 @@ class TranscriptionService:
 
     def _cache_result(self, file_hash: str, result: TranscriptionResult):
         """Cache transcription result."""
+        if not self.cache_dir:
+            return
+
         cache_file = self.cache_dir / f"{file_hash}.json"
         try:
             data = asdict(result)
@@ -597,6 +635,9 @@ class TranscriptionService:
         Args:
             max_age_days: Maximum age of cached files to keep
         """
+        if not self.cache_dir:
+            return
+
         try:
             cutoff_time = time.time() - (max_age_days * 24 * 3600)
             cleaned_count = 0

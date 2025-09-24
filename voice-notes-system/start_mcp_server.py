@@ -43,11 +43,20 @@ def main():
         logger = setup_logging()
 
         # Ensure required directories exist
-        output_dir = Path(os.getenv('VOICE_NOTES_OUTPUT_DIR', project_root / "notes"))
-        output_dir.mkdir(exist_ok=True)
+        output_dir = Path(os.getenv('VOICE_NOTES_OUTPUT_DIR',
+                                  os.path.expanduser("~/Documents/Build in public/Content Bank/1-raw-ideas")))
+        try:
+            output_dir.mkdir(parents=True, exist_ok=True)
+        except (OSError, PermissionError) as e:
+            logger.warning(f"Cannot create output directory {output_dir}: {e}")
+            # Directory creation will be handled in VoiceNotesServer with fallback
 
         temp_audio_dir = project_root / "temp_audio"
-        temp_audio_dir.mkdir(exist_ok=True)
+        try:
+            temp_audio_dir.mkdir(parents=True, exist_ok=True)
+        except (OSError, PermissionError) as e:
+            logger.warning(f"Cannot create temp directory {temp_audio_dir}: {e}")
+            # Directory creation will be handled in VoiceNotesServer with fallback
 
         logger.info(f"Output directory: {output_dir}")
         logger.info(f"Temp audio directory: {temp_audio_dir}")

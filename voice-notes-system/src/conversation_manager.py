@@ -8,6 +8,7 @@ import re
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 import logging
 
 logger = logging.getLogger(__name__)
@@ -86,8 +87,12 @@ class ConversationManager:
     Analyzes topic types and generates appropriate follow-up prompts.
     """
 
-    def __init__(self, config_path: str = "config/prompts.yaml"):
+    def __init__(self, config_path: str = None):
         """Initialize with prompt configuration."""
+        if config_path is None:
+            # Use absolute path relative to project root
+            project_root = Path(__file__).parent.parent
+            config_path = project_root / "config" / "prompts.yaml"
         self.config_path = config_path
         self.prompts = self._load_prompts()
         self.max_follow_ups = self.prompts.get("conversation_flow", {}).get("max_follow_ups", 5)

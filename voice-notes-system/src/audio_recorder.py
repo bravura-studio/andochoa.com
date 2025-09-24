@@ -52,9 +52,17 @@ class AudioRecorder:
         self.level_callback: Optional[Callable[[float], None]] = None
         self.silence_start_time: Optional[float] = None
 
-        # Temporary file management
-        self.temp_dir = Path("temp_audio")
-        self.temp_dir.mkdir(exist_ok=True)
+        # Temporary file management - use absolute path in project directory
+        project_root = Path(__file__).parent.parent
+        self.temp_dir = project_root / "temp_audio"
+        try:
+            self.temp_dir.mkdir(exist_ok=True)
+        except (OSError, PermissionError) as e:
+            # Fallback to user's temporary directory if project dir is read-only
+            import tempfile
+            self.temp_dir = Path(tempfile.gettempdir()) / "voice_notes_temp"
+            self.temp_dir.mkdir(exist_ok=True)
+            print(f"Warning: Using fallback temp directory: {self.temp_dir} (Original error: {e})")
 
         # Verify audio device availability
         self._check_audio_devices()

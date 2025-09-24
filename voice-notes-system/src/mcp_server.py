@@ -21,6 +21,18 @@ from mcp.types import (
 )
 from mcp import ClientSession
 
+# Import our voice notes components
+try:
+    from .audio_recorder import AudioRecorder
+    from .transcription import TranscriptionService
+    from .conversation_manager import ConversationManager
+    from .config_manager import ConfigManager
+except ImportError:
+    from audio_recorder import AudioRecorder
+    from transcription import TranscriptionService
+    from conversation_manager import ConversationManager
+    from config_manager import ConfigManager
+
 
 logger = logging.getLogger(__name__)
 
@@ -42,13 +54,38 @@ class VoiceNotesServer:
         self.output_dir = Path(output_dir or os.getenv('VOICE_NOTES_OUTPUT_DIR', project_root / 'notes'))
         self.temp_audio_dir = Path(os.getenv('VOICE_NOTES_TEMP_AUDIO_DIR', project_root / 'temp_audio'))
 
-        # Ensure directories exist
-        self.output_dir.mkdir(exist_ok=True)
-        self.temp_audio_dir.mkdir(exist_ok=True)
+        # Ensure directories exist with fallback for read-only systems
+        try:
+            self.output_dir.mkdir(parents=True, exist_ok=True)
+        except (OSError, PermissionError) as e:
+            logger.error(f"Cannot create output directory {self.output_dir}: {e}")
+            # Use a fallback directory
+            import tempfile
+            fallback_output = Path(tempfile.gettempdir()) / "voice_notes_output"
+            fallback_output.mkdir(exist_ok=True)
+            self.output_dir = fallback_output
+            logger.warning(f"Using fallback output directory: {self.output_dir}")
+
+        try:
+            self.temp_audio_dir.mkdir(parents=True, exist_ok=True)
+        except (OSError, PermissionError) as e:
+            logger.error(f"Cannot create temp audio directory {self.temp_audio_dir}: {e}")
+            # Use system temp directory
+            import tempfile
+            self.temp_audio_dir = Path(tempfile.gettempdir()) / "voice_notes_temp"
+            self.temp_audio_dir.mkdir(exist_ok=True)
+            logger.warning(f"Using fallback temp audio directory: {self.temp_audio_dir}")
 
         # Voice notes storage
         self.voice_notes = {}
         self.active_recordings = {}
+        self.conversation_states = {}  # Store conversation states by session_id
+
+        # Initialize voice notes components
+        self.config_manager = ConfigManager()
+        self.audio_recorder = AudioRecorder(self.config_manager)
+        self.transcription_service = TranscriptionService(self.config_manager)
+        self.conversation_manager = ConversationManager()
 
         self.server = Server("voice-notes")
         self._setup_handlers()
@@ -187,9 +224,51 @@ class VoiceNotesServer:
                                 "type": "string",
                                 "description": "Type of conversation for formatting",
                                 "default": "general"
+                            },
+                            "enable_conversation": {
+                                "type": "boolean",
+                                "description": "Enable AI conversation for deeper insights",
+                                "default": True
+                            },
+                            "processing_mode": {
+                                "type": "string",
+                                "description": "Processing mode (quick/standard/deep)",
+                                "default": "standard"
                             }
                         },
                         "required": ["transcription"]
+                    }
+                ),
+                Tool(
+                    name="continue_conversation",
+                    description="Continue an AI conversation about a voice note",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "session_id": {
+                                "type": "string",
+                                "description": "Session ID of the conversation"
+                            },
+                            "user_response": {
+                                "type": "string",
+                                "description": "User's response to the AI prompt"
+                            }
+                        },
+                        "required": ["session_id", "user_response"]
+                    }
+                ),
+                Tool(
+                    name="end_conversation",
+                    description="End an AI conversation and get the final summary",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "session_id": {
+                                "type": "string",
+                                "description": "Session ID of the conversation to end"
+                            }
+                        },
+                        "required": ["session_id"]
                     }
                 ),
                 Tool(
@@ -248,6 +327,10 @@ class VoiceNotesServer:
                     return await self._list_voice_notes(**arguments)
                 elif name == "search_voice_notes":
                     return await self._search_voice_notes(**arguments)
+                elif name == "continue_conversation":
+                    return await self._continue_conversation(**arguments)
+                elif name == "end_conversation":
+                    return await self._end_conversation(**arguments)
                 else:
                     return [TextContent(type="text", text=f"Unknown tool: {name}")]
 
@@ -258,25 +341,40 @@ class VoiceNotesServer:
     async def _start_voice_recording(self, session_name: Optional[str] = None,
                                    conversation_type: str = "general") -> List[TextContent]:
         """Start a new voice recording session."""
-        # This would integrate with your audio_recorder.py
         session_id = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
-        self.active_recordings[session_id] = {
-            "name": session_name or f"Recording {session_id}",
-            "type": conversation_type,
-            "started": datetime.now().isoformat(),
-            "status": "recording"
-        }
+        try:
+            # Start actual audio recording
+            success = self.audio_recorder.start_recording()
 
-        # Here you would start the actual audio recording
-        # For now, return a mock response
-        return [TextContent(
-            type="text",
-            text=f"Started voice recording session: {session_id}\n"
-                 f"Session name: {session_name or 'Unnamed'}\n"
-                 f"Type: {conversation_type}\n"
-                 f"Use the stop_voice_recording tool with session_id '{session_id}' when finished."
-        )]
+            if not success:
+                return [TextContent(
+                    type="text",
+                    text=f"Failed to start audio recording. Please check your microphone settings."
+                )]
+
+            self.active_recordings[session_id] = {
+                "name": session_name or f"Recording {session_id}",
+                "type": conversation_type,
+                "started": datetime.now().isoformat(),
+                "status": "recording",
+                "audio_recorder": self.audio_recorder
+            }
+
+            return [TextContent(
+                type="text",
+                text=f"🎤 Started voice recording session: {session_id}\n"
+                     f"Session name: {session_name or 'Unnamed'}\n"
+                     f"Type: {conversation_type}\n"
+                     f"🛑 Use stop_voice_recording with session_id '{session_id}' when finished."
+            )]
+
+        except Exception as e:
+            logger.error(f"Error starting recording: {e}")
+            return [TextContent(
+                type="text",
+                text=f"Error starting recording: {str(e)}"
+            )]
 
     async def _stop_voice_recording(self, session_id: str) -> List[TextContent]:
         """Stop an active voice recording session."""
@@ -284,64 +382,179 @@ class VoiceNotesServer:
             return [TextContent(type="text", text=f"No active recording found for session: {session_id}")]
 
         session = self.active_recordings[session_id]
-        session["status"] = "stopped"
-        session["ended"] = datetime.now().isoformat()
 
-        # Here you would stop the actual audio recording and save the file
-        audio_file = self.temp_audio_dir / f"{session_id}.wav"
+        try:
+            # Stop the actual audio recording
+            if "audio_recorder" in session:
+                audio_recorder = session["audio_recorder"]
+                success = audio_recorder.stop_recording()
 
-        return [TextContent(
-            type="text",
-            text=f"Stopped voice recording session: {session_id}\n"
-                 f"Duration: Started at {session['started']}\n"
-                 f"Audio saved to: {audio_file}\n"
-                 f"Use the transcribe_audio tool to process the recording."
-        )]
+                if not success:
+                    return [TextContent(
+                        type="text",
+                        text=f"Failed to stop recording for session: {session_id}"
+                    )]
+
+                # Save the audio file
+                audio_file = self.temp_audio_dir / f"{session_id}.wav"
+                saved_path = audio_recorder.save_audio(str(audio_file))
+                duration = audio_recorder.get_recording_duration()
+
+                session["status"] = "stopped"
+                session["ended"] = datetime.now().isoformat()
+                session["audio_file"] = saved_path
+                session["duration"] = duration
+
+                return [TextContent(
+                    type="text",
+                    text=f"🛑 Stopped voice recording session: {session_id}\n"
+                         f"Duration: {duration:.1f} seconds\n"
+                         f"Audio saved to: {saved_path}\n"
+                         f"📝 Use transcribe_audio tool with file path '{saved_path}' to process the recording."
+                )]
+            else:
+                return [TextContent(
+                    type="text",
+                    text=f"No audio recorder found for session: {session_id}"
+                )]
+
+        except Exception as e:
+            logger.error(f"Error stopping recording: {e}")
+            return [TextContent(
+                type="text",
+                text=f"Error stopping recording: {str(e)}"
+            )]
 
     async def _transcribe_audio(self, audio_file: str, language: Optional[str] = None) -> List[TextContent]:
         """Transcribe an audio file using Whisper."""
-        # This would integrate with your transcription.py
-        # For now, return a mock response
-        return [TextContent(
-            type="text",
-            text=f"Transcription of {audio_file}:\n\n"
-                 f"[Mock transcription - this would contain the actual Whisper output]\n"
-                 f"Language detected: {language or 'auto-detected'}\n\n"
-                 f"Use the create_voice_note tool to format this transcription into a note."
-        )]
+        try:
+            # Use the actual transcription service
+            result = self.transcription_service.transcribe_audio(audio_file, use_cache=True)
+
+            if not result or not result.text:
+                return [TextContent(
+                    type="text",
+                    text=f"❌ Failed to transcribe audio file: {audio_file}\n"
+                         f"The transcription returned empty or failed."
+                )]
+
+            # Format the response with metadata
+            response_text = f"✅ Transcription completed for: {Path(audio_file).name}\n\n"
+            response_text += f"**Text:**\n{result.text}\n\n"
+            response_text += f"**Details:**\n"
+            response_text += f"- Duration: {result.duration:.1f} minutes\n"
+            response_text += f"- Language: {result.language or 'auto-detected'}\n"
+            response_text += f"- Word count: {result.word_count}\n"
+            response_text += f"- Cost: ${result.cost_estimate:.4f}\n"
+            response_text += f"- API used: {result.api_used}\n\n"
+            response_text += f"💡 Use create_voice_note tool with this transcription to create a structured note with AI conversation."
+
+            return [TextContent(type="text", text=response_text)]
+
+        except Exception as e:
+            logger.error(f"Transcription error: {e}")
+            # Try fallback transcription
+            try:
+                result = self.transcription_service.fallback_transcription(audio_file)
+                response_text = f"⚠️ Used fallback transcription for: {Path(audio_file).name}\n\n"
+                response_text += f"**Text:**\n{result.text}\n\n"
+                response_text += f"**Note:** This is a lower-quality fallback transcription.\n"
+                response_text += f"Duration: {result.duration:.1f} minutes | API: {result.api_used}\n\n"
+                response_text += f"💡 Use create_voice_note tool with this transcription to create a structured note."
+                return [TextContent(type="text", text=response_text)]
+            except Exception as fallback_error:
+                logger.error(f"Fallback transcription failed: {fallback_error}")
+                return [TextContent(
+                    type="text",
+                    text=f"❌ Transcription failed: {str(e)}\n"
+                         f"Fallback also failed: {str(fallback_error)}\n\n"
+                         f"Please check your OpenAI API key and internet connection."
+                )]
 
     async def _create_voice_note(self, transcription: str, title: Optional[str] = None,
                                tags: Optional[List[str]] = None,
-                               conversation_type: str = "general") -> List[TextContent]:
-        """Create a formatted voice note from transcription."""
+                               conversation_type: str = "general",
+                               enable_conversation: bool = True,
+                               processing_mode: str = "standard") -> List[TextContent]:
+        """Create a formatted voice note from transcription with optional AI conversation."""
         timestamp = datetime.now()
         note_id = timestamp.strftime("%Y%m%d_%H%M%S")
         note_title = title or f"Voice Note {note_id}"
 
-        # Format the note in markdown
-        note_content = f"# {note_title}\n\n"
-        note_content += f"**Date:** {timestamp.strftime('%Y-%m-%d %H:%M:%S')}\n"
-        note_content += f"**Type:** {conversation_type}\n"
+        try:
+            # Start AI conversation if enabled
+            conversation_session_id = None
+            initial_prompt = None
+            conversation_state = None
 
-        if tags:
-            note_content += f"**Tags:** {', '.join(tags)}\n"
+            if enable_conversation:
+                # Create conversation state and get initial prompt
+                initial_prompt, conversation_state = self.conversation_manager.generate_initial_prompt(
+                    transcription, processing_mode
+                )
 
-        note_content += "\n---\n\n"
-        note_content += transcription
-        note_content += "\n\n---\n\n"
-        note_content += "*Created by Voice Notes System*\n"
+                conversation_session_id = f"conv_{note_id}"
+                self.conversation_states[conversation_session_id] = conversation_state
 
-        # Save the note
-        note_file = self.output_dir / f"{note_id}_{note_title.replace(' ', '_')}.md"
-        note_file.write_text(note_content)
+            # Format the note in markdown with YAML frontmatter
+            note_content = f"---\n"
+            note_content += f"title: \"{note_title}\"\n"
+            note_content += f"date: \"{timestamp.strftime('%Y-%m-%d %H:%M:%S')}\"\n"
+            note_content += f"type: \"{conversation_type}\"\n"
+            note_content += f"processing_mode: \"{processing_mode}\"\n"
 
-        return [TextContent(
-            type="text",
-            text=f"Created voice note: {note_title}\n"
-                 f"File: {note_file}\n"
-                 f"Type: {conversation_type}\n"
-                 f"Tags: {', '.join(tags) if tags else 'None'}"
-        )]
+            if tags:
+                note_content += f"tags: [{', '.join(f'\"{tag}\"' for tag in tags)}]\n"
+
+            if conversation_session_id:
+                note_content += f"conversation_session_id: \"{conversation_session_id}\"\n"
+                note_content += f"topic_type: \"{conversation_state.topic_type.value}\"\n"
+                note_content += f"conversation_depth: \"{conversation_state.depth_level.value}\"\n"
+
+            note_content += f"source: \"voice_recording\"\n"
+            note_content += f"---\n\n"
+
+            # Add the main content
+            note_content += f"# {note_title}\n\n"
+            note_content += f"## Original Transcription\n\n"
+            note_content += transcription
+
+            if enable_conversation and initial_prompt:
+                note_content += f"\n\n## AI Conversation\n\n"
+                note_content += f"**Initial AI Prompt:** {initial_prompt}\n\n"
+                note_content += f"*Use `continue_conversation` with session ID `{conversation_session_id}` to respond and continue the conversation.*\n\n"
+
+            note_content += f"\n\n---\n\n"
+            note_content += f"*Created by Voice Notes System at {timestamp.strftime('%Y-%m-%d %H:%M:%S')}*\n"
+
+            # Save the note
+            note_file = self.output_dir / f"{note_id}_{note_title.replace(' ', '_').replace('/', '_')}.md"
+            note_file.write_text(note_content)
+
+            # Prepare response
+            response_text = f"📝 Created voice note: {note_title}\n"
+            response_text += f"📁 File: {note_file}\n"
+            response_text += f"📊 Type: {conversation_type}\n"
+            response_text += f"🏷️ Tags: {', '.join(tags) if tags else 'None'}\n"
+
+            if enable_conversation and initial_prompt:
+                response_text += f"\n🤖 **AI Conversation Started**\n"
+                response_text += f"Session ID: `{conversation_session_id}`\n"
+                response_text += f"Topic: {conversation_state.topic_type.value}\n"
+                response_text += f"Depth: {conversation_state.depth_level.value}\n\n"
+                response_text += f"**AI asks:** {initial_prompt}\n\n"
+                response_text += f"💬 Use `continue_conversation` with session ID `{conversation_session_id}` and your response to continue."
+            else:
+                response_text += f"\n✅ Voice note created without AI conversation."
+
+            return [TextContent(type="text", text=response_text)]
+
+        except Exception as e:
+            logger.error(f"Error creating voice note: {e}")
+            return [TextContent(
+                type="text",
+                text=f"❌ Error creating voice note: {str(e)}"
+            )]
 
     async def _list_voice_notes(self, filter: Optional[str] = None,
                               limit: int = 20) -> List[TextContent]:
@@ -418,6 +631,158 @@ class VoiceNotesServer:
             result_text += f"```\n{result['snippet']}\n```\n\n"
 
         return [TextContent(type="text", text=result_text)]
+
+    async def _continue_conversation(self, session_id: str, user_response: str) -> List[TextContent]:
+        """Continue an AI conversation about a voice note."""
+        if session_id not in self.conversation_states:
+            return [TextContent(
+                type="text",
+                text=f"❌ No active conversation found for session: {session_id}\n"
+                     f"Available sessions: {list(self.conversation_states.keys())}"
+            )]
+
+        try:
+            conversation_state = self.conversation_states[session_id]
+
+            # Check if conversation is already complete
+            if conversation_state.is_complete:
+                return [TextContent(
+                    type="text",
+                    text=f"✅ This conversation has already been completed.\n"
+                         f"Use `end_conversation` with session ID `{session_id}` to get the final summary."
+                )]
+
+            # Generate follow-up prompt based on user response
+            next_prompt = self.conversation_manager.generate_followup(conversation_state)
+
+            if next_prompt is None:
+                # Conversation is complete
+                conversation_state.is_complete = True
+                insights = self.conversation_manager.extract_insights(conversation_state)
+
+                return [TextContent(
+                    type="text",
+                    text=f"✅ Conversation completed naturally!\n\n"
+                         f"**Summary:**\n"
+                         f"- Topic: {insights['topic_type']}\n"
+                         f"- Total exchanges: {insights['total_exchanges']}\n"
+                         f"- Completion reason: {insights['completion_reason']}\n\n"
+                         f"💾 Use `end_conversation` with session ID `{session_id}` to update your voice note with the conversation insights."
+                )]
+
+            # Update conversation context with the user response
+            last_prompt = "[Previous AI prompt]"  # We could track this better
+            self.conversation_manager.update_conversation_context(
+                conversation_state, user_response, last_prompt
+            )
+
+            # Check if we should continue
+            if not self.conversation_manager.should_continue(conversation_state, user_response):
+                conversation_state.is_complete = True
+                insights = self.conversation_manager.extract_insights(conversation_state)
+
+                return [TextContent(
+                    type="text",
+                    text=f"✅ Conversation completed!\n\n"
+                         f"**Final Summary:**\n"
+                         f"- Topic: {insights['topic_type']}\n"
+                         f"- Total exchanges: {insights['total_exchanges']}\n"
+                         f"- Completion reason: {insights['completion_reason']}\n\n"
+                         f"💾 Use `end_conversation` with session ID `{session_id}` to update your voice note."
+                )]
+
+            # Continue the conversation
+            response_text = f"🤖 **AI Response** (Exchange {conversation_state.follow_up_count + 1})\n\n"
+            response_text += f"{next_prompt}\n\n"
+            response_text += f"**Session:** `{session_id}`\n"
+            response_text += f"**Topic:** {conversation_state.topic_type.value}\n"
+            response_text += f"**Engagement:** {conversation_state.user_engagement_score:.1f}/1.0\n\n"
+            response_text += f"💬 Use `continue_conversation` with your response to continue, or `end_conversation` to finish."
+
+            return [TextContent(type="text", text=response_text)]
+
+        except Exception as e:
+            logger.error(f"Error continuing conversation: {e}")
+            return [TextContent(
+                type="text",
+                text=f"❌ Error continuing conversation: {str(e)}"
+            )]
+
+    async def _end_conversation(self, session_id: str) -> List[TextContent]:
+        """End an AI conversation and get the final summary."""
+        if session_id not in self.conversation_states:
+            return [TextContent(
+                type="text",
+                text=f"❌ No conversation found for session: {session_id}\n"
+                     f"Available sessions: {list(self.conversation_states.keys())}"
+            )]
+
+        try:
+            conversation_state = self.conversation_states[session_id]
+
+            # Finalize the conversation
+            insights = self.conversation_manager.finalize_conversation(conversation_state)
+
+            # Find and update the original voice note file
+            note_id = session_id.replace('conv_', '')
+            matching_files = list(self.output_dir.glob(f"{note_id}_*.md"))
+
+            if matching_files:
+                note_file = matching_files[0]
+
+                # Read existing content
+                existing_content = note_file.read_text()
+
+                # Add conversation summary to the note
+                conversation_summary = f"\n## Conversation Summary\n\n"
+                conversation_summary += f"**Topic Analysis:** {insights['topic_type']} ({insights['depth_level']} depth)\n"
+                conversation_summary += f"**Total Exchanges:** {insights['total_exchanges']}\n"
+                conversation_summary += f"**Completion Reason:** {insights['completion_reason']}\n\n"
+
+                if insights.get('conversation_history'):
+                    conversation_summary += f"**Full Conversation:**\n"
+                    for i, exchange in enumerate(insights['conversation_history'], 1):
+                        conversation_summary += f"\n{i}. {exchange}\n"
+
+                conversation_summary += f"\n\n*Conversation completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*\n"
+
+                # Update the note file
+                updated_content = existing_content.replace(
+                    "*Created by Voice Notes System",
+                    f"{conversation_summary}\n---\n\n*Created by Voice Notes System"
+                )
+
+                note_file.write_text(updated_content)
+
+                # Clean up conversation state
+                del self.conversation_states[session_id]
+
+                response_text = f"✅ **Conversation Completed & Note Updated**\n\n"
+                response_text += f"**Summary:**\n"
+                response_text += f"- Topic: {insights['topic_type']}\n"
+                response_text += f"- Depth: {insights['depth_level']}\n"
+                response_text += f"- Exchanges: {insights['total_exchanges']}\n"
+                response_text += f"- Reason: {insights['completion_reason']}\n\n"
+                response_text += f"📝 **Updated file:** {note_file}\n\n"
+                response_text += f"🎯 The conversation insights have been added to your original voice note."
+
+                return [TextContent(type="text", text=response_text)]
+            else:
+                return [TextContent(
+                    type="text",
+                    text=f"⚠️ Conversation ended but could not find original note file for ID: {note_id}\n\n"
+                         f"**Conversation Summary:**\n"
+                         f"- Topic: {insights['topic_type']}\n"
+                         f"- Exchanges: {insights['total_exchanges']}\n"
+                         f"- Reason: {insights['completion_reason']}"
+                )]
+
+        except Exception as e:
+            logger.error(f"Error ending conversation: {e}")
+            return [TextContent(
+                type="text",
+                text=f"❌ Error ending conversation: {str(e)}"
+            )]
 
 
 async def main():
