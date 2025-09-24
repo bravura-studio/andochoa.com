@@ -1,0 +1,1 @@
+use and examine the note contents from Content Bank/1-raw-ideas/2025-09-24/2025-09-24_Have-a-Good-Life.md with mcp-obsidian and start the conversation using the voice-notes
