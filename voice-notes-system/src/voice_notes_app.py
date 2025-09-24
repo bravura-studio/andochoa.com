@@ -16,6 +16,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, Optional, List, Callable
 
+sys.path.insert(0, str(Path(__file__).parent))
+
 try:
     from .config_manager import ConfigManager
     from .audio_recorder import AudioRecorder

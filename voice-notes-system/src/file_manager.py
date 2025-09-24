@@ -15,7 +15,6 @@ from dataclasses import dataclass
 try:
     from .markdown_formatter import MarkdownFormatter, ConversationMetadata
 except ImportError:
-    # Handle case when module is run directly (not as package)
     from markdown_formatter import MarkdownFormatter, ConversationMetadata
 
 logger = logging.getLogger(__name__)

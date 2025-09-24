@@ -1,0 +1,1 @@
+pkill -9 -f "voice_notes_app"
