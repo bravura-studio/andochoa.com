@@ -48,3 +48,8 @@ Related frameworks: [[training-data/product-philosophy/pmf-measurement|PMF Measu
 This PMF framework connects to broader growth strategies:
 - [[training-data/world-view/The Bullseye Framework for Getting Traction|The Bullseye Framework]] - Finding your one optimal channel mirrors finding your core value proposition
 - [[training-data/world-view/$80M within 6 months|Rapid growth playbook]] - Customer feedback loops are critical for both PMF and rapid scaling
+
+
+## Related Strategic Frameworks
+
+The PMF measurement approach here complements broader entrepreneurial strategy thinking in [[20250925_010619_BUILD.FUN.FREE_Mantra_&_Product_Urgency_Strategy|BUILD.FUN.FREE Mantra & Product Urgency Strategy]], particularly around distinguishing "must-have" vs "nice-to-have" solutions through urgency testing.

@@ -42,3 +42,8 @@ Metrics to track:
 - Sales qualified lead rate
 
 Learn more: [[training-data/growth-strategies/user-onboarding-best-practices|User Onboarding Best Practices]]
+
+
+## Strategic Connection
+
+The insight about behavioral data over user feedback connects to [[20250925_010619_BUILD.FUN.FREE_Mantra_&_Product_Urgency_Strategy|BUILD.FUN.FREE Mantra & Product Urgency Strategy]] discussion of the "polite interest trap" - both emphasize watching what users do rather than what they say.
