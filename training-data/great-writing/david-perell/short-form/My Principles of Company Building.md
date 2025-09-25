@@ -1,0 +1,39 @@
+---
+title: "My Principles of Company Building"
+source: "https://perell.com/essay/principles-of-company-building/"
+author:
+  - "[[David Perell]]"
+published: 2020-02-25
+created: 2025-09-25
+description: "Here’s a list of 20 values I’m going to remember as I build Write of Passage. Stay nimble: I want to keep the business small. I want to have a personal relationship with everybody I partner with. I have no plans to IPO or sell the business, so I’m going to build the kind of company"
+tags:
+  - "dperell-shorts"
+---
+Here’s a list of 20 values I’m going to remember as I build [Write of Passage](https://writeofpassage.school/).
+
+---
+
+1. **Stay nimble:** I want to keep the business small. I want to have a personal relationship with everybody I partner with. I have no plans to IPO or sell the business, so I’m going to build the kind of company I want to run for decades. The business must be a joy to operate. It should be challenging, yet meaningful. That way, it can become a compounding machine.
+2. **Experiment:** We pursue a collection of projects with big upside and low downside. These experiments are low-cost and low-risk because they are independent from the core business and do not threaten its survival.
+3. **Do what’s interesting:** Rationality is a tool for optimization, not invention. I follow the compass of maximal interestingness. I do boring tasks, but only when I absolutely need to. For example, I’ll try every job myself before I hire somebody else to do it. That way, I can familiarize myself with the work, which will help me assess the quality of an applicant, understand the business, and lead my team. In general, I only work on projects that excite me and spark conversation, and never work on boring projects for an extended amount of time.
+4. **Hire when it hurts:** Resist the temptation to hire people. If there’s a problem, I try to solve it myself. If I need help with something, I look for a plug-and-play software product or build a [checklist](https://el2.convertkit-mail.com/c/preview/zvtghnh9/aHR0cHM6Ly93d3cucGVyZWxsLmNvbS9ibG9nL3RoZS1jaGVja2xpc3QtaGFiaXQ=) for a personal assistant to execute.
+5. **Quarterly meetings:** I tend to underestimate the benefits of planning. Commit to quarterly meetups to reflect and plan. Divide projects into small, week-by-week chunks. I check-in every week to confirm progress, but I avoid unnecessary meetings at all costs.
+6. **Weekly planning and reviews:** Every Monday, we write about our goals for the week by answering: “What do I plan to accomplish this week?” It focuses on the big-picture plan without all the individual pieces. Then, we write a weekly review at the end of every week where we answer: “What did I accomplish this week? What went well? Where is there room for improvement?”
+7. **Knowledge management:** Personal and organizational knowledge management is a competitive advantage. Everybody in the business must be an expert on our shared knowledge base, contribute to detailed [standard operating procedures](https://el2.convertkit-mail.com/c/preview/pnceh9hk/aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvU3RhbmRhcmRfb3BlcmF0aW5nX3Byb2NlZHVyZQ==), and develop their knowledge management system. New hires are expected to learn  [Tiago Forte’s knowledge management system](https://el2.convertkit-mail.com/c/preview/xksph6h8/aHR0cHM6Ly93d3cuYnVpbGRpbmdhc2Vjb25kYnJhaW4uY29tLw==) and absorb his methods of working. This is priority #1 for new full-time hires.
+8. **Build once, benefit forever:** I make things that stand the test of time. I only publish articles that will be relevant in ten years. Inside the business, I build re-usable systems that I can share with students, readers, and friends of the company.
+9. **Differentiate**: The economy is bigger than you can possibly imagine. Avoid competition. I pick distinct slices of the economic pie, define my vision for improving it, and build a product unlike anything else on the market. Differentiation is free marketing, especially online.
+10. **Share our story:** Everybody in the business is encouraged to write online. By sharing our knowledge, we help other people build their businesses and build a distribution advantage for ourselves. By sharing valuable information, we attract loyal students and employees.
+11. **Teaching is marketing:** We open-source our strategy. First, we learn as much as we can. Then, we share the best of what we learn. Instead of buying attention with advertisements and salespeople, we build loyalty by teaching. We attract like-minded people, build trust at scale, and create serendipity for ourselves.
+12. **Community effects:** Don’t just build products. Build communities. Like Network Effects, communities get exponentially stronger when the right kinds of people join. We measure our success by the number of friendships we create by taking the course and writing online.
+13. **Remote-first:** We hire from a global pool of talent and find employees ourselves. We look for under-rated signals of ability, such as well-written personal blogs. People find us by writing online, taking our courses, and pursuing their craft with soul, spirit, and tenacity.
+14. **Write it up:** Thinking well is a competitive advantage for our company. We write long-form to improve the rigor of our thinking, and never use slide decks. We don’t discuss new initiatives until we’ve written about them. The more we write about our thinking, the farther our thinking will travel, and the better our decisions will become. And we publish our best thinking in public.
+15. **Work with obsessives:** We want to partner with artists — high-agency dreamers with loud imaginations and bold beliefs about the future. We give them the freedom to eat, sleep, and breathe their craft with vigor. Instead of work-life balance, we pursue work-life integration.
+16. **Software-first:** We live in the Age of Leverage. Information spreads at zero-marginal cost so that you can reach anyone on Earth with an Internet connection — 24/7. We embrace the gifts of software and smartphones, and use them to create serendipity and economic opportunity.
+17. **Profit from the start:** Cash is the blood of a business. Profit allows us to treat employees exceptionally, enjoy running the business, and reinvest in it in service of our students. When we launch a new venture, it should have a clear path to profitability.
+18. **Remember the Deli Shop:** The workers at a good deli like [Zingerman’s](https://el2.convertkit-mail.com/c/preview/60aeh8hv/aHR0cHM6Ly90d2l0dGVyLmNvbS9kYXZpZF9wZXJlbGwvc3RhdHVzLzEyMzEwNjY5MTY1NzMzNjgzMjA=) in Ann Arbor, Michigan know your name and remember your order. In addition to quirky decorations and memorable names for their sandwiches, they treat customers well and assume long-term relationships with them.
+19. **The Internet Arbitrage:** Our business model is predicated on people’s inability to wrap their heads around the scale of the Internet. Others understand this intellectually, but we understand it experientially. We expect this delta to increase over time, especially as the size, loyalty, and quality of our audience improves.
+20. **Citizens of the Internet:** The Internet isn’t just a new technology. It’s a new way of life. Like electricity in the 20th century, software in the 21st century will impact every aspect of human life. With software and education, we help people become citizens of the Internet.
+
+---
+
+![](https://pixel.wp.com/g.gif?v=ext&blog=182345211&post=2039&tz=-5&srv=perell.com&hp=atomic&ac=3&amp=0&j=1%3A15.1-a.7&host=perell.com&ref=https%3A%2F%2Fperell.com%2Fcategory%2Fshort-form%2Fpage%2F3%2F&rand=0.8804147684007363)
