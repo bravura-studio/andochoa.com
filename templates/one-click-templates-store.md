@@ -6,6 +6,33 @@
 
 ### **Primary Workflows** (Most Common)
 
+#### 0. **Controlled Voice Capture** 🎤
+**Command**: `controlled_voice_capture`  
+**Description**: Intelligent voice recording with conversation control and workflow integration  
+**Duration**: 3-8 minutes (user-controlled)  
+**Output**: Structured voice note ready for weekly workflow integration
+
+**What It Does**:
+- Manages recording start/stop with user control
+- Provides intelligent conversation management with focus maintenance
+- Generates structured output compatible with Analyzer and Connector agents
+- Creates action-oriented insights with clear connection hints
+- Integrates seamlessly with weekly draft generation workflow
+
+**Template to Use**:
+```
+I want to start a controlled voice capture session.
+
+Use the Voice Recording Agent to orchestrate:
+1. Start voice recording for [struggle/win/observation/brainstorm/metric] session
+2. Provide clear recording control (I will say "stop recording" when ready)
+3. After transcription, ask if I want to continue with AI conversation
+4. If yes, manage focused conversation with checkpoints and user control
+5. Generate structured output ready for Analyzer agent and weekly workflow
+
+Please start the controlled voice workflow and give me recording control.
+```
+
 #### 1. **Generate Weekly Draft** ⚡
 **Command**: `generate_weekly_draft`  
 **Description**: Complete end-to-end weekly insight generation  
