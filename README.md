@@ -1,64 +1,36 @@
-# Content Bank 📚
+# Scripta
 
-A systematic approach to content creation and management using a structured repository.
+Personal brand content engine and website for [andochoa.com](https://andochoa.com).
+4th product in the [BUILD.FUN.FREE](https://github.com/bravura-studio/build-fun-free) portfolio.
 
-## Repository Structure
+## Content Pipeline
 
 ```
-content-bank/
-├── 📂 1-raw-ideas/          # Daily brain dumps
-│   └── images/              # Screenshots/memes
-├── 📂 2-content-nuggets/     # Processed snippets
-│   ├── one-liners.md
-│   ├── metrics.md
-│   └── user-stories.md
-├── 📂 3-article-drafts/      # AI-generated drafts
-├── 📂 4-published-content/   # Final published pieces
-│   ├── journals/
-│   └── social-snippets/
-├── 📂 templates/             # Your writing templates
-├── 📜 ai-prompt-guide.md     # Instructions for AI
-└── 📜 .github/workflows/     # Automation scripts
+content/raw-ideas/    -> Capture (founder insights, observations)
+content/nuggets/      -> Extract (one-liners, metrics, stories)
+content/drafts/       -> Synthesize (long-form articles)
+content/published/    -> Ship (MDX, ready for website)
 ```
 
-## How to Use
+## Knowledge
 
-### 1. Capture Raw Ideas
-- Dump daily thoughts, insights, and observations into `1-raw-ideas/`
-- Save screenshots, memes, and visual inspiration in `1-raw-ideas/images/`
+Training data lives in qmd vault `scripta` (not in this repo).
+- 9 writing style references (Tim Urban essays)
+- 115 business strategy docs
 
-### 2. Process into Content Nuggets
-- Use the AI prompt guide to transform raw ideas into structured content
-- Organize insights into:
-  - **One-liners**: Quick, punchy statements for social media
-  - **Metrics**: Data points and statistics
-  - **User Stories**: Real experiences and case studies
+## Repo Structure
 
-### 3. Create Article Drafts
-- Combine content nuggets into full article drafts
-- Use AI assistance to develop coherent, engaging pieces
-- Store drafts in `3-article-drafts/`
+```
+andochoa.com/
+  content/        # Content pipeline (the product)
+  templates/      # Content creation templates
+  project-docs/   # Reference docs
+  archive/        # Preserved old system (Content Bank v1)
+```
 
-### 4. Publish and Archive
-- Move final content to `4-published-content/`
-- Organize by platform: `journals/` and `social-snippets/`
-- Keep templates in `templates/` for consistent formatting
+## Future
 
-## AI Integration
-
-See `ai-prompt-guide.md` for detailed instructions on:
-- Processing raw ideas into content nuggets
-- Generating article drafts from nuggets
-- Adapting content for different platforms
-- Quality control and optimization
-
-## Getting Started
-
-1. Start by adding your first raw idea to `1-raw-ideas/`
-2. Use the AI prompt guide to process it into content nuggets
-3. Gradually build up your content bank with diverse insights
-4. Use the automation workflows to streamline your process
-
----
-
-*Happy content creating! 🚀*
+- Next.js personal site (`app/` directory)
+- Voice capture workflow
+- Social media repurposing
+- Vercel deployment at andochoa.com
