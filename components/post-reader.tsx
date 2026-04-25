@@ -261,7 +261,7 @@ export function PostReader({ post, showMobileBackLink = false }: PostReaderProps
       <div className="px-5 pb-8 pt-5 sm:px-8 lg:px-10 lg:py-8">
         {showMobileBackLink ? (
           <Link
-            className="inline-flex items-center gap-2 text-sm text-white/68 transition hover:text-white lg:hidden"
+            className="mb-5 inline-flex min-h-11 items-center gap-2 rounded-full border border-dashed border-white/12 bg-black/35 px-4 text-sm text-white/68 transition hover:border-white/20 hover:text-white lg:hidden"
             href="/posts"
           >
             <ArrowLeft className="h-4 w-4" />
