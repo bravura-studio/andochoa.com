@@ -378,7 +378,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
           className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] shell-glow backdrop-blur-xl"
           onClick={() => terminalInputRef.current?.focus()}
         >
-          <div className="flex items-center justify-between rounded-t-[2rem] border-b border-dashed border-white/12 px-4 py-3 text-xs text-white/42 sm:px-5">
+          <div className="flex flex-col gap-3 rounded-t-[2rem] border-b border-dashed border-white/12 px-4 py-3 text-xs text-white/42 sm:flex-row sm:items-center sm:justify-between sm:px-5">
             <div className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full bg-white/78" />
               <span className="h-3 w-3 rounded-full bg-white/34" />
@@ -388,7 +388,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
               <Command className="h-3.5 w-3.5" />
               <span>vault terminal</span>
             </div>
-            <span className="text-terminal/70">~/knowledge-vault</span>
+            <span className="break-all text-left text-terminal/70 sm:text-right">~/knowledge-vault</span>
           </div>
 
           <div className="px-4 py-4 sm:px-5">
@@ -449,17 +449,17 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
               </div>
 
               <div className="mt-4 space-y-3 rounded-[1.45rem] border border-dashed border-white/12 bg-white/[0.035] p-4 text-sm text-white/56">
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <span>hash</span>
-                  <span className="text-white/82">{selectedEntry.id}</span>
+                  <span className="break-all text-white/82 sm:text-right">{selectedEntry.id}</span>
                 </div>
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <span>topic</span>
-                  <span className="text-white/82">{selectedEntry.topic}</span>
+                  <span className="break-words text-white/82 sm:text-right">{selectedEntry.topic}</span>
                 </div>
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <span>file</span>
-                  <span className="truncate text-white/82">{selectedEntry.fileName}.md</span>
+                  <span className="break-all text-white/82 sm:text-right">{selectedEntry.fileName}.md</span>
                 </div>
               </div>
 
