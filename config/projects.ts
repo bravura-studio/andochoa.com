@@ -1,40 +1,45 @@
-export type ProjectStatus = "active" | "paused" | "planned";
+export type ProjectStatus = "live" | "building" | "testing";
 
-export type Project = {
+export type PortfolioProject = {
+  slug: string;
   name: string;
   description: string;
   status: ProjectStatus;
-  url: string;
-  logo: string;
+  href: string;
+  mark: string;
 };
 
-export const projects: Project[] = [
+export const projects: PortfolioProject[] = [
   {
-    name: "Tmaker",
-    description: "A focused workspace for makers to capture ideas, ship faster, and keep momentum visible.",
-    status: "paused",
-    url: "https://tmaker.io",
-    logo: "TM",
+    slug: "voice-notes",
+    name: "Voice Notes",
+    description: "Voice-first capture system for turning founder thoughts into publishable raw material.",
+    status: "live",
+    href: "/vault",
+    mark: "VN",
   },
   {
+    slug: "tycoon",
+    name: "Tycoon.pt",
+    description: "Real estate wholesale workflow focused on investor-ready opportunities with clear ROI signals.",
+    status: "testing",
+    href: "/vault",
+    mark: "TY",
+  },
+  {
+    slug: "striva",
+    name: "Striva.pt",
+    description: "Operations software for removing administrative drag from small and medium businesses.",
+    status: "testing",
+    href: "/vault",
+    mark: "ST",
+  },
+  {
+    slug: "scripta",
     name: "Scripta",
-    description: "The publishing layer for founder essays, notes, and operating-system thinking behind BUILD.FUN.FREE.",
-    status: "active",
-    url: "https://andochoa.com",
-    logo: "SC",
-  },
-  {
-    name: "Tycoon",
-    description: "A real-estate workflow bet aimed at making deal flow and evaluation easier for investors.",
-    status: "planned",
-    url: "https://tycoon.pt",
-    logo: "TY",
-  },
-  {
-    name: "Striva",
-    description: "An operations product for small businesses that want less admin drag and more execution speed.",
-    status: "planned",
-    url: "https://striva.pt",
-    logo: "ST",
+    description: "The public writing engine for BUILD.FUN.FREE: essays, field notes, and experiments in motion.",
+    status: "building",
+    href: "/",
+    mark: "SC",
   },
 ];

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import { SiteShell } from "@/components/site-shell";
 import "./globals.css";
 
-const jetbrainsMono = JetBrains_Mono({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html className="dark" lang="en">
-      <body className={`${jetbrainsMono.variable} antialiased`}>
+      <body className={`${geistMono.variable} antialiased`}>
         <SiteShell>{children}</SiteShell>
       </body>
     </html>
