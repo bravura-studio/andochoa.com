@@ -57,7 +57,7 @@ export const cvExperience: CvEntry[] = [
   },
   {
     company: "Critical TechWorks",
-    role: "Product / Digital Roles",
+    role: "Learned product inside large systems",
     period: "Previous",
     summary: "Developed product instincts inside a large-scale technology organization.",
     highlights: [
@@ -67,7 +67,7 @@ export const cvExperience: CvEntry[] = [
   },
   {
     company: "Sonae MC",
-    role: "Controller / Finance Roles",
+    role: "Started in finance, learned the business",
     period: "Earlier",
     summary: "Started from the numbers side and learned how businesses really move underneath the narrative.",
     highlights: [
