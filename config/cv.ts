@@ -37,7 +37,7 @@ export const cvExperience: CvEntry[] = [
   },
   {
     company: "Jscrambler",
-    role: "Product Manager",
+    role: "Developer security products",
     period: "Previous",
     summary: "Worked on developer-facing security products with a strong bias toward clarity and practical outcomes.",
     highlights: [
@@ -47,7 +47,7 @@ export const cvExperience: CvEntry[] = [
   },
   {
     company: "knok",
-    role: "Product Manager",
+    role: "Digital health product work",
     period: "Previous",
     summary: "Helped shape digital healthcare experiences in a fast-moving environment.",
     highlights: [
@@ -78,12 +78,12 @@ export const cvExperience: CvEntry[] = [
 ];
 
 export const cvEducation: CvSection = {
-  title: "Education",
+  title: "Foundation",
   items: ["Catolica Portuguesa University — Economics and finance foundation"],
 };
 
 export const cvSkills: CvSection = {
-  title: "Skills",
+  title: "Operating modes",
   items: [
     "Founder-led product strategy",
     "Product discovery and validation",
