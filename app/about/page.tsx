@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, CalendarDays, Download, Github, Linkedin, Twitter } from "lucide-react";
 import { cvEducation, cvExperience, cvLinks, cvProfile, cvSkills } from "@/config/cv";
+import { buildPageMetadata } from "@/lib/site";
 
 const socialIcons = {
   X: Twitter,
@@ -9,6 +10,12 @@ const socialIcons = {
   GitHub: Github,
   "Cal.com": CalendarDays,
 } as const;
+
+export const metadata = buildPageMetadata({
+  title: "About",
+  description: "Background, experience, and founder profile for Andre Ochoa.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
