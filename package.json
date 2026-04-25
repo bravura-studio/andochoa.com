@@ -1,0 +1,36 @@
+{
+  "name": "scripta",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "NODE_ENV=development next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.24",
+    "gray-matter": "^4.0.3",
+    "lucide-react": "^0.542.0",
+    "next": "15.5.15",
+    "next-mdx-remote": "^5.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "15.5.15",
+    "postcss": "^8.5.6",
+    "shadcn": "^4.4.0",
+    "tailwindcss": "3.4.19",
+    "typescript": "^5.9.3"
+  }
+}
