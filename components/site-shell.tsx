@@ -21,7 +21,17 @@ const eyebrowByPath: Record<string, string> = {
 
 export function SiteShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const eyebrow = eyebrowByPath[pathname] ?? "andochoa.com boot sequence";
+  const eyebrow = pathname.startsWith("/posts")
+    ? eyebrowByPath["/posts"]
+    : pathname.startsWith("/vault")
+      ? eyebrowByPath["/vault"]
+      : pathname.startsWith("/about")
+        ? eyebrowByPath["/about"]
+        : eyebrowByPath["/"];
+
+  function isActive(href: string) {
+    return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -49,7 +59,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               <nav aria-label="Primary" className="mt-6 flex flex-col gap-2 text-sm text-white/62">
                 <Link
                   className={`rounded-2xl border border-dashed px-4 py-3 transition ${
-                    pathname === "/"
+                    isActive("/")
                       ? "border-white/20 bg-white/10 text-white"
                       : "border-white/10 bg-white/[0.03] hover:border-white/18 hover:bg-white/[0.06] hover:text-white/90"
                   }`}
@@ -60,7 +70,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
                 {navItems.map((item) => (
                   <Link
                     className={`rounded-2xl border border-dashed px-4 py-3 transition ${
-                      pathname === item.href
+                      isActive(item.href)
                         ? "border-white/20 bg-white/10 text-white"
                         : "border-white/10 bg-white/[0.03] hover:border-white/18 hover:bg-white/[0.06] hover:text-white/90"
                     }`}
