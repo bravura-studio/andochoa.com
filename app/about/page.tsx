@@ -20,10 +20,10 @@ export const metadata = buildPageMetadata({
 export default function AboutPage() {
   return (
     <div className="space-y-6">
-      <section className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-        <div className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.05] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
+      <section className="grid max-w-full gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+        <div className="min-w-0 max-w-full rounded-[2rem] border border-dashed border-white/15 bg-white/[0.05] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
           <p className="text-xs uppercase tracking-[0.35em] text-white/42">about / founder file</p>
-          <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start">
+          <div className="mt-6 flex max-w-full flex-col gap-6 lg:flex-row lg:items-start">
             <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-[2rem] border border-dashed border-white/16 bg-black/40 sm:h-48 sm:w-48">
               <Image
                 alt="Andre Ochoa portrait"
@@ -34,9 +34,9 @@ export default function AboutPage() {
                 src="/profile.jpg"
               />
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 max-w-full">
               <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white sm:text-5xl">{cvProfile.name}</h1>
-              <p className="mt-4 text-sm uppercase tracking-[0.28em] text-white/42">{cvProfile.title}</p>
+              <p className="mt-4 break-words text-sm uppercase tracking-[0.28em] text-white/42">{cvProfile.title}</p>
               <p className="mt-5 max-w-2xl text-sm leading-7 text-white/62 sm:text-base">{cvProfile.summary}</p>
             </div>
           </div>
@@ -50,7 +50,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
+        <div className="min-w-0 max-w-full rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
           <div className="rounded-[1.75rem] border border-dashed border-white/12 bg-black/35 p-5">
             <p className="text-[11px] uppercase tracking-[0.4em] text-white/38">build.fun.free</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -102,17 +102,17 @@ export default function AboutPage() {
 
                 return (
                   <Link
-                    className="flex items-center justify-between gap-3 rounded-[1.2rem] border border-dashed border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/72 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+                    className="flex min-w-0 max-w-full items-center justify-between gap-3 rounded-[1.2rem] border border-dashed border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/72 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
                     href={link.href}
                     key={link.href}
                     rel="noreferrer"
                     target="_blank"
                   >
-                    <span className="inline-flex items-center gap-3">
+                    <span className="inline-flex min-w-0 items-center gap-3">
                       <Icon className="h-4 w-4 text-white/48" />
                       <span>{link.label}</span>
                     </span>
-                    <span className="inline-flex items-center gap-2 text-white/45">
+                    <span className="inline-flex min-w-0 break-all text-right text-white/45">
                       {link.value}
                       <ArrowUpRight className="h-4 w-4" />
                     </span>
