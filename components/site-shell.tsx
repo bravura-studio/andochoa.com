@@ -18,6 +18,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
+  if (pathname === "/") {
+    return <div className="min-h-screen bg-background text-foreground">{children}</div>;
+  }
+
   function isActive(href: string) {
     return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
   }
