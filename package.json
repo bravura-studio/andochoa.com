@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev --port 3000",
+    "generate:vault-index": "node scripts/generate-vault-index.mjs",
+    "prebuild": "npm run generate:vault-index",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
