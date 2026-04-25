@@ -352,7 +352,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
 
   return (
     <section className="space-y-4">
-      <div className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
+      <div className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 shell-glow backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-white/38">knowledge vault</p>
@@ -375,38 +375,43 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.25fr)_360px]">
         <section
-          className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] shadow-terminal backdrop-blur-xl"
+          className="min-w-0 rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] shell-glow backdrop-blur-xl"
           onClick={() => terminalInputRef.current?.focus()}
         >
-          <div className="flex items-center justify-between rounded-t-[2rem] border-b border-dashed border-white/12 px-4 py-3 text-xs text-white/42 sm:px-5">
+          <div className="flex flex-col gap-3 rounded-t-[2rem] border-b border-dashed border-white/12 px-4 py-3 text-xs text-white/42 sm:flex-row sm:items-center sm:justify-between sm:px-5">
             <div className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full bg-white/78" />
               <span className="h-3 w-3 rounded-full bg-white/34" />
               <span className="h-3 w-3 rounded-full bg-white/18" />
             </div>
-            <div className="flex items-center gap-2 uppercase tracking-[0.28em]">
+            <div className="flex items-center gap-2 uppercase tracking-[0.28em] text-terminal/90">
               <Command className="h-3.5 w-3.5" />
               <span>vault terminal</span>
             </div>
-            <span>~/knowledge-vault</span>
+            <span className="break-all text-left text-terminal/70 sm:text-right">~/knowledge-vault</span>
           </div>
 
           <div className="px-4 py-4 sm:px-5">
             <div
-              className="h-[420px] overflow-y-auto rounded-[1.6rem] border border-dashed border-white/12 bg-black/45 px-4 py-4 sm:px-5"
+              className="h-[420px] overflow-y-auto rounded-[1.6rem] border border-dashed border-terminal/25 bg-black/70 px-4 py-4 sm:px-5"
               ref={terminalViewportRef}
             >
               <div className="space-y-3 text-sm leading-7 text-white/82">
                 {terminalLines.map((line) =>
                   line.kind === "command" ? (
                     <div className="flex gap-3 break-words" key={line.id}>
-                      <span className="shrink-0 text-white/40">{line.prompt}</span>
+                      <span className="shrink-0 text-terminal">{line.prompt}</span>
                       <span>{line.displayText}</span>
                     </div>
                   ) : (
-                    <p className="whitespace-pre-wrap break-words text-white/70" key={line.id}>
+                    <p
+                      className={`whitespace-pre-wrap break-words ${
+                        line.id.startsWith("boot-") ? "text-terminal/80" : "text-white/70"
+                      }`}
+                      key={line.id}
+                    >
                       {line.displayText}
-                      {line.isTyping ? <span className="ml-0.5 inline-block h-5 w-2 animate-pulse bg-white/80 align-middle" /> : null}
+                      {line.isTyping ? <span className="ml-0.5 inline-block h-5 w-2 animate-pulse bg-terminal align-middle" /> : null}
                     </p>
                   ),
                 )}
@@ -414,8 +419,8 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
             </div>
 
             <form className="mt-4" onSubmit={handleCommandSubmit}>
-              <label className="flex items-center gap-3 rounded-[1.35rem] border border-dashed border-white/12 bg-white/[0.035] px-4 py-3 text-sm text-white/76">
-                <span className="shrink-0 text-white/40">{PROMPT}</span>
+              <label className="flex items-center gap-3 rounded-[1.35rem] border border-dashed border-terminal/25 bg-terminal/5 px-4 py-3 text-sm text-white/76">
+                <span className="shrink-0 text-terminal">{PROMPT}</span>
                 <input
                   autoCapitalize="none"
                   autoCorrect="off"
@@ -431,7 +436,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
           </div>
         </section>
 
-        <aside className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-5 shadow-terminal backdrop-blur-xl">
+        <aside className="min-w-0 rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-5 shell-glow backdrop-blur-xl">
           <p className="text-[11px] uppercase tracking-[0.35em] text-white/38">selected source</p>
 
           {selectedEntry ? (
@@ -444,17 +449,17 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
               </div>
 
               <div className="mt-4 space-y-3 rounded-[1.45rem] border border-dashed border-white/12 bg-white/[0.035] p-4 text-sm text-white/56">
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <span>hash</span>
-                  <span className="text-white/82">{selectedEntry.id}</span>
+                  <span className="break-all text-white/82 sm:text-right">{selectedEntry.id}</span>
                 </div>
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <span>topic</span>
-                  <span className="text-white/82">{selectedEntry.topic}</span>
+                  <span className="break-words text-white/82 sm:text-right">{selectedEntry.topic}</span>
                 </div>
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <span>file</span>
-                  <span className="truncate text-white/82">{selectedEntry.fileName}.md</span>
+                  <span className="break-all text-white/82 sm:text-right">{selectedEntry.fileName}.md</span>
                 </div>
               </div>
 
@@ -482,7 +487,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
         </aside>
       </div>
 
-      <section className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-5 shadow-terminal backdrop-blur-xl sm:p-6">
+      <section className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-5 shell-glow backdrop-blur-xl sm:p-6">
         <div className="flex flex-col gap-4 border-b border-dashed border-white/12 pb-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-[11px] uppercase tracking-[0.35em] text-white/38">git log view</p>
