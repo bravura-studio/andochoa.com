@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, FolderKanban, NotebookPen, Orbit } from "lucide-react";
-import { SiteShell } from "@/components/site-shell";
 
 const cards = [
   {
@@ -29,7 +28,7 @@ const cards = [
 
 export default function Home() {
   return (
-    <SiteShell eyebrow="terminal theme initialized">
+    <>
       <section className="grid gap-6 lg:grid-cols-[1.35fr_0.9fr]">
         <div className="animate-fade-up rounded-[2rem] border border-border/80 bg-card/80 p-6 shadow-terminal backdrop-blur [animation-delay:0.08s] sm:p-8">
           <p className="text-xs uppercase tracking-[0.4em] text-accent">andochoa@build.fun.free</p>
@@ -61,15 +60,15 @@ export default function Home() {
           <div className="rounded-[1.5rem] border border-border/80 bg-card/60 p-3">
             <div className="relative aspect-square overflow-hidden rounded-[1.25rem] border border-dashed border-accent/45 bg-background/60">
               <Image
-                alt="Founder profile placeholder"
+                alt="Founder profile"
                 className="object-cover opacity-85"
                 fill
                 priority
                 sizes="(min-width: 1024px) 28rem, 100vw"
-                src="/logo.jpg"
+                src="/profile.jpg"
               />
               <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-border/80 bg-background/80 px-4 py-3 text-sm text-muted-foreground backdrop-blur">
-                `public/profile.jpg` is still missing in the repo, so the shell is falling back to `logo.jpg` for now.
+                Founder profile loaded from `public/profile.jpg`.
               </div>
             </div>
           </div>
@@ -96,6 +95,6 @@ export default function Home() {
           </Link>
         ))}
       </section>
-    </SiteShell>
+    </>
   );
 }

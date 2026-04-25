@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { TerminalSquare } from "lucide-react";
 import type { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   { href: "/posts", label: "posts" },
@@ -9,13 +12,17 @@ const navItems = [
   { href: "/about", label: "about" },
 ];
 
-export function SiteShell({
-  children,
-  eyebrow = "andochoa.com boot sequence",
-}: {
-  children: ReactNode;
-  eyebrow?: string;
-}) {
+const eyebrowByPath: Record<string, string> = {
+  "/": "andochoa.com boot sequence",
+  "/posts": "directory /posts",
+  "/vault": "directory /vault",
+  "/about": "directory /about",
+};
+
+export function SiteShell({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const eyebrow = eyebrowByPath[pathname] ?? "andochoa.com boot sequence";
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-6 sm:px-6 lg:px-8">
@@ -49,7 +56,11 @@ export function SiteShell({
             <nav aria-label="Primary" className="flex flex-wrap gap-2 text-sm text-muted-foreground">
               {navItems.map((item) => (
                 <Link
-                  className="rounded-full border border-border/80 bg-background/70 px-4 py-2 transition hover:border-primary/60 hover:text-primary"
+                  className={`rounded-full border px-4 py-2 transition ${
+                    pathname === item.href
+                      ? "border-primary/60 bg-primary/10 text-primary"
+                      : "border-border/80 bg-background/70 hover:border-primary/60 hover:text-primary"
+                  }`}
                   href={item.href}
                   key={item.href}
                 >
