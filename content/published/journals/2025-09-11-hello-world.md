@@ -1,18 +1,17 @@
 ---
 title: "Hello World"
-date: 2025-09-11
+date: "2025-09-11"
 type: reflection
-status: draft
-revised: 2026-04-24
+description: "The first public note on why this site exists and why waiting had to stop."
+status: published
 word_count: 230
-original_draft: "Draftsmith Agent v1, 2025-09-17"
 ---
 
 # Hello World
 
 Finally. I'm here.
 
-Writing my memoirs. Not because I'm dying — because I want to never die.
+Writing my memoirs. Not because I'm dying, but because I want to never die.
 
 You can't live forever. But you can create forever. I want my kids to find this someday and think: "this is who dad really was."
 
