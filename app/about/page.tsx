@@ -21,7 +21,7 @@ export default function AboutPage() {
   return (
     <div className="space-y-6">
       <section className="grid max-w-full gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-        <div className="min-w-0 max-w-full rounded-[2rem] border border-dashed border-white/15 bg-white/[0.05] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
+        <div className="min-w-0 max-w-full rounded-[2rem] border border-dashed border-white/15 bg-white/[0.05] p-6 backdrop-blur-xl sm:p-8">
           <p className="text-xs uppercase tracking-[0.35em] text-white/42">about / founder file</p>
           <div className="mt-6 flex max-w-full flex-col gap-6 lg:flex-row lg:items-start">
             <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-[2rem] border border-dashed border-white/16 bg-black/40 sm:h-48 sm:w-48">
@@ -50,7 +50,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="min-w-0 max-w-full rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
+        <div className="min-w-0 max-w-full rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 backdrop-blur-xl sm:p-8">
           <div className="rounded-[1.75rem] border border-dashed border-white/12 bg-black/35 p-5">
             <p className="text-[11px] uppercase tracking-[0.4em] text-white/38">build.fun.free</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -124,7 +124,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
+      <section className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-3 border-b border-dashed border-white/12 pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-white/42">selected work / operating history</p>
