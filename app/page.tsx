@@ -1,25 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Github, Linkedin, Twitter } from "lucide-react";
+import { Github, Linkedin, Twitter } from "lucide-react";
 import { TypingStatus } from "@/components/typing-status";
 import { projects } from "@/config/projects";
 import { getRecentPublishedPosts } from "@/lib/posts";
 import { buildPageMetadata } from "@/lib/site";
 
 const socialLinks = [
-  { href: "https://x.com/andochoa", icon: Twitter, label: "x /andochoa" },
-  { href: "https://linkedin.com/in/andreochoa", icon: Linkedin, label: "linkedin /andreochoa" },
-  { href: "https://github.com/AndOchoa", icon: Github, label: "github /AndOchoa" },
+  { href: "https://x.com/andochoa", icon: Twitter, label: "X" },
+  { href: "https://linkedin.com/in/andreochoa", icon: Linkedin, label: "LinkedIn" },
+  { href: "https://github.com/AndOchoa", icon: Github, label: "GitHub" },
 ];
 
-const statusLabel = {
-  live: "live",
-  building: "building",
-  testing: "testing",
+const statusStyles = {
+  active: "border-white/15 text-white/72",
+  paused: "border-white/12 border-solid text-white/42",
+  planned: "border-white/12 border-dashed text-white/42",
 } as const;
 
 export const metadata = buildPageMetadata({
-  description: "Founder notes, active projects, and recent writing from Andre Ochoa in a monochrome desktop shell.",
+  description: "A centered monochrome hub for founder notes, projects, and recent writing from Andre Ochoa.",
 });
 
 function formatDate(date: string) {
@@ -31,150 +31,95 @@ function formatDate(date: string) {
 }
 
 export default function Home() {
-  const recentPosts = getRecentPublishedPosts(3);
+  const recentPosts = getRecentPublishedPosts(4);
 
   return (
-    <>
-      <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="animate-fade-up rounded-[2rem] border border-dashed border-white/15 bg-white/[0.05] p-6 shadow-terminal backdrop-blur-xl [animation-delay:0.08s] sm:p-8">
-          <p className="text-xs uppercase tracking-[0.4em] text-white/42">andochoa.com / founder terminal</p>
-          <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-center">
-            <div className="relative h-28 w-28 overflow-hidden rounded-full border border-dashed border-white/18 bg-black/50 sm:h-32 sm:w-32">
-              <Image
-                alt="Founder profile"
-                className="object-cover grayscale contrast-110"
-                fill
-                priority
-                sizes="128px"
-                src="/profile.jpg"
-              />
-            </div>
-            <div className="min-w-0">
-              <h1 className="text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">andre ochoa</h1>
-              <div className="mt-4">
-                <TypingStatus />
-              </div>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/58 sm:text-base">
-                Building products in public, documenting the operating system behind them, and turning live work into
-                essays, prompts, and experiments.
-              </p>
-            </div>
-          </div>
+    <section className="mx-auto flex w-full max-w-[600px] flex-col items-center px-1 pb-10 pt-6 text-center sm:pt-10">
+      <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-dashed border-white/[0.15] bg-[#111]">
+        <Image alt="Andre Ochoa profile photo" className="object-cover grayscale" fill priority sizes="80px" src="/profile.jpg" />
+      </div>
 
-          <div className="mt-8 rounded-[1.75rem] border border-dashed border-white/16 bg-black/35 px-5 py-5 backdrop-blur-xl">
-            <p className="text-[11px] uppercase tracking-[0.4em] text-white/38">north star</p>
-            <div className="mt-4 flex flex-wrap gap-3 text-2xl font-semibold tracking-[-0.06em] sm:text-4xl">
-              <span className="rounded-full border border-dashed border-white/14 bg-white/[0.04] px-4 py-2">BUILD.</span>
-              <span className="rounded-full border border-dashed border-white/14 bg-white/[0.04] px-4 py-2">FUN.</span>
-              <span className="rounded-full border border-dashed border-white/14 bg-white/[0.04] px-4 py-2">FREE.</span>
-            </div>
-          </div>
+      <h1 className="mt-5 text-[32px] font-bold leading-none text-[#e8e8e8]" style={{ letterSpacing: "-0.5px" }}>
+        andre ochoa
+      </h1>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            {socialLinks.map(({ href, icon: Icon, label }) => (
-              <Link
-                className="inline-flex items-center gap-2 rounded-full border border-dashed border-white/16 bg-white/[0.04] px-4 py-3 text-sm text-white/78 transition hover:border-white/24 hover:bg-white/[0.08]"
-                href={href}
-                key={href}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <Icon className="h-4 w-4 text-white/56" />
-                <span>{label}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
+      <div className="mt-4">
+        <TypingStatus />
+      </div>
 
-        <div className="animate-fade-up rounded-[2rem] border border-dashed border-white/15 bg-white/[0.04] p-6 backdrop-blur-xl [animation-delay:0.16s]">
-          <div className="rounded-[1.5rem] border border-dashed border-white/12 bg-black/35 p-5">
-            <p className="text-[11px] uppercase tracking-[0.38em] text-white/38">workspace note</p>
-            <h2 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">A sparse hub for shipping the thinking.</h2>
-            <p className="mt-4 text-sm leading-7 text-white/58">
-              No neon hacker posture. Just a clean desktop shell for founder notes, portfolio context, and current
-              writing momentum.
-            </p>
+      <div className="mt-5 rounded-xl border border-dashed border-white/[0.12] bg-white/[0.02] px-4 py-3">
+        <p className="text-[13px] uppercase text-white/80" style={{ letterSpacing: "6px" }}>
+          BUILD · FUN · FREE
+        </p>
+      </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <Link
-                className="rounded-[1.4rem] border border-dashed border-white/16 bg-white px-4 py-4 text-sm font-medium text-black transition hover:bg-white/90"
-                href="/posts"
-              >
-                enter posts
-              </Link>
-              <Link
-                className="rounded-[1.4rem] border border-dashed border-white/16 bg-white/[0.04] px-4 py-4 text-sm font-medium text-white/82 transition hover:border-white/24 hover:bg-white/[0.08]"
-                href="/about"
-              >
-                read mission
-              </Link>
-            </div>
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+        {socialLinks.map(({ href, icon: Icon, label }) => (
+          <Link
+            className="inline-flex items-center gap-2 rounded-full border border-dashed border-white/[0.12] bg-white/[0.03] px-3 py-2 text-[12px] text-white/72 transition hover:border-white/[0.18] hover:bg-white/[0.06]"
+            href={href}
+            key={href}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <Icon className="h-3.5 w-3.5 text-white/55" />
+            <span>{label}</span>
+          </Link>
+        ))}
+      </div>
 
-            <div className="mt-8 rounded-[1.4rem] border border-dashed border-white/12 bg-white/[0.03] p-4 text-sm text-white/56">
-              Founder profile loaded from `public/profile.jpg`. Content system wired to local markdown under
-              `content/`.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="animate-fade-up rounded-[1.9rem] border border-dashed border-white/14 bg-white/[0.045] p-6 shadow-terminal [animation-delay:0.22s]">
+      <div className="mt-8 grid w-full gap-4 text-left sm:grid-cols-2">
+        <section className="rounded-xl border border-dashed border-white/[0.12] bg-white/[0.03] p-4 backdrop-blur-[12px]">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-xs uppercase tracking-[0.36em] text-white/42">&gt; recent posts</p>
-            <Link className="inline-flex items-center gap-2 text-sm text-white/72 transition hover:text-white" href="/posts">
-              [all posts <ArrowRight className="h-4 w-4" />]
+            <p className="text-[12px] uppercase tracking-[0.24em] text-white/58">&gt; recent posts</p>
+            <Link className="text-[11px] uppercase tracking-[0.18em] text-white/40 transition hover:text-white/72" href="/posts">
+              all
             </Link>
           </div>
 
-          {recentPosts.length > 0 ? (
-            <div className="mt-6 space-y-3">
-              {recentPosts.map((post) => (
-                <article
-                  className="rounded-[1.35rem] border border-dashed border-white/12 bg-black/30 px-4 py-4"
+          <div className="mt-4 space-y-3">
+            {recentPosts.length > 0 ? (
+              recentPosts.map((post) => (
+                <Link
+                  className="block rounded-lg border border-dashed border-white/[0.08] bg-black/20 px-3 py-3 transition hover:border-white/[0.14] hover:bg-white/[0.04]"
+                  href={`/posts/${post.slug}`}
                   key={post.slug}
                 >
-                  <p className="text-xs uppercase tracking-[0.24em] text-white/38">{formatDate(post.date)}</p>
-                  <h2 className="mt-3 text-lg font-medium text-white">{post.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-white/56">{post.excerpt}</p>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="mt-6 rounded-[1.35rem] border border-dashed border-white/12 bg-black/30 px-4 py-5 text-sm leading-7 text-white/56">
-              No published posts yet. The writing pipeline is live, and drafts are accumulating before the first public
-              releases.
-            </div>
-          )}
-        </div>
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-white/38">{formatDate(post.date)}</p>
+                  <p className="mt-2 text-sm leading-6 text-[#e8e8e8]">{post.title}</p>
+                </Link>
+              ))
+            ) : (
+              <div className="rounded-lg border border-dashed border-white/[0.08] bg-black/20 px-3 py-3 text-sm leading-6 text-white/50">
+                No published posts yet.
+              </div>
+            )}
+          </div>
+        </section>
 
-        <div className="animate-fade-up rounded-[1.9rem] border border-dashed border-white/14 bg-white/[0.045] p-6 shadow-terminal [animation-delay:0.28s]">
-          <p className="text-xs uppercase tracking-[0.36em] text-white/42">&gt; projects</p>
-          <div className="mt-6 grid gap-3 md:grid-cols-2">
+        <section className="rounded-xl border border-dashed border-white/[0.12] bg-white/[0.03] p-4 backdrop-blur-[12px]">
+          <p className="text-[12px] uppercase tracking-[0.24em] text-white/58">&gt; projects</p>
+
+          <div className="mt-4 space-y-3">
             {projects.map((project) => (
               <Link
-                className="rounded-[1.4rem] border border-dashed border-white/12 bg-black/30 p-4 transition hover:-translate-y-1 hover:border-white/22 hover:bg-white/[0.06]"
+                className="flex items-center justify-between gap-3 rounded-lg border border-dashed border-white/[0.08] bg-black/20 px-3 py-3 transition hover:border-white/[0.14] hover:bg-white/[0.04]"
                 href={project.href}
                 key={project.slug}
               >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-dashed border-white/14 bg-white/[0.04] text-sm text-white/84">
-                    {project.mark}
-                  </div>
-                  <span className="rounded-full border border-dashed border-white/14 px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-white/48">
-                    {statusLabel[project.status]}
-                  </span>
-                </div>
-                <h2 className="mt-6 text-xl font-medium text-white">{project.name}</h2>
-                <p className="mt-3 text-sm leading-6 text-white/56">{project.description}</p>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm text-white/78">
-                  open <ArrowUpRight className="h-4 w-4" />
+                <span className="text-sm leading-6 text-[#e8e8e8]">{project.name}</span>
+                <span
+                  className={`shrink-0 rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.18em] ${statusStyles[project.status]}`}
+                >
+                  {project.status}
                 </span>
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-    </>
+        </section>
+      </div>
+
+      <p className="mt-8 text-[12px] text-white/38">Keep building. -Ochoa</p>
+    </section>
   );
 }

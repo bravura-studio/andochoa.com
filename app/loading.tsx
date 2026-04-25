@@ -1,5 +1,3 @@
-import { TerminalLoader } from "@/components/terminal-loader";
-
 export default function Loading() {
-  return <TerminalLoader />;
+  return <div className="min-h-screen bg-background" aria-hidden="true" />;
 }

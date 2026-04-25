@@ -1,4 +1,4 @@
-export type ProjectStatus = "live" | "building" | "testing";
+export type ProjectStatus = "active" | "paused" | "planned";
 
 export type PortfolioProject = {
   slug: string;
@@ -14,7 +14,7 @@ export const projects: PortfolioProject[] = [
     slug: "voice-notes",
     name: "Voice Notes",
     description: "Voice-first capture system for turning founder thoughts into publishable raw material.",
-    status: "live",
+    status: "active",
     href: "/vault",
     mark: "VN",
   },
@@ -22,7 +22,7 @@ export const projects: PortfolioProject[] = [
     slug: "tycoon",
     name: "Tycoon.pt",
     description: "Real estate wholesale workflow focused on investor-ready opportunities with clear ROI signals.",
-    status: "testing",
+    status: "paused",
     href: "/vault",
     mark: "TY",
   },
@@ -30,7 +30,7 @@ export const projects: PortfolioProject[] = [
     slug: "striva",
     name: "Striva.pt",
     description: "Operations software for removing administrative drag from small and medium businesses.",
-    status: "testing",
+    status: "planned",
     href: "/vault",
     mark: "ST",
   },
@@ -38,7 +38,7 @@ export const projects: PortfolioProject[] = [
     slug: "scripta",
     name: "Scripta",
     description: "The public writing engine for BUILD.FUN.FREE: essays, field notes, and experiments in motion.",
-    status: "building",
+    status: "active",
     href: "/",
     mark: "SC",
   },
