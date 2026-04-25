@@ -1,131 +1,136 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Command } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 const navItems = [
+  { href: "/", label: "home" },
   { href: "/posts", label: "posts" },
   { href: "/vault", label: "vault" },
   { href: "/about", label: "about" },
-];
-
-const eyebrowByPath: Record<string, string> = {
-  "/": "andochoa.com boot sequence",
-  "/posts": "directory /posts",
-  "/vault": "directory /vault",
-  "/about": "directory /about",
-};
+] as const;
 
 export function SiteShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const eyebrow = pathname.startsWith("/posts")
-    ? eyebrowByPath["/posts"]
-    : pathname.startsWith("/vault")
-      ? eyebrowByPath["/vault"]
-      : pathname.startsWith("/about")
-        ? eyebrowByPath["/about"]
-        : pathname === "/"
-          ? eyebrowByPath["/"]
-          : `missing ${pathname}`;
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   function isActive(href: string) {
     return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
   }
 
+  const activeItem = navItems.find((item) => isActive(item.href)) ?? navItems[0];
+
+  function closeMobileNav() {
+    setMobileNavOpen(false);
+  }
+
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      <div className="mx-auto flex min-h-screen max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-        <div className="grid w-full gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
-          <aside className="animate-fade-up rounded-[2rem] border border-dashed border-white/15 bg-white/5 p-5 shadow-terminal backdrop-blur-xl">
-            <div className="flex h-full flex-col">
-              <Link className="flex items-center gap-4 border-b border-dashed border-white/12 pb-5" href="/">
-                <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-dashed border-white/20 bg-black/50">
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="flex min-h-screen">
+        <aside className="shell-card shell-glow fixed inset-y-0 left-0 z-30 hidden w-[220px] rounded-none border-y-0 border-l-0 lg:block">
+          <div className="flex h-full flex-col px-5 py-8">
+            <Link className="border-b border-dashed border-border/8 pb-8" href="/">
+              <div className="flex items-center gap-4">
+                <div className="relative h-11 w-11 overflow-hidden rounded-full border border-dashed border-border/15 bg-surface-elevated/80">
                   <Image
                     alt="ANDOCHOA wordmark"
                     className="object-cover grayscale"
                     fill
                     priority
-                    sizes="48px"
+                    sizes="44px"
                     src="/logo.jpg"
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-[0.38em] text-white/45">{eyebrow}</p>
-                  <p className="mt-2 text-sm leading-6 text-white/88">founder notes, systems, and experiments</p>
+                  <p className="text-sm font-bold uppercase tracking-[0.4em] text-foreground">ANDOCHOA</p>
+                  <p className="mt-2 text-xs text-text-dim/45">Personal archive for BUILD.FUN.FREE.</p>
                 </div>
-              </Link>
+              </div>
+            </Link>
 
-              <nav aria-label="Primary" className="mt-6 flex flex-col gap-2 text-sm text-white/62">
-                <Link
-                  className={`rounded-2xl border border-dashed px-4 py-3 transition ${
-                    isActive("/")
-                      ? "border-white/20 bg-white/10 text-white"
-                      : "border-white/10 bg-white/[0.03] hover:border-white/18 hover:bg-white/[0.06] hover:text-white/90"
-                  }`}
-                  href="/"
-                >
-                  [home]
-                </Link>
-                {navItems.map((item) => (
+            <nav aria-label="Primary" className="mt-8 flex flex-col gap-1.5 text-[13px] text-text-dim/45">
+              {navItems.map((item) => {
+                const active = isActive(item.href);
+
+                return (
                   <Link
-                    className={`rounded-2xl border border-dashed px-4 py-3 transition ${
-                      isActive(item.href)
-                        ? "border-white/20 bg-white/10 text-white"
-                        : "border-white/10 bg-white/[0.03] hover:border-white/18 hover:bg-white/[0.06] hover:text-white/90"
+                    className={`group rounded-md px-3 py-2.5 transition ${
+                      active ? "bg-foreground/5 text-foreground" : "hover:bg-foreground/5 hover:text-foreground"
                     }`}
                     href={item.href}
                     key={item.href}
                   >
-                    [{item.label}]
+                    <span className={`mr-2 transition ${active ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>&gt;</span>
+                    {item.label}
                   </Link>
-                ))}
-              </nav>
+                );
+              })}
+            </nav>
 
-              <div className="mt-6 rounded-[1.5rem] border border-dashed border-white/10 bg-black/30 p-4 text-xs leading-6 text-white/52">
-                <div className="flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-full bg-white/80" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-white/35" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-white/18" />
-                </div>
-                <p className="mt-4">Minimal shell, sparse spacing, monochrome surfaces.</p>
-              </div>
-            </div>
-          </aside>
-
-          <div className="flex min-h-[calc(100vh-2.5rem)] flex-col rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] shadow-terminal backdrop-blur-2xl">
-            <header className="animate-fade-up border-b border-dashed border-white/12 px-4 py-4 sm:px-6">
-              <div className="rounded-[1.6rem] border border-dashed border-white/12 bg-black/45">
-                <div className="flex items-center justify-between rounded-t-[1.5rem] border-b border-dashed border-white/10 px-4 py-3 text-xs text-white/42">
-                  <div className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded-full bg-white/80" />
-                    <span className="h-3 w-3 rounded-full bg-white/35" />
-                    <span className="h-3 w-3 rounded-full bg-white/18" />
-                  </div>
-                  <div className="flex items-center gap-2 uppercase tracking-[0.28em]">
-                    <Command className="h-3.5 w-3.5" />
-                    <span>terminal</span>
-                  </div>
-                  <span>{pathname === "/" ? "~" : pathname}</span>
-                </div>
-                <div className="flex items-center gap-3 px-4 py-4 text-sm text-white/78">
-                  <span className="text-white/38">andre</span>
-                  <span className="text-white/22">~/build.fun.free</span>
-                  <span className="text-white/88">$_</span>
-                  <span className="h-4 w-px bg-white/20" />
-                  <span className="text-white/52">clean, sparse, developer-elegant</span>
-                </div>
-              </div>
-            </header>
-
-            <main className="flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
-
-            <footer className="border-t border-dashed border-white/12 px-4 py-4 text-sm text-white/42 sm:px-6">
-              Keep building. -Ochoa
-            </footer>
+            <p className="mt-auto text-[11px] leading-7 text-text-muted/25">Keep building. -Ochoa</p>
           </div>
+        </aside>
+
+        <div className="min-h-screen w-full lg:pl-[220px]">
+          <header className="sticky top-0 z-20 border-b border-dashed border-border/8 bg-background/90 backdrop-blur">
+            <div className="flex items-center justify-between px-4 py-4 sm:px-6 lg:hidden">
+              <Link className="text-sm font-bold uppercase tracking-[0.4em] text-foreground" href="/" onClick={closeMobileNav}>
+                ANDOCHOA
+              </Link>
+              <button
+                aria-expanded={mobileNavOpen}
+                aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-dashed border-border/10 bg-surface/80 text-foreground transition hover:bg-foreground/5"
+                onClick={() => setMobileNavOpen((current) => !current)}
+                type="button"
+              >
+                {mobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
+
+            {mobileNavOpen ? (
+              <nav aria-label="Mobile primary" className="border-t border-dashed border-border/8 px-4 py-4 sm:px-6 lg:hidden">
+                <div className="shell-panel flex flex-col gap-1 p-2">
+                  {navItems.map((item) => {
+                    const active = isActive(item.href);
+
+                    return (
+                      <Link
+                        className={`rounded-md px-3 py-3 text-sm transition ${
+                          active ? "bg-foreground/5 text-foreground" : "text-text-dim/45 hover:bg-foreground/5 hover:text-foreground"
+                        }`}
+                        href={item.href}
+                        key={item.href}
+                        onClick={closeMobileNav}
+                      >
+                        <span className={`mr-2 ${active ? "opacity-100" : "opacity-0"}`}>&gt;</span>
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </nav>
+            ) : null}
+          </header>
+
+          <main className="px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
+            <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-[1280px] flex-col">
+              <div className="mb-6 hidden items-end justify-between gap-6 lg:flex">
+                <div>
+                  <p className="shell-label">Active view</p>
+                  <h1 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-foreground">{activeItem.label}</h1>
+                </div>
+                <p className="max-w-md text-right text-sm leading-7 text-text-dim/45">
+                  Monochrome shell. Dashed borders. Type-first layout.
+                </p>
+              </div>
+              <div className="flex-1">{children}</div>
+            </div>
+          </main>
         </div>
       </div>
     </div>

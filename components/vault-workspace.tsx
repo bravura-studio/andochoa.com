@@ -400,13 +400,13 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
                 {terminalLines.map((line) =>
                   line.kind === "command" ? (
                     <div className="flex gap-3 break-words" key={line.id}>
-                      <span className="shrink-0 text-white/40">{line.prompt}</span>
+                      <span className="vault-terminal shrink-0">{line.prompt}</span>
                       <span>{line.displayText}</span>
                     </div>
                   ) : (
                     <p className="whitespace-pre-wrap break-words text-white/70" key={line.id}>
                       {line.displayText}
-                      {line.isTyping ? <span className="ml-0.5 inline-block h-5 w-2 animate-pulse bg-white/80 align-middle" /> : null}
+                      {line.isTyping ? <span className="vault-terminal ml-0.5 inline-block h-5 w-2 animate-pulse align-middle" /> : null}
                     </p>
                   ),
                 )}
@@ -415,7 +415,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
 
             <form className="mt-4" onSubmit={handleCommandSubmit}>
               <label className="flex items-center gap-3 rounded-[1.35rem] border border-dashed border-white/12 bg-white/[0.035] px-4 py-3 text-sm text-white/76">
-                <span className="shrink-0 text-white/40">{PROMPT}</span>
+                <span className="vault-terminal shrink-0">{PROMPT}</span>
                 <input
                   autoCapitalize="none"
                   autoCorrect="off"
