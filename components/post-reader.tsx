@@ -13,7 +13,7 @@ function formatDate(date: string) {
 }
 
 function renderInlineMarkdown(text: string) {
-  const segments = text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g).filter(Boolean);
+  const segments = text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`|\*[^*]+\*)/g).filter(Boolean);
 
   return segments.map((segment, index) => {
     if (/^\[[^\]]+\]\([^)]+\)$/.test(segment)) {
@@ -44,9 +44,17 @@ function renderInlineMarkdown(text: string) {
       );
     }
 
+    if (/^\*[^*]+\*$/.test(segment)) {
+      return (
+        <em className="italic text-white/82" key={`${segment}-${index}`}>
+          {segment.slice(1, -1)}
+        </em>
+      );
+    }
+
     if (/^`[^`]+`$/.test(segment)) {
       return (
-        <code className="rounded bg-white/[0.08] px-1.5 py-1 font-mono text-[0.92em] text-white" key={`${segment}-${index}`}>
+        <code className="rounded bg-white/[0.08] px-1.5 py-1 text-[0.92em] text-white" key={`${segment}-${index}`}>
           {segment.slice(1, -1)}
         </code>
       );
@@ -58,7 +66,7 @@ function renderInlineMarkdown(text: string) {
 
 function Paragraph({ children, ...props }: HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className="mt-5 text-[15px] leading-8 text-white/72 first:mt-0 sm:text-base" {...props}>
+    <p className="mt-5 text-[14px] leading-[1.8] text-white/75 first:mt-0" {...props}>
       {children}
     </p>
   );
@@ -66,7 +74,7 @@ function Paragraph({ children, ...props }: HTMLAttributes<HTMLParagraphElement>)
 
 function HeadingOne({ children, ...props }: HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h1 className="mt-10 font-mono text-3xl font-semibold leading-tight text-white first:mt-0 sm:text-4xl" {...props}>
+    <h1 className="mt-10 text-[28px] font-bold leading-tight text-white first:mt-0" {...props}>
       {children}
     </h1>
   );
@@ -74,7 +82,7 @@ function HeadingOne({ children, ...props }: HTMLAttributes<HTMLHeadingElement>) 
 
 function HeadingTwo({ children, ...props }: HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h2 className="mt-10 font-mono text-2xl font-semibold leading-tight text-white" {...props}>
+    <h2 className="mt-10 text-2xl font-semibold leading-tight text-white" {...props}>
       {children}
     </h2>
   );
@@ -82,7 +90,7 @@ function HeadingTwo({ children, ...props }: HTMLAttributes<HTMLHeadingElement>) 
 
 function HeadingThree({ children, ...props }: HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h3 className="mt-8 font-mono text-xl font-semibold leading-tight text-white" {...props}>
+    <h3 className="mt-8 text-xl font-semibold leading-tight text-white" {...props}>
       {children}
     </h3>
   );
@@ -90,7 +98,7 @@ function HeadingThree({ children, ...props }: HTMLAttributes<HTMLHeadingElement>
 
 function ListItem({ children, ...props }: LiHTMLAttributes<HTMLLIElement>) {
   return (
-    <li className="pl-1 text-[15px] leading-8 text-white/72 sm:text-base" {...props}>
+    <li className="pl-1 text-[14px] leading-[1.8] text-white/75" {...props}>
       {children}
     </li>
   );
@@ -110,6 +118,12 @@ function renderMarkdown(content: string) {
       continue;
     }
 
+    if (trimmedLine === "---") {
+      blocks.push(<hr className="mt-8 border-t border-dashed border-white/12" key={`hr-${blocks.length}`} />);
+      index += 1;
+      continue;
+    }
+
     if (trimmedLine.startsWith("```")) {
       const language = trimmedLine.slice(3).trim();
       const codeLines: string[] = [];
@@ -123,7 +137,7 @@ function renderMarkdown(content: string) {
       index += 1;
       blocks.push(
         <pre
-          className="mt-6 overflow-x-auto rounded-[1.4rem] border border-dashed border-white/14 bg-black/70 px-4 py-4 text-sm leading-7 text-white/82"
+          className="mt-6 overflow-x-auto rounded-2xl border border-dashed border-white/14 bg-black/70 px-4 py-4 text-sm leading-7 text-white/82"
           key={`code-${blocks.length}`}
         >
           {language ? <div className="mb-3 text-[11px] uppercase tracking-[0.24em] text-white/38">{language}</div> : null}
@@ -161,7 +175,7 @@ function renderMarkdown(content: string) {
 
       blocks.push(
         <blockquote
-          className="mt-6 border-l border-dashed border-white/20 pl-4 text-[15px] leading-8 text-white/58 sm:text-base"
+          className="mt-6 border-l border-dashed border-white/20 pl-4 text-[14px] leading-[1.8] text-white/60"
           key={`quote-${blocks.length}`}
         >
           {quoteLines.map((line, quoteIndex) => (
@@ -214,6 +228,7 @@ function renderMarkdown(content: string) {
       const paragraphLine = lines[index].trim();
 
       if (
+        paragraphLine === "---" ||
         paragraphLine.startsWith("#") ||
         paragraphLine.startsWith(">") ||
         paragraphLine.startsWith("```") ||
@@ -242,69 +257,55 @@ type PostReaderProps = {
 
 export function PostReader({ post, showMobileBackLink = false }: PostReaderProps) {
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] shadow-terminal backdrop-blur-xl">
-      <div className="border-b border-dashed border-white/10 px-4 py-4 sm:px-6">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-white/80" />
-            <span className="h-2.5 w-2.5 rounded-full bg-white/35" />
-            <span className="h-2.5 w-2.5 rounded-full bg-white/18" />
-          </div>
-          <span className="rounded-full border border-dashed border-white/12 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white/44">
-            reader
-          </span>
-        </div>
-
+    <section className="overflow-hidden rounded-2xl border border-dashed border-white/10 bg-white/[0.03] shadow-terminal backdrop-blur-xl lg:h-full">
+      <div className="px-5 pb-8 pt-5 sm:px-8 lg:px-10 lg:py-8">
         {showMobileBackLink ? (
           <Link
-            className="mt-4 inline-flex items-center gap-2 text-sm text-white/68 transition hover:text-white lg:hidden"
+            className="mb-5 inline-flex min-h-11 items-center gap-2 rounded-full border border-dashed border-white/12 bg-black/35 px-4 text-sm text-white/68 transition hover:border-white/20 hover:text-white lg:hidden"
             href="/posts"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to posts
           </Link>
         ) : null}
+
+        <article>
+          <header className="border-b border-dashed border-white/10 pb-6">
+            <div className="flex items-center gap-4">
+              <div className="relative h-8 w-8 overflow-hidden rounded-full border border-dashed border-white/14 bg-black/45">
+                <Image
+                  alt="Andre Ochoa"
+                  className="object-cover grayscale"
+                  fill
+                  sizes="32px"
+                  src="/profile.jpg"
+                />
+              </div>
+              <div>
+                <p className="text-[13px] text-white">Andre Ochoa</p>
+                <p className="text-[12px] text-white/42">{formatDate(post.date)}</p>
+              </div>
+            </div>
+
+            <h1 className="mt-6 max-w-4xl text-[28px] font-bold leading-tight text-white">{post.title}</h1>
+
+            <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] text-white/46">
+              <span className="rounded-full border border-dashed border-white/12 px-3 py-1 uppercase tracking-[0.2em]">
+                {post.type}
+              </span>
+              <span>{post.wordCount} words</span>
+              <span>&middot;</span>
+              <span>{post.readingTimeMinutes} min read</span>
+            </div>
+          </header>
+
+          <div className="mx-auto mt-8 max-w-[65ch]">{renderMarkdown(post.content)}</div>
+
+          <footer className="mx-auto mt-10 max-w-[65ch] border-t border-dashed border-white/10 pt-5">
+            <p className="text-[14px] font-semibold text-white">Keep building. -Ochoa</p>
+          </footer>
+        </article>
       </div>
-
-      <article className="px-4 py-6 sm:px-6 sm:py-8">
-        <header className="border-b border-dashed border-white/10 pb-6">
-          <div className="flex items-center gap-4">
-            <div className="relative h-14 w-14 overflow-hidden rounded-full border border-dashed border-white/18 bg-black/45">
-              <Image
-                alt="Andre Ochoa"
-                className="object-cover grayscale"
-                fill
-                sizes="56px"
-                src="/profile.jpg"
-              />
-            </div>
-            <div>
-              <p className="text-sm text-white">Andre Ochoa</p>
-              <p className="mt-1 text-xs uppercase tracking-[0.24em] text-white/40">{formatDate(post.date)}</p>
-            </div>
-          </div>
-
-          <h1 className="mt-6 max-w-4xl font-mono text-3xl font-semibold leading-tight text-white sm:text-4xl">
-            {post.title}
-          </h1>
-
-          <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-white/46">
-            <span className="rounded-full border border-dashed border-white/12 px-3 py-1">{post.type}</span>
-            <span className="rounded-full border border-dashed border-white/12 px-3 py-1">{post.wordCount} words</span>
-            <span className="rounded-full border border-dashed border-white/12 px-3 py-1">
-              {post.readingTimeMinutes} min read
-            </span>
-          </div>
-        </header>
-
-        <div className="mx-auto mt-8 max-w-[65ch]">
-          {renderMarkdown(post.content)}
-        </div>
-
-        <footer className="mx-auto mt-10 max-w-[65ch] border-t border-dashed border-white/10 pt-5">
-          <p className="text-sm uppercase tracking-[0.28em] text-white/46">Keep building. -Ochoa</p>
-        </footer>
-      </article>
     </section>
   );
 }

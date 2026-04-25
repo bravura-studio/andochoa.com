@@ -10,6 +10,7 @@ export type Post = {
   date: string;
   status: PostStatus;
   type: string;
+  tags: string[];
   description: string;
   excerpt: string;
   content: string;
@@ -67,6 +68,26 @@ function extractExcerpt(content: string) {
   return lines[0] ?? "Writing in progress.";
 }
 
+function stripSignoff(content: string) {
+  return content.replace(/\n+Keep building\. -Ochoa\s*$/i, "").trimEnd();
+}
+
+function extractTags(data: Record<string, unknown>, fallbackType: string) {
+  const rawTags = Array.isArray(data.tags) ? data.tags : [];
+  const normalized = rawTags
+    .filter((tag): tag is string => typeof tag === "string")
+    .map((tag) => tag.trim().toLowerCase())
+    .filter(Boolean);
+
+  const fallback = fallbackType.trim().toLowerCase();
+
+  if (!normalized.includes(fallback)) {
+    normalized.unshift(fallback);
+  }
+
+  return Array.from(new Set(normalized));
+}
+
 function countWords(content: string) {
   return content
     .replace(/```[\s\S]*?```/g, " ")
@@ -81,6 +102,40 @@ function computeReadingTime(wordCount: number) {
   return Math.max(1, Math.ceil(wordCount / 200));
 }
 
+function resolvePostDate(data: Record<string, unknown>, content: string, filename: string, filePath: string) {
+  const candidates: string[] = [];
+
+  if (typeof data.date === "string") {
+    candidates.push(data.date);
+  }
+
+  if (typeof data.revised === "string") {
+    candidates.push(data.revised);
+  }
+
+  const filenameDateMatch = filename.match(/^(\d{4}-\d{2}-\d{2})(?:-|$)/);
+
+  if (filenameDateMatch) {
+    candidates.push(filenameDateMatch[1]);
+  }
+
+  const generatedDateMatch = content.match(/^\*\*Generated\*\*:\s*(.+)$/m);
+
+  if (generatedDateMatch) {
+    candidates.push(generatedDateMatch[1].trim());
+  }
+
+  for (const candidate of candidates) {
+    const timestamp = Date.parse(candidate);
+
+    if (!Number.isNaN(timestamp)) {
+      return new Date(timestamp).toISOString();
+    }
+  }
+
+  throw new Error(`Missing valid date in ${filePath}`);
+}
+
 function readPost(filePath: string, sourceDir: string, fallbackStatus: PostStatus): Post {
   const file = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(file);
@@ -92,22 +147,26 @@ function readPost(filePath: string, sourceDir: string, fallbackStatus: PostStatu
     ?.replace(/^#\s+/, "")
     .trim();
   const title = typeof data.title === "string" ? data.title : heading ?? titleizeFilename(filename);
-  const rawDate = data.date ?? data.revised ?? fs.statSync(filePath).mtime.toISOString();
-  const date = new Date(rawDate).toISOString();
+  const date = resolvePostDate(data as Record<string, unknown>, content, filename, filePath);
   const status = data.status === "published" ? "published" : fallbackStatus;
-  const excerpt = extractExcerpt(content);
+  const sanitizedContent = stripSignoff(content);
+  const excerpt = extractExcerpt(sanitizedContent);
+  const type = typeof data.type === "string" ? data.type : "reflection";
   const wordCount =
-    typeof data.word_count === "number" && Number.isFinite(data.word_count) ? data.word_count : countWords(content);
+    typeof data.word_count === "number" && Number.isFinite(data.word_count)
+      ? data.word_count
+      : countWords(sanitizedContent);
 
   return {
     slug: relativeSlug,
     title,
     date,
     status,
-    type: typeof data.type === "string" ? data.type : "reflection",
+    type,
+    tags: extractTags(data as Record<string, unknown>, type),
     description: typeof data.description === "string" ? data.description : excerpt,
     excerpt,
-    content,
+    content: sanitizedContent,
     wordCount,
     readingTimeMinutes: computeReadingTime(wordCount),
   };
