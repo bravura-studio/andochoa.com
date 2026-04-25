@@ -39,7 +39,7 @@ function isPostStatus(value: unknown): value is PostStatus {
 }
 
 function toSlug(filePath: string) {
-  return path.basename(filePath, path.extname(filePath));
+  return path.basename(filePath, path.extname(filePath)).replace(/^\d{4}-\d{2}-\d{2}-/, "");
 }
 
 function validateFrontmatter(data: Record<string, unknown>, filePath: string): PostFrontmatter {
