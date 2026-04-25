@@ -23,13 +23,13 @@ module.exports = {
         "card-foreground": "hsl(var(--card-foreground))",
       },
       fontFamily: {
-        mono: ["var(--font-jetbrains-mono)"],
+        mono: ["var(--font-geist-mono)"],
       },
       boxShadow: {
-        terminal: "0 0 0 1px rgba(0, 255, 65, 0.2), 0 24px 60px rgba(0, 0, 0, 0.45)",
+        terminal: "0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 60px rgba(0, 0, 0, 0.45)",
       },
       backgroundImage: {
-        grid: "linear-gradient(rgba(0,255,65,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,0.08) 1px, transparent 1px)",
+        grid: "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
       },
       animation: {
         blink: "blink 1.2s step-end infinite",
