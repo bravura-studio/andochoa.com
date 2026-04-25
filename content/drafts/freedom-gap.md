@@ -1,3 +1,7 @@
+---
+date: "2025-09-25"
+---
+
 # The Freedom Gap
 
 *BUILD.FUN.FREE* isn't just words -> it's my North Star. This week crystallized a harsh truth.

@@ -102,6 +102,40 @@ function computeReadingTime(wordCount: number) {
   return Math.max(1, Math.ceil(wordCount / 200));
 }
 
+function resolvePostDate(data: Record<string, unknown>, content: string, filename: string, filePath: string) {
+  const candidates: string[] = [];
+
+  if (typeof data.date === "string") {
+    candidates.push(data.date);
+  }
+
+  if (typeof data.revised === "string") {
+    candidates.push(data.revised);
+  }
+
+  const filenameDateMatch = filename.match(/^(\d{4}-\d{2}-\d{2})(?:-|$)/);
+
+  if (filenameDateMatch) {
+    candidates.push(filenameDateMatch[1]);
+  }
+
+  const generatedDateMatch = content.match(/^\*\*Generated\*\*:\s*(.+)$/m);
+
+  if (generatedDateMatch) {
+    candidates.push(generatedDateMatch[1].trim());
+  }
+
+  for (const candidate of candidates) {
+    const timestamp = Date.parse(candidate);
+
+    if (!Number.isNaN(timestamp)) {
+      return new Date(timestamp).toISOString();
+    }
+  }
+
+  throw new Error(`Missing valid date in ${filePath}`);
+}
+
 function readPost(filePath: string, sourceDir: string, fallbackStatus: PostStatus): Post {
   const file = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(file);
@@ -113,8 +147,7 @@ function readPost(filePath: string, sourceDir: string, fallbackStatus: PostStatu
     ?.replace(/^#\s+/, "")
     .trim();
   const title = typeof data.title === "string" ? data.title : heading ?? titleizeFilename(filename);
-  const rawDate = data.date ?? data.revised ?? fs.statSync(filePath).mtime.toISOString();
-  const date = new Date(rawDate).toISOString();
+  const date = resolvePostDate(data as Record<string, unknown>, content, filename, filePath);
   const status = data.status === "published" ? "published" : fallbackStatus;
   const sanitizedContent = stripSignoff(content);
   const excerpt = extractExcerpt(sanitizedContent);
