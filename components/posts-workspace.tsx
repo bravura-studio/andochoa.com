@@ -17,17 +17,8 @@ export function PostsWorkspace({
   const selectedPost = posts.find((post) => post.slug === selectedSlug) ?? fallbackPost;
 
   return (
-    <section className="space-y-4">
-      <div className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.05] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-white/42">posts workspace</p>
-        <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Founder writing, arranged like an editor.</h1>
-        <p className="mt-4 max-w-3xl leading-7 text-white/60">
-          Browse the archive in the navigator, keep one post open in the reader, and use direct URLs when you want to
-          point to a specific essay.
-        </p>
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-[340px_minmax(0,1fr)]">
+    <section className="min-h-[calc(100vh-8rem)]">
+      <div className="grid gap-4 lg:min-h-[calc(100vh-9.5rem)] lg:grid-cols-[300px_minmax(0,1fr)]">
         <div className={showMobileReader ? "hidden lg:block" : undefined}>
           <PostsNavigator posts={posts} selectedSlug={selectedPost?.slug ?? null} />
         </div>
