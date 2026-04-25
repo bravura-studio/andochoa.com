@@ -27,7 +27,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
       ? eyebrowByPath["/vault"]
       : pathname.startsWith("/about")
         ? eyebrowByPath["/about"]
-        : eyebrowByPath["/"];
+        : pathname === "/"
+          ? eyebrowByPath["/"]
+          : `missing ${pathname}`;
 
   function isActive(href: string) {
     return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);

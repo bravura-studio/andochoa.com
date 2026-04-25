@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, CalendarDays, Download, Github, Linkedin, Twitter } from "lucide-react";
 import { cvEducation, cvExperience, cvLinks, cvProfile, cvSkills } from "@/config/cv";
+import { buildPageMetadata } from "@/lib/site";
 
 const socialIcons = {
   X: Twitter,
@@ -9,6 +10,12 @@ const socialIcons = {
   GitHub: Github,
   "Cal.com": CalendarDays,
 } as const;
+
+export const metadata = buildPageMetadata({
+  title: "About",
+  description: "Background, experience, and founder profile for Andre Ochoa.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
@@ -74,7 +81,7 @@ export default function AboutPage() {
               href="/ochoa-cv.pdf"
             >
               <Download className="h-4 w-4" />
-              download cv pdf
+              download background pdf
             </Link>
             <Link
               className="inline-flex items-center justify-center gap-2 rounded-[1.4rem] border border-dashed border-white/16 bg-white/[0.04] px-4 py-4 text-sm font-medium text-white/82 transition hover:border-white/24 hover:bg-white/[0.08]"
@@ -120,7 +127,7 @@ export default function AboutPage() {
       <section className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-3 border-b border-dashed border-white/12 pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-white/42">cv / selected track record</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-white/42">selected work / operating history</p>
             <h2 className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-white sm:text-3xl">
               Builder-first experience, not corporate theater.
             </h2>
@@ -189,7 +196,7 @@ export default function AboutPage() {
             <section className="rounded-[1.6rem] border border-dashed border-white/12 bg-white/[0.03] p-5">
               <p className="text-xs uppercase tracking-[0.28em] text-white/38">availability</p>
               <p className="mt-4 text-sm leading-7 text-white/60">
-                Open to founder conversations, product strategy exchanges, and collaborations that fit the
+                Open to founder conversations, builder-to-builder exchanges, and collaborations that fit the
                 build-in-public rhythm.
               </p>
               <p className="mt-4 text-sm text-white/48">Base: {cvProfile.location}</p>

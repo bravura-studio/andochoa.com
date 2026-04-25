@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, Github, Linkedin, Twitter } from "lucide-reac
 import { TypingStatus } from "@/components/typing-status";
 import { projects } from "@/config/projects";
 import { getRecentPublishedPosts } from "@/lib/posts";
+import { buildPageMetadata } from "@/lib/site";
 
 const socialLinks = [
   { href: "https://x.com/andochoa", icon: Twitter, label: "x /andochoa" },
@@ -16,6 +17,10 @@ const statusLabel = {
   building: "building",
   testing: "testing",
 } as const;
+
+export const metadata = buildPageMetadata({
+  description: "Founder notes, active projects, and recent writing from Andre Ochoa in a monochrome desktop shell.",
+});
 
 function formatDate(date: string) {
   return new Intl.DateTimeFormat("en-US", {
