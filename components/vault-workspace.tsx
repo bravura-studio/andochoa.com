@@ -352,7 +352,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
 
   return (
     <section className="space-y-4">
-      <div className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 shadow-terminal backdrop-blur-xl sm:p-8">
+      <div className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-6 shell-glow backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-white/38">knowledge vault</p>
@@ -375,7 +375,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.25fr)_360px]">
         <section
-          className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] shadow-terminal backdrop-blur-xl"
+          className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] shell-glow backdrop-blur-xl"
           onClick={() => terminalInputRef.current?.focus()}
         >
           <div className="flex items-center justify-between rounded-t-[2rem] border-b border-dashed border-white/12 px-4 py-3 text-xs text-white/42 sm:px-5">
@@ -436,7 +436,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
           </div>
         </section>
 
-        <aside className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-5 shadow-terminal backdrop-blur-xl">
+        <aside className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-5 shell-glow backdrop-blur-xl">
           <p className="text-[11px] uppercase tracking-[0.35em] text-white/38">selected source</p>
 
           {selectedEntry ? (
@@ -487,7 +487,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
         </aside>
       </div>
 
-      <section className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-5 shadow-terminal backdrop-blur-xl sm:p-6">
+      <section className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-5 shell-glow backdrop-blur-xl sm:p-6">
         <div className="flex flex-col gap-4 border-b border-dashed border-white/12 pb-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-[11px] uppercase tracking-[0.35em] text-white/38">git log view</p>
