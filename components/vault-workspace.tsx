@@ -384,29 +384,34 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
               <span className="h-3 w-3 rounded-full bg-white/34" />
               <span className="h-3 w-3 rounded-full bg-white/18" />
             </div>
-            <div className="flex items-center gap-2 uppercase tracking-[0.28em]">
+            <div className="flex items-center gap-2 uppercase tracking-[0.28em] text-terminal/90">
               <Command className="h-3.5 w-3.5" />
               <span>vault terminal</span>
             </div>
-            <span>~/knowledge-vault</span>
+            <span className="text-terminal/70">~/knowledge-vault</span>
           </div>
 
           <div className="px-4 py-4 sm:px-5">
             <div
-              className="h-[420px] overflow-y-auto rounded-[1.6rem] border border-dashed border-white/12 bg-black/45 px-4 py-4 sm:px-5"
+              className="h-[420px] overflow-y-auto rounded-[1.6rem] border border-dashed border-terminal/25 bg-black/70 px-4 py-4 sm:px-5"
               ref={terminalViewportRef}
             >
               <div className="space-y-3 text-sm leading-7 text-white/82">
                 {terminalLines.map((line) =>
                   line.kind === "command" ? (
                     <div className="flex gap-3 break-words" key={line.id}>
-                      <span className="vault-terminal shrink-0">{line.prompt}</span>
+                      <span className="shrink-0 text-terminal">{line.prompt}</span>
                       <span>{line.displayText}</span>
                     </div>
                   ) : (
-                    <p className="whitespace-pre-wrap break-words text-white/70" key={line.id}>
+                    <p
+                      className={`whitespace-pre-wrap break-words ${
+                        line.id.startsWith("boot-") ? "text-terminal/80" : "text-white/70"
+                      }`}
+                      key={line.id}
+                    >
                       {line.displayText}
-                      {line.isTyping ? <span className="vault-terminal ml-0.5 inline-block h-5 w-2 animate-pulse align-middle" /> : null}
+                      {line.isTyping ? <span className="ml-0.5 inline-block h-5 w-2 animate-pulse bg-terminal align-middle" /> : null}
                     </p>
                   ),
                 )}
@@ -414,8 +419,8 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
             </div>
 
             <form className="mt-4" onSubmit={handleCommandSubmit}>
-              <label className="flex items-center gap-3 rounded-[1.35rem] border border-dashed border-white/12 bg-white/[0.035] px-4 py-3 text-sm text-white/76">
-                <span className="vault-terminal shrink-0">{PROMPT}</span>
+              <label className="flex items-center gap-3 rounded-[1.35rem] border border-dashed border-terminal/25 bg-terminal/5 px-4 py-3 text-sm text-white/76">
+                <span className="shrink-0 text-terminal">{PROMPT}</span>
                 <input
                   autoCapitalize="none"
                   autoCorrect="off"
