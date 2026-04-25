@@ -17,21 +17,28 @@ export function TypingStatus() {
   }, []);
 
   return (
-    <div className="flex items-center gap-2 text-sm text-white/68 sm:text-base">
-      <span className="text-white/38">&gt;</span>
+    <div className="flex items-center justify-center gap-1 text-[16px] text-white/72 sm:text-[18px]">
+      <span className="text-white/48">&gt;</span>
       <AnimatePresence mode="wait">
         <motion.span
           animate={{ opacity: 1, y: 0 }}
-          className="inline-block min-w-[7ch] text-white"
-          exit={{ opacity: 0, y: -8 }}
-          initial={{ opacity: 0, y: 8 }}
+          className="inline-block min-w-[7ch] text-left text-[#e8e8e8]"
+          exit={{ opacity: 0, y: -6 }}
+          initial={{ opacity: 0, y: 6 }}
           key={words[index]}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
         >
           {words[index]}
         </motion.span>
       </AnimatePresence>
-      <span className="h-5 w-2 animate-blink rounded-full bg-white/85" />
+      <motion.span
+        animate={{ opacity: [1, 0, 1] }}
+        aria-hidden="true"
+        className="text-[#e8e8e8]"
+        transition={{ duration: 0.9, ease: "linear", repeat: Number.POSITIVE_INFINITY }}
+      >
+        _
+      </motion.span>
     </div>
   );
 }
