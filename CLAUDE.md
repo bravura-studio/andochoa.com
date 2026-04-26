@@ -137,6 +137,8 @@ Every issue follows this sequence. No skipping.
 14. Always run typecheck + lint before committing.
 15. Always base PRs on main, never on feature branches.
 16. Never work in /tmp mirrors. Work directly in /opt/bff/scripta/repos.
+17. NEVER merge PRs. Create the PR, hand off to QA. After QA passes, the FOUNDER merges. Agents do not merge.
+18. NEVER push directly to main. All work goes through feature branch → PR → QA → founder merge.
 
 ## Knowledge
 
