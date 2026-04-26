@@ -287,21 +287,36 @@ export function PostReader({ post, previousPost, nextPost }: PostReaderProps) {
 
         <footer className="mt-10 border-t border-dashed border-white/10 pt-6">
           <p className="text-[12px] uppercase tracking-[0.2em] text-white/68">Keep building. -Ochoa</p>
-          <div className="flex items-center justify-between gap-6 text-[12px] text-white/56">
-            {previousPost ? (
-              <Link className="mt-6 transition hover:text-white" href={`/posts/${previousPost.slug}`}>
-                ← {previousPost.title}
-              </Link>
-            ) : (
-              <span className="mt-6" />
-            )}
 
-            {nextPost ? (
-              <Link className="mt-6 ml-auto text-right transition hover:text-white" href={`/posts/${nextPost.slug}`}>
-                {nextPost.title} →
-              </Link>
-            ) : null}
-          </div>
+          {(previousPost ?? nextPost) ? (
+            <div className="mt-6 flex items-stretch justify-between gap-3 border-t border-dashed border-white/8 pt-5">
+              {previousPost ? (
+                <Link
+                  className="group flex min-w-0 flex-1 flex-col gap-1 rounded-md border border-white/8 px-4 py-3 transition hover:border-white/18 hover:bg-white/[0.03]"
+                  href={`/posts/${previousPost.slug}`}
+                >
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/28">← older</span>
+                  <span className="truncate text-[12px] text-white/62 transition group-hover:text-white">
+                    {previousPost.title}
+                  </span>
+                </Link>
+              ) : (
+                <span className="flex-1" />
+              )}
+
+              {nextPost ? (
+                <Link
+                  className="group flex min-w-0 flex-1 flex-col items-end gap-1 rounded-md border border-white/8 px-4 py-3 text-right transition hover:border-white/18 hover:bg-white/[0.03]"
+                  href={`/posts/${nextPost.slug}`}
+                >
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/28">newer →</span>
+                  <span className="truncate text-[12px] text-white/62 transition group-hover:text-white">
+                    {nextPost.title}
+                  </span>
+                </Link>
+              ) : null}
+            </div>
+          ) : null}
         </footer>
       </article>
     </div>
