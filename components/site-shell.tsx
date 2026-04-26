@@ -35,6 +35,8 @@ type SiteShellProps = {
   breadcrumbs: Breadcrumb[];
   statusMeta: string;
   children: ReactNode;
+  mobileSidebarOpen?: boolean;
+  onMobileSidebarOpenChange?: (open: boolean) => void;
 };
 
 export function SiteShell({
@@ -45,8 +47,15 @@ export function SiteShell({
   breadcrumbs,
   statusMeta,
   children,
+  mobileSidebarOpen: controlledOpen,
+  onMobileSidebarOpenChange,
 }: SiteShellProps) {
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const mobileSidebarOpen = controlledOpen ?? internalOpen;
+  const setMobileSidebarOpen = (open: boolean) => {
+    setInternalOpen(open);
+    onMobileSidebarOpenChange?.(open);
+  };
   const pathname = usePathname();
 
   useEffect(() => {
@@ -68,7 +77,7 @@ export function SiteShell({
             aria-expanded={mobileSidebarOpen}
             aria-label={mobileSidebarOpen ? "Close sidebar" : "Open sidebar"}
             className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/8 text-white/50 transition hover:bg-white/[0.04] hover:text-white lg:hidden"
-            onClick={() => setMobileSidebarOpen((current) => !current)}
+            onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
             type="button"
           >
             {mobileSidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
