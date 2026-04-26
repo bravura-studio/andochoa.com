@@ -1,6 +1,8 @@
+import Link from "next/link";
 import type { Post } from "@/lib/posts";
 import { PostReader } from "@/components/post-reader";
 import { PostsNavigator } from "@/components/posts-navigator";
+import { SiteShell } from "@/components/site-shell";
 
 type PostsWorkspaceProps = {
   posts: Post[];
@@ -15,30 +17,41 @@ export function PostsWorkspace({
 }: PostsWorkspaceProps) {
   const fallbackPost = posts[0] ?? null;
   const selectedPost = posts.find((post) => post.slug === selectedSlug) ?? fallbackPost;
+  const fileLabel = selectedPost ? `${selectedPost.slug.split("/").at(-1)}.md` : "posts";
+  const statusMeta = selectedPost
+    ? `${selectedPost.wordCount} words · ${selectedPost.readingTimeMinutes} min`
+    : `${posts.length} posts`;
 
   return (
-    <section className="min-h-[calc(100vh-8rem)]">
-      <div className="grid gap-4 lg:min-h-[calc(100vh-9.5rem)] lg:grid-cols-[300px_minmax(0,1fr)]">
-        <div className={showMobileReader ? "hidden lg:block" : undefined}>
-          <PostsNavigator posts={posts} selectedSlug={selectedPost?.slug ?? null} />
-        </div>
+    <SiteShell
+      activityKey="posts"
+      breadcrumbs={[
+        { label: "andochoa.com", href: "/" },
+        { label: "posts", href: "/posts" },
+        { label: fileLabel },
+      ]}
+      sidebar={<PostsNavigator posts={posts} selectedSlug={selectedPost?.slug ?? null} />}
+      sidebarTitle="posts"
+      statusMeta={statusMeta}
+      tabs={[
+        { href: "/posts", label: "posts/" },
+        { active: true, label: fileLabel },
+      ]}
+    >
+      <div className="hidden lg:block">{selectedPost ? <PostReader post={selectedPost} /> : null}</div>
 
-        <div className={showMobileReader ? undefined : "hidden lg:block"}>
-          {selectedPost ? (
-            <PostReader post={selectedPost} />
-          ) : (
-            <section className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-8 shadow-terminal backdrop-blur-xl">
-              <p className="text-sm text-white/56">No post selected yet.</p>
-            </section>
-          )}
-        </div>
-
+      <div className="lg:hidden">
         {showMobileReader && selectedPost ? (
-          <div className="lg:hidden">
-            <PostReader post={selectedPost} showMobileBackLink />
+          <div>
+            <Link className="mb-4 inline-flex text-[11px] uppercase tracking-[0.2em] text-white/36" href="/posts">
+              ← back to posts
+            </Link>
+            <PostReader post={selectedPost} />
           </div>
-        ) : null}
+        ) : (
+          <PostsNavigator posts={posts} selectedSlug={selectedPost?.slug ?? null} />
+        )}
       </div>
-    </section>
+    </SiteShell>
   );
 }

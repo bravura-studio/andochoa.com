@@ -1,142 +1,185 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import type { ReactNode } from "react";
-import { usePathname } from "next/navigation";
 
-const navItems = [
-  { href: "/", label: "home" },
-  { href: "/posts", label: "posts" },
-  { href: "/vault", label: "vault" },
-  { href: "/about", label: "about" },
+const activityItems = [
+  { href: "/", label: "Home", icon: "⌂", key: "home" },
+  { href: "/posts", label: "Posts", icon: "✎", key: "posts" },
+  { href: "/vault", label: "Vault", icon: "◆", key: "vault" },
+  { href: "/about", label: "About", icon: "○", key: "about" },
 ] as const;
 
-export function SiteShell({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+type SiteTab = {
+  label: string;
+  href?: string;
+  active?: boolean;
+  tone?: "default" | "alert";
+};
 
-  if (pathname === "/") {
-    return <div className="min-h-screen bg-background text-foreground">{children}</div>;
-  }
+type Breadcrumb = {
+  label: string;
+  href?: string;
+  tone?: "default" | "alert";
+};
 
-  function isActive(href: string) {
-    return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
-  }
+type SiteShellProps = {
+  activityKey: (typeof activityItems)[number]["key"];
+  sidebarTitle: string;
+  sidebar: ReactNode;
+  tabs: SiteTab[];
+  breadcrumbs: Breadcrumb[];
+  statusMeta: string;
+  children: ReactNode;
+};
 
-  const activeItem = navItems.find((item) => isActive(item.href)) ?? navItems[0];
-
-  function closeMobileNav() {
-    setMobileNavOpen(false);
-  }
+export function SiteShell({
+  activityKey,
+  sidebarTitle,
+  sidebar,
+  tabs,
+  breadcrumbs,
+  statusMeta,
+  children,
+}: SiteShellProps) {
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="flex min-h-screen">
-        <aside className="shell-card shell-glow fixed inset-y-0 left-0 z-30 hidden w-[220px] rounded-none border-y-0 border-l-0 lg:block">
-          <div className="flex h-full flex-col px-5 py-8">
-            <Link className="border-b border-dashed border-border/8 pb-8" href="/">
-              <div className="flex items-center gap-4">
-                <div className="relative h-11 w-11 overflow-hidden rounded-full border border-dashed border-border/15 bg-surface-elevated/80">
-                  <Image
-                    alt="ANDOCHOA wordmark"
-                    className="object-cover grayscale"
-                    fill
-                    priority
-                    sizes="44px"
-                    src="/logo.jpg"
-                  />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-bold uppercase tracking-[0.4em] text-foreground">ANDOCHOA</p>
-                  <p className="mt-2 text-xs text-text-dim/45">Personal archive for BUILD.FUN.FREE.</p>
-                </div>
-              </div>
-            </Link>
+    <div className="min-h-screen bg-background px-3 py-3 text-foreground sm:px-5 sm:py-5">
+      <div className="shell-frame mx-auto flex min-h-[calc(100vh-1.5rem)] max-w-[1440px] flex-col sm:min-h-[calc(100vh-2.5rem)]">
+        <div className="shell-chrome flex h-10 items-center gap-2 border-b px-3">
+          <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+          <div className="flex-1 text-center text-[11px] text-white/30">andochoa.com — Cursor</div>
+          <button
+            aria-expanded={mobileSidebarOpen}
+            aria-label={mobileSidebarOpen ? "Close sidebar" : "Open sidebar"}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/8 text-white/50 transition hover:bg-white/[0.04] hover:text-white lg:hidden"
+            onClick={() => setMobileSidebarOpen((current) => !current)}
+            type="button"
+          >
+            {mobileSidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
 
-            <nav aria-label="Primary" className="mt-8 flex flex-col gap-1.5 text-[13px] text-text-dim/45">
-              {navItems.map((item) => {
-                const active = isActive(item.href);
+        <div className="flex min-h-0 flex-1">
+          <nav aria-label="Activity" className="shell-chrome hidden w-[42px] shrink-0 flex-col items-center gap-1 border-r py-3 lg:flex">
+            {activityItems.map((item) => (
+              <Link
+                aria-current={item.key === activityKey ? "page" : undefined}
+                className={`flex h-8 w-8 items-center justify-center rounded-md text-sm transition ${
+                  item.key === activityKey ? "bg-white/[0.06] text-white" : "text-white/28 hover:bg-white/[0.04] hover:text-white/65"
+                }`}
+                href={item.href}
+                key={item.href}
+                title={item.label}
+              >
+                {item.icon}
+              </Link>
+            ))}
+          </nav>
 
-                return (
+          <aside className="shell-chrome hidden w-[220px] shrink-0 border-r lg:flex lg:flex-col">
+            <div className="border-b px-4 py-3 text-[10px] uppercase tracking-[0.28em] text-white/28">{sidebarTitle}</div>
+            <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">{sidebar}</div>
+          </aside>
+
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+            <div className="shell-chrome hidden min-h-[34px] items-stretch overflow-x-auto border-b lg:flex">
+              {tabs.map((tab, index) => {
+                const className = tab.active
+                  ? tab.tone === "alert"
+                    ? "bg-background text-[#ff8a8a]"
+                    : "bg-background text-white"
+                  : tab.tone === "alert"
+                    ? "text-[#ff8a8a]/65 hover:bg-white/[0.04]"
+                    : "text-white/42 hover:bg-white/[0.04]";
+
+                return tab.href ? (
                   <Link
-                    className={`group rounded-md px-3 py-2.5 transition ${
-                      active ? "bg-foreground/5 text-foreground" : "hover:bg-foreground/5 hover:text-foreground"
-                    }`}
-                    href={item.href}
-                    key={item.href}
+                    className={`group relative flex shrink-0 items-center gap-2 border-r px-4 text-[11px] ${className}`}
+                    href={tab.href}
+                    key={`${tab.label}-${index}`}
                   >
-                    <span className={`mr-2 transition ${active ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>&gt;</span>
-                    {item.label}
+                    <span>{tab.label}</span>
+                    <span className="opacity-0 transition group-hover:opacity-100">×</span>
                   </Link>
+                ) : (
+                  <div className={`relative flex shrink-0 items-center gap-2 border-r px-4 text-[11px] ${className}`} key={`${tab.label}-${index}`}>
+                    <span>{tab.label}</span>
+                    <span className="text-white/20">×</span>
+                  </div>
                 );
               })}
-            </nav>
+            </div>
 
-            <p className="mt-auto text-[11px] leading-7 text-text-muted/25">Keep building. -Ochoa</p>
+            <div className="hidden border-b border-white/7 px-4 py-1.5 text-[11px] text-white/28 lg:block">
+              <div className="flex flex-wrap items-center gap-2">
+                {breadcrumbs.map((crumb, index) => (
+                  <div className="contents" key={`${crumb.label}-${index}`}>
+                    {crumb.href ? (
+                      <Link className={crumb.tone === "alert" ? "text-[#ff8a8a]/80" : "text-white/42 hover:text-white/68"} href={crumb.href}>
+                        {crumb.label}
+                      </Link>
+                    ) : (
+                      <span className={crumb.tone === "alert" ? "text-[#ff8a8a]/80" : "text-white/42"}>{crumb.label}</span>
+                    )}
+                    {index < breadcrumbs.length - 1 ? <span className="text-white/18">›</span> : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="min-h-0 flex-1 overflow-y-auto bg-background px-4 py-4 sm:px-6 sm:py-6">{children}</div>
+
+            <div className="shell-chrome flex h-6 items-center justify-between border-t px-3 text-[10px] text-white/28">
+              <span>Keep building. -Ochoa</span>
+              <span>{statusMeta}</span>
+            </div>
           </div>
-        </aside>
+        </div>
 
-        <div className="min-h-screen w-full lg:pl-[220px]">
-          <header className="sticky top-0 z-20 border-b border-dashed border-border/8 bg-background/90 backdrop-blur">
-            <div className="flex items-center justify-between px-4 py-4 sm:px-6 lg:hidden">
-              <Link className="text-sm font-bold uppercase tracking-[0.4em] text-foreground" href="/" onClick={closeMobileNav}>
-                ANDOCHOA
-              </Link>
+        <nav aria-label="Mobile activity" className="shell-chrome grid h-[52px] grid-cols-4 border-t lg:hidden">
+          {activityItems.map((item) => (
+            <Link
+              aria-current={item.key === activityKey ? "page" : undefined}
+              className={`flex flex-col items-center justify-center gap-1 text-[10px] transition ${
+                item.key === activityKey ? "bg-white/[0.06] text-white" : "text-white/32"
+              }`}
+              href={item.href}
+              key={item.href}
+            >
+              <span className="text-sm">{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      {mobileSidebarOpen ? (
+        <div className="fixed inset-0 z-50 bg-black/70 lg:hidden" onClick={() => setMobileSidebarOpen(false)}>
+          <div
+            className="shell-chrome h-full w-[280px] border-r px-3 py-3"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-3 flex items-center justify-between border-b border-white/7 pb-3">
+              <span className="text-[10px] uppercase tracking-[0.28em] text-white/28">{sidebarTitle}</span>
               <button
-                aria-expanded={mobileNavOpen}
-                aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-dashed border-border/10 bg-surface/80 text-foreground transition hover:bg-foreground/5"
-                onClick={() => setMobileNavOpen((current) => !current)}
+                aria-label="Close sidebar"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/8 text-white/50"
+                onClick={() => setMobileSidebarOpen(false)}
                 type="button"
               >
-                {mobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                <X className="h-4 w-4" />
               </button>
             </div>
-
-            {mobileNavOpen ? (
-              <nav aria-label="Mobile primary" className="border-t border-dashed border-border/8 px-4 py-4 sm:px-6 lg:hidden">
-                <div className="shell-panel flex flex-col gap-1 p-2">
-                  {navItems.map((item) => {
-                    const active = isActive(item.href);
-
-                    return (
-                      <Link
-                        className={`rounded-md px-3 py-3 text-sm transition ${
-                          active ? "bg-foreground/5 text-foreground" : "text-text-dim/45 hover:bg-foreground/5 hover:text-foreground"
-                        }`}
-                        href={item.href}
-                        key={item.href}
-                        onClick={closeMobileNav}
-                      >
-                        <span className={`mr-2 ${active ? "opacity-100" : "opacity-0"}`}>&gt;</span>
-                        {item.label}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </nav>
-            ) : null}
-          </header>
-
-          <main className="px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
-            <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-[1280px] flex-col">
-              <div className="mb-6 hidden items-end justify-between gap-6 lg:flex">
-                <div>
-                  <p className="shell-label">Active view</p>
-                  <h1 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-foreground">{activeItem.label}</h1>
-                </div>
-                <p className="max-w-md text-right text-sm leading-7 text-text-dim/45">
-                  Monochrome shell. Dashed borders. Type-first layout.
-                </p>
-              </div>
-              <div className="flex-1">{children}</div>
-            </div>
-          </main>
+            <div className="h-[calc(100%-3rem)] overflow-y-auto">{sidebar}</div>
+          </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 }

@@ -36,13 +36,13 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
   });
 
   return (
-    <aside className="overflow-hidden rounded-2xl border border-dashed border-white/10 bg-white/[0.03] shadow-terminal backdrop-blur-xl lg:h-full">
-      <div className="border-b border-dashed border-white/10 px-4 py-4">
-        <p className="text-[10px] uppercase tracking-[0.32em] text-white/38">post navigator</p>
+    <aside>
+      <div className="border-b border-white/7 px-2 pb-3">
+        <p className="text-[10px] uppercase tracking-[0.28em] text-white/28">post navigator</p>
         <label className="mt-4 block">
           <span className="sr-only">Search posts</span>
           <input
-            className="w-full rounded-lg border border-dashed border-white/12 bg-white/[0.04] px-3 py-2.5 text-[12px] text-white outline-none transition placeholder:text-white/28 focus:border-white/24"
+            className="w-full rounded-md border border-white/8 bg-white/[0.03] px-3 py-2 text-[11px] text-white outline-none transition placeholder:text-white/22 focus:border-white/14"
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search posts"
             type="search"
@@ -57,10 +57,10 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
             return (
               <button
                 className={cn(
-                  "rounded-full border border-dashed px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] transition",
+                  "rounded-md border px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] transition",
                   isActive
-                    ? "border-white/18 bg-white/[0.08] text-white"
-                    : "border-white/10 bg-transparent text-white/46 hover:border-white/16 hover:bg-white/[0.05] hover:text-white/72",
+                    ? "border-white/14 bg-white/[0.06] text-white"
+                    : "border-white/8 bg-transparent text-white/34 hover:border-white/14 hover:bg-white/[0.04] hover:text-white/68",
                 )}
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
@@ -73,7 +73,7 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
         </div>
       </div>
 
-      <div className="space-y-1 px-2 py-2">
+      <div className="space-y-1 px-1 py-3">
         {filteredPosts.length > 0 ? (
           filteredPosts.map((post) => {
             const isSelected = post.slug === selectedSlug;
@@ -81,22 +81,27 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
             return (
               <Link
                 className={cn(
-                  "block rounded-xl border border-transparent px-3 py-3 transition",
+                  "block rounded-md border border-transparent px-3 py-3 transition",
                   isSelected
-                    ? "border-l-2 border-l-white bg-white/[0.06] text-white"
-                    : "text-white/72 hover:bg-white/[0.035] hover:text-white",
+                    ? "border-white/10 bg-white/[0.06] text-white"
+                    : "text-white/62 hover:border-white/8 hover:bg-white/[0.04] hover:text-white",
                 )}
                 href={`/posts/${post.slug}`}
                 key={post.slug}
               >
-                <p className="text-[10px] uppercase tracking-[0.18em] text-white/34">{formatDate(post.date)}</p>
-                <h2 className="mt-2 text-[13px] font-medium text-white">{post.title}</h2>
-                <p className="mt-2 text-[11px] leading-5 text-white/48">{post.description}</p>
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/28">{formatDate(post.date)}</p>
+                  <span className="rounded-md border border-white/8 px-2 py-0.5 text-[9px] uppercase tracking-[0.18em] text-white/30">
+                    {post.type}
+                  </span>
+                </div>
+                <h2 className="mt-2 text-[13px] text-white">{post.title}</h2>
+                <p className="mt-1 text-[11px] leading-5 text-white/42">{post.description}</p>
               </Link>
             );
           })
         ) : (
-          <div className="rounded-xl border border-dashed border-white/10 bg-black/25 px-4 py-5 text-sm leading-7 text-white/52">
+          <div className="rounded-md border border-dashed border-white/10 bg-white/[0.03] px-4 py-5 text-[11px] leading-6 text-white/42">
             No posts match the current search and tag filter.
           </div>
         )}
