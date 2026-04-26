@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
-import { SiteShell } from "@/components/site-shell";
 import { buildPageMetadata, siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -32,9 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html className="dark" lang="en">
-      <body className={`${geistMono.variable} antialiased`}>
-        <SiteShell>{children}</SiteShell>
-      </body>
+      <body className={`${geistMono.variable} antialiased`}>{children}</body>
     </html>
   );
 }

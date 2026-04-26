@@ -5,41 +5,36 @@ export type PortfolioProject = {
   name: string;
   description: string;
   status: ProjectStatus;
-  href: string;
-  mark: string;
+  url: string | null;
 };
 
 export const projects: PortfolioProject[] = [
   {
-    slug: "voice-notes",
-    name: "Voice Notes",
-    description: "Voice-first capture system for turning founder thoughts into publishable raw material.",
-    status: "active",
-    href: "/vault",
-    mark: "VN",
-  },
-  {
-    slug: "tycoon",
-    name: "Tycoon.pt",
-    description: "Real estate wholesale workflow focused on investor-ready opportunities with clear ROI signals.",
+    slug: "tmaker",
+    name: "Tmaker",
+    description: "Talent marketplace project currently paused while the broader portfolio gets reshaped.",
     status: "paused",
-    href: "/vault",
-    mark: "TY",
-  },
-  {
-    slug: "striva",
-    name: "Striva.pt",
-    description: "Operations software for removing administrative drag from small and medium businesses.",
-    status: "planned",
-    href: "/vault",
-    mark: "ST",
+    url: "https://tmaker.com",
   },
   {
     slug: "scripta",
     name: "Scripta",
-    description: "The public writing engine for BUILD.FUN.FREE: essays, field notes, and experiments in motion.",
+    description: "Personal brand content engine for BUILD.FUN.FREE running at andochoa.com.",
     status: "active",
-    href: "/",
-    mark: "SC",
+    url: "https://andochoa.com",
+  },
+  {
+    slug: "tycoon",
+    name: "Tycoon",
+    description: "Real estate workflow still in planning mode.",
+    status: "planned",
+    url: null,
+  },
+  {
+    slug: "striva",
+    name: "Striva",
+    description: "Operations software idea queued behind the current publishing engine.",
+    status: "planned",
+    url: null,
   },
 ];

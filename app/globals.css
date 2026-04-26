@@ -18,7 +18,8 @@
 }
 
 * {
-  border-color: rgb(var(--border) / 0.08);
+  border-color: rgb(var(--border) / 0.07);
+  box-sizing: border-box;
 }
 
 html {
@@ -40,9 +41,9 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at top left, rgb(var(--surface-elevated) / 0.9), transparent 34%),
-    radial-gradient(circle at bottom right, rgb(var(--surface) / 0.75), transparent 30%);
-  opacity: 0.85;
+    radial-gradient(circle at top left, rgb(var(--surface-elevated) / 0.55), transparent 30%),
+    radial-gradient(circle at bottom right, rgb(var(--surface) / 0.55), transparent 26%);
+  opacity: 0.92;
 }
 
 a {
@@ -55,37 +56,39 @@ a {
   color: rgb(var(--foreground));
 }
 
-.shell-card {
-  border: 1px dashed rgb(var(--border) / 0.08);
-  border-radius: var(--radius-lg);
-  background: rgb(var(--surface) / 0.72);
-  backdrop-filter: blur(12px);
+.vault-terminal {
+  color: rgb(var(--terminal-green));
 }
 
-.shell-panel {
-  border: 1px dashed rgb(var(--border) / 0.08);
+.shell-frame {
+  border: 1px solid rgb(var(--border) / 0.12);
+  border-radius: 12px;
+  background: rgb(var(--background));
+  box-shadow: 0 28px 90px rgb(0 0 0 / 0.42);
+  overflow: hidden;
+}
+
+.shell-chrome {
+  background: rgb(var(--surface));
+  border-color: rgb(var(--border) / 0.07);
+}
+
+.shell-card {
+  border: 1px dashed rgb(var(--border) / 0.12);
   border-radius: var(--radius-md);
-  background: rgb(var(--surface-elevated) / 0.72);
+  background: rgb(var(--surface) / 0.58);
   backdrop-filter: blur(12px);
 }
 
 .shell-label {
-  color: rgb(var(--text-muted) / 0.25);
-  font-size: 11px;
-  letter-spacing: 0.32em;
+  color: rgb(var(--text-muted) / 0.28);
+  font-size: 10px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
 }
 
 .shell-copy {
-  color: rgb(var(--text-dim) / 0.45);
-}
-
-.shell-glow {
-  box-shadow: 0 20px 60px rgb(0 0 0 / 0.35);
-}
-
-.vault-terminal {
-  color: rgb(var(--terminal-green));
+  color: rgb(var(--text-dim) / 0.46);
 }
 
 @media (max-width: 1023px) {
