@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import type { ReactNode } from "react";
@@ -47,12 +48,15 @@ export function SiteShell({
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background px-3 py-3 text-foreground sm:px-5 sm:py-5">
-      <div className="shell-frame mx-auto flex min-h-[calc(100vh-1.5rem)] max-w-[1440px] flex-col sm:min-h-[calc(100vh-2.5rem)]">
+    <div className="min-h-screen bg-background px-3 py-3 pb-[calc(52px+1.5rem)] text-foreground sm:px-5 sm:py-5 lg:pb-5">
+      <div className="shell-frame mx-auto flex min-h-[calc(100dvh-76px)] max-w-[1440px] flex-col sm:min-h-[calc(100dvh-2.5rem)]">
         <div className="shell-chrome flex h-10 items-center gap-2 border-b px-3">
           <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+          <Link aria-label="ANDOCHOA home" className="ml-2 hidden items-center sm:flex" href="/">
+            <Image alt="ANDOCHOA wordmark" className="h-4 w-auto object-contain opacity-80" height={16} priority src="/logo.jpg" width={90} />
+          </Link>
           <div className="flex-1 text-center text-[11px] text-white/30">andochoa.com — Cursor</div>
           <button
             aria-expanded={mobileSidebarOpen}
@@ -142,7 +146,7 @@ export function SiteShell({
           </div>
         </div>
 
-        <nav aria-label="Mobile activity" className="shell-chrome grid h-[52px] grid-cols-4 border-t lg:hidden">
+        <nav aria-label="Mobile activity" className="shell-chrome fixed bottom-0 left-3 right-3 z-40 grid h-[52px] grid-cols-4 border-t lg:hidden sm:left-5 sm:right-5">
           {activityItems.map((item) => (
             <Link
               aria-current={item.key === activityKey ? "page" : undefined}
