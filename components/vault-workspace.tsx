@@ -1,6 +1,7 @@
 "use client";
 
 import { useDeferredValue, useEffect, useMemo, useRef, useState, startTransition } from "react";
+import Fuse from "fuse.js";
 import Link from "next/link";
 import { ArrowUpRight, Command, Search } from "lucide-react";
 import type { VaultEntry } from "@/lib/vault";
@@ -142,26 +143,30 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
   const terminalViewportRef = useRef<HTMLDivElement | null>(null);
   const terminalInputRef = useRef<HTMLInputElement | null>(null);
   const terminalTree = useMemo(() => createTerminalTree(entries), [entries]);
+  const topicEntries = useMemo(
+    () => (activeTopic === "all" ? entries : entries.filter((entry) => entry.topic === activeTopic)),
+    [activeTopic, entries],
+  );
+  const fuse = useMemo(
+    () =>
+      new Fuse(topicEntries, {
+        includeScore: true,
+        ignoreLocation: true,
+        threshold: 0.34,
+        keys: ["title", "authorLabel", "folderPath", "fileName", "relativePath"],
+      }),
+    [topicEntries],
+  );
 
   const filteredEntries = useMemo(() => {
     const normalizedQuery = deferredQuery.trim().toLowerCase();
 
-    return entries.filter((entry) => {
-      const topicMatches = activeTopic === "all" ? true : entry.topic === activeTopic;
+    if (!normalizedQuery) {
+      return topicEntries;
+    }
 
-      if (!topicMatches) {
-        return false;
-      }
-
-      if (!normalizedQuery) {
-        return true;
-      }
-
-      const haystack = [entry.title, entry.authorLabel, entry.folderPath, entry.fileName].join(" ").toLowerCase();
-
-      return haystack.includes(normalizedQuery);
-    });
-  }, [activeTopic, deferredQuery, entries]);
+    return fuse.search(normalizedQuery).map((result) => result.item);
+  }, [deferredQuery, fuse, topicEntries]);
 
   const selectedEntry =
     filteredEntries.find((entry) => entry.slug === selectedSlug) ??
@@ -368,35 +373,36 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
           <div className="flex items-center gap-3 text-sm text-white/54">
             <span>{entries.length} indexed files</span>
             <span className="h-4 w-px bg-white/12" />
-            <span>black / white / glass</span>
+            <span>terminal + git log</span>
           </div>
         </div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.25fr)_360px]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.4fr)_340px]">
         <section
           className="min-w-0 rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] shell-glow backdrop-blur-xl"
           onClick={() => terminalInputRef.current?.focus()}
         >
-          <div className="flex flex-col gap-3 rounded-t-[2rem] border-b border-dashed border-white/12 px-4 py-3 text-xs text-white/42 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <div className="relative flex items-center rounded-t-[2rem] border-b border-dashed border-white/12 px-4 py-3 text-xs text-white/42 sm:px-5">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-white/78" />
-              <span className="h-3 w-3 rounded-full bg-white/34" />
-              <span className="h-3 w-3 rounded-full bg-white/18" />
+              <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+              <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+              <span className="h-3 w-3 rounded-full bg-[#28c840]" />
             </div>
-            <div className="flex items-center gap-2 uppercase tracking-[0.28em] text-terminal/90">
-              <Command className="h-3.5 w-3.5" />
-              <span>vault terminal</span>
+            <div className="pointer-events-none absolute inset-x-0 flex items-center justify-center">
+              <div className="flex items-center gap-2 uppercase tracking-[0.28em] text-white/45">
+                <Command className="h-3.5 w-3.5" />
+                <span>ochoa@vault</span>
+              </div>
             </div>
-            <span className="break-all text-left text-terminal/70 sm:text-right">~/knowledge-vault</span>
           </div>
 
           <div className="px-4 py-4 sm:px-5">
             <div
-              className="h-[420px] overflow-y-auto rounded-[1.6rem] border border-dashed border-terminal/25 bg-black/70 px-4 py-4 sm:px-5"
+              className="h-[420px] overflow-x-hidden overflow-y-auto rounded-[12px] border border-white/12 bg-[#0d0d0d] px-4 py-4 sm:px-5"
               ref={terminalViewportRef}
             >
-              <div className="space-y-3 text-sm leading-7 text-white/82">
+              <div className="space-y-3 text-sm leading-7 text-[#33ff33]">
                 {terminalLines.map((line) =>
                   line.kind === "command" ? (
                     <div className="flex gap-3 break-words" key={line.id}>
@@ -406,12 +412,12 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
                   ) : (
                     <p
                       className={`whitespace-pre-wrap break-words ${
-                        line.id.startsWith("boot-") ? "text-terminal/80" : "text-white/70"
+                        line.id.startsWith("boot-") ? "text-[#33ff33]/86" : "text-[#33ff33]/72"
                       }`}
                       key={line.id}
                     >
                       {line.displayText}
-                      {line.isTyping ? <span className="ml-0.5 inline-block h-5 w-2 animate-pulse bg-terminal align-middle" /> : null}
+                      {line.isTyping ? <span className="ml-0.5 inline-block h-5 w-2 animate-pulse bg-[#33ff33] align-middle" /> : null}
                     </p>
                   ),
                 )}
@@ -419,18 +425,19 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
             </div>
 
             <form className="mt-4" onSubmit={handleCommandSubmit}>
-              <label className="flex items-center gap-3 rounded-[1.35rem] border border-dashed border-terminal/25 bg-terminal/5 px-4 py-3 text-sm text-white/76">
+              <label className="flex items-center gap-3 rounded-[12px] border border-white/12 bg-[#0d0d0d] px-4 py-3 text-sm text-[#33ff33]">
                 <span className="shrink-0 text-terminal">{PROMPT}</span>
                 <input
                   autoCapitalize="none"
                   autoCorrect="off"
-                  className="min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-white/26"
+                  className="min-w-0 flex-1 bg-transparent text-[#33ff33] outline-none placeholder:text-[#33ff33]/35"
                   onChange={(event) => setTerminalInput(event.target.value)}
                   placeholder="help"
                   ref={terminalInputRef}
                   spellCheck={false}
                   value={terminalInput}
                 />
+                <span aria-hidden className="h-5 w-2 animate-pulse bg-[#33ff33]" />
               </label>
             </form>
           </div>
@@ -490,17 +497,23 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
       <section className="rounded-[2rem] border border-dashed border-white/15 bg-white/[0.045] p-5 shell-glow backdrop-blur-xl sm:p-6">
         <div className="flex flex-col gap-4 border-b border-dashed border-white/12 pb-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.35em] text-white/38">git log view</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-white/38">&gt; vault log</p>
+              <span className="rounded-full border border-dashed border-white/12 px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-white/44">
+                {entries.length} entries
+              </span>
+            </div>
             <p className="mt-2 text-sm leading-7 text-white/56">Filter by topic, title, or author. Open the source when a line is useful.</p>
           </div>
 
           <div className="flex flex-col gap-3 lg:min-w-[420px] lg:max-w-[420px]">
-            <label className="flex items-center gap-3 rounded-[1.2rem] border border-dashed border-white/12 bg-black/30 px-4 py-3 text-sm text-white/58">
+            <label className="flex items-center gap-3 rounded-[1.2rem] border border-dashed border-white/12 bg-black/30 px-4 py-3 text-sm text-white/58 backdrop-blur-xl">
               <Search className="h-4 w-4" />
               <input
                 className="min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-white/24"
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search title or author"
+                type="search"
                 value={query}
               />
             </label>
@@ -524,49 +537,45 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
           </div>
         </div>
 
-        <div className="mt-5 overflow-hidden rounded-[1.6rem] border border-dashed border-white/12 bg-black/35">
-          <div className="max-h-[580px] overflow-y-auto">
+        <div className="mt-5 space-y-3">
+          <div className="max-h-[580px] space-y-3 overflow-y-auto pr-1">
             {filteredEntries.length ? (
               filteredEntries.map((entry) => (
                 <article
-                  className={`grid gap-3 border-b border-dashed border-white/10 px-4 py-4 text-sm transition sm:grid-cols-[110px_120px_170px_minmax(0,1fr)_auto] sm:items-start ${
-                    selectedEntry?.slug === entry.slug ? "bg-white/[0.06]" : "hover:bg-white/[0.04]"
+                  className={`rounded-[1.45rem] border border-dashed px-4 py-4 transition ${
+                    selectedEntry?.slug === entry.slug
+                      ? "border-white/22 bg-white/[0.08]"
+                      : "border-white/10 bg-black/25 hover:bg-white/[0.04]"
                   }`}
                   key={entry.slug}
                 >
-                  <button
-                    className="text-left text-white/82"
-                    onClick={() => startTransition(() => setSelectedSlug(entry.slug))}
-                    type="button"
-                  >
-                    <span className="font-medium">{entry.id}</span>
-                  </button>
-                  <p className="text-white/42">{formatDisplayDate(entry.publishedAt)}</p>
-                  <p className="truncate text-white/56">{entry.authorLabel}</p>
-                  <button
-                    className="min-w-0 text-left"
-                    onClick={() => startTransition(() => setSelectedSlug(entry.slug))}
-                    type="button"
-                  >
-                    <p className="truncate text-[11px] uppercase tracking-[0.24em] text-white/34">{entry.folderPath}</p>
-                    <p className="mt-2 text-white/86">{entry.title}</p>
+                  <button className="block w-full text-left" onClick={() => startTransition(() => setSelectedSlug(entry.slug))} type="button">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/34">
+                      <span className="font-medium uppercase tracking-[0.18em]">#{entry.id}</span>
+                      <span>{formatDisplayDate(entry.publishedAt)}</span>
+                      <span>{entry.authorLabel}</span>
+                      <span className="truncate uppercase tracking-[0.18em]">{entry.folderPath}</span>
+                    </div>
+                    <p className="mt-3 text-[13px] leading-6 text-white/90">{entry.title}</p>
                   </button>
                   {entry.sourceUrl ? (
                     <a
-                      className="inline-flex items-center justify-self-start rounded-full border border-dashed border-white/14 px-3 py-2 text-white/68 transition hover:border-white/24 hover:text-white"
+                      className="mt-3 inline-flex items-center gap-2 text-[11px] text-white/42 transition hover:text-white"
                       href={entry.sourceUrl}
                       rel="noreferrer"
                       target="_blank"
                     >
-                      <ArrowUpRight className="h-4 w-4" />
+                      <span>{`→ ${new URL(entry.sourceUrl).hostname.replace(/^www\./, "")}`}</span>
                     </a>
                   ) : (
-                    <span className="px-3 py-2 text-white/24">-</span>
+                    <span className="mt-3 inline-flex text-[11px] text-white/24">→ no-source</span>
                   )}
                 </article>
               ))
             ) : (
-              <div className="px-4 py-8 text-sm text-white/44">No entries match the current filters.</div>
+              <div className="rounded-[1.45rem] border border-dashed border-white/10 bg-black/25 px-4 py-8 text-sm text-white/44">
+                No entries match the current filters.
+              </div>
             )}
           </div>
         </div>

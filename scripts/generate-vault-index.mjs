@@ -94,11 +94,29 @@ function readEntry(filePath) {
   };
 }
 
+function loadExistingEntries() {
+  if (!fs.existsSync(OUTPUT_PATH)) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(fs.readFileSync(OUTPUT_PATH, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
 const entries = INCLUDED_TOPICS.flatMap((topic) => findMarkdownFiles(path.join(VAULT_ROOT, topic)).map(readEntry)).sort(
   (left, right) => new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime(),
 );
 
-fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
-fs.writeFileSync(OUTPUT_PATH, `${JSON.stringify(entries, null, 2)}\n`);
+const nextEntries = entries.length > 0 ? entries : loadExistingEntries() ?? [];
 
-console.log(`Generated ${entries.length} vault entries at ${OUTPUT_PATH}`);
+fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+fs.writeFileSync(OUTPUT_PATH, `${JSON.stringify(nextEntries, null, 2)}\n`);
+
+if (entries.length === 0 && nextEntries.length > 0) {
+  console.log(`Vault source missing. Preserved ${nextEntries.length} committed entries at ${OUTPUT_PATH}`);
+} else {
+  console.log(`Generated ${nextEntries.length} vault entries at ${OUTPUT_PATH}`);
+}
