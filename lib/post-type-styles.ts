@@ -2,24 +2,24 @@ import { cn } from "@/lib/utils";
 
 const postTypeStyles: Record<string, { badge: string; text: string }> = {
   reflection: {
-    badge: "border-white/12 bg-white/[0.05] text-white/74",
-    text: "text-white/74",
+    badge: "border-[rgba(59,130,246,0.3)] bg-[rgba(59,130,246,0.15)] text-[rgba(59,130,246,0.8)]",
+    text: "text-[rgba(59,130,246,0.8)]",
   },
   struggle: {
-    badge: "border-white/10 bg-white/[0.04] text-white/68",
-    text: "text-white/68",
+    badge: "border-[rgba(244,63,94,0.3)] bg-[rgba(244,63,94,0.15)] text-[rgba(244,63,94,0.8)]",
+    text: "text-[rgba(244,63,94,0.8)]",
   },
   win: {
-    badge: "border-white/12 bg-white/[0.05] text-white/76",
-    text: "text-white/76",
+    badge: "border-[rgba(34,197,94,0.3)] bg-[rgba(34,197,94,0.15)] text-[rgba(34,197,94,0.8)]",
+    text: "text-[rgba(34,197,94,0.8)]",
   },
   observation: {
-    badge: "border-white/10 bg-white/[0.04] text-white/64",
-    text: "text-white/64",
+    badge: "border-[rgba(234,179,8,0.3)] bg-[rgba(234,179,8,0.15)] text-[rgba(234,179,8,0.8)]",
+    text: "text-[rgba(234,179,8,0.8)]",
   },
   brainstorm: {
-    badge: "border-white/11 bg-white/[0.045] text-white/70",
-    text: "text-white/70",
+    badge: "border-[rgba(168,85,247,0.3)] bg-[rgba(168,85,247,0.15)] text-[rgba(168,85,247,0.8)]",
+    text: "text-[rgba(168,85,247,0.8)]",
   },
 };
 
