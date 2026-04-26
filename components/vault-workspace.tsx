@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRight, ChevronDown, ChevronRight } from "lucide-react";
 import Fuse from "fuse.js";
 import { SiteShell } from "@/components/site-shell";
@@ -24,12 +24,13 @@ const PLACEHOLDER_SUGGESTIONS = [
   "Try: bootstrapping",
 ];
 
-function useRotatingPlaceholder(suggestions: string[], intervalMs = 3000) {
+function useRotatingPlaceholder(suggestions: string[], active: boolean, intervalMs = 3000) {
   const [index, setIndex] = useState(0);
   useEffect(() => {
+    if (!active) return;
     const id = setInterval(() => setIndex((i) => (i + 1) % suggestions.length), intervalMs);
     return () => clearInterval(id);
-  }, [suggestions.length, intervalMs]);
+  }, [active, suggestions.length, intervalMs]);
   return suggestions[index] ?? suggestions[0] ?? "";
 }
 
@@ -61,7 +62,8 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
   const [activeFolder, setActiveFolder] = useState<string>("");
   const [terminalOpen, setTerminalOpen] = useState(false);
 
-  const placeholder = useRotatingPlaceholder(PLACEHOLDER_SUGGESTIONS);
+  const isSearching = query.trim().length > 0;
+  const placeholder = useRotatingPlaceholder(PLACEHOLDER_SUGGESTIONS, !isSearching);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const fuse = useMemo(
@@ -84,38 +86,35 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     return entries.filter((e) => e.folderPath === activeFolder || e.folderPath.startsWith(`${activeFolder}/`));
   }, [entries, activeFolder]);
 
-  const displayEntries = query.trim() ? searchResults : folderFiltered;
+  const displayEntries = isSearching ? searchResults : folderFiltered;
+  const hasResults = displayEntries.length > 0;
+
+  const entryBySlug = useMemo(() => new Map(entries.map((e) => [e.slug, e])), [entries]);
 
   const pickedEntries = useMemo(
     () =>
       vaultPicks
         .map((pick) => {
-          const entry = entries.find((e) => e.slug === pick.slug);
+          const entry = entryBySlug.get(pick.slug);
           return entry ? { entry, note: pick.note } : null;
         })
         .filter((item): item is NonNullable<typeof item> => item !== null),
-    [entries],
+    [entryBySlug],
   );
 
   const topAuthors = useMemo(() => getTopAuthors(entries), [entries]);
   const topFolders = useMemo(() => getTopLevelFolders(entries), [entries]);
 
-  const handleChip = useCallback((term: string) => {
+  function handleChip(term: string) {
     setQuery(term);
     setActiveFolder("");
     inputRef.current?.focus();
-  }, []);
+  }
 
-  const handleFolderFilter = useCallback(
-    (folder: string) => {
-      setActiveFolder(activeFolder === folder ? "" : folder);
-      setQuery("");
-    },
-    [activeFolder],
-  );
-
-  const isSearching = query.trim().length > 0;
-  const hasResults = displayEntries.length > 0;
+  function handleFolderFilter(folder: string) {
+    setActiveFolder(activeFolder === folder ? "" : folder);
+    setQuery("");
+  }
 
   const terminalLines = [
     "knowledge vault online",
@@ -124,35 +123,39 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     query ? `query: ${query}` : "query: idle",
   ];
 
-  const sidebar = (
-    <div className="space-y-4">
-      <div className="space-y-1">
-        <p className="px-1 text-[10px] uppercase tracking-[0.22em] text-white/28">vault/</p>
-        <button
-          className={`flex w-full items-center rounded-md px-3 py-2 text-left text-[12px] transition ${
-            !activeFolder ? "bg-white/[0.06] text-white" : "text-white/42 hover:bg-white/[0.04] hover:text-white/72"
-          }`}
-          onClick={() => { setActiveFolder(""); setQuery(""); }}
-          type="button"
-        >
-          vault/ ({entries.length})
-        </button>
-        {topFolders.map(([folder, count]) => (
+  const sidebar = useMemo(
+    () => (
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <p className="px-1 text-[10px] uppercase tracking-[0.22em] text-white/28">vault/</p>
           <button
-            className={`flex w-full items-center rounded-md px-3 py-2 pl-6 text-left text-[12px] transition ${
-              activeFolder === folder
-                ? "bg-white/[0.06] text-white"
-                : "text-white/38 hover:bg-white/[0.04] hover:text-white/65"
+            className={`flex w-full items-center rounded-md px-3 py-2 text-left text-[12px] transition ${
+              !activeFolder ? "bg-white/[0.06] text-white" : "text-white/42 hover:bg-white/[0.04] hover:text-white/72"
             }`}
-            key={folder}
-            onClick={() => handleFolderFilter(folder)}
+            onClick={() => { setActiveFolder(""); setQuery(""); }}
             type="button"
           >
-            {folder}/ ({count})
+            vault/ ({entries.length})
           </button>
-        ))}
+          {topFolders.map(([folder, count]) => (
+            <button
+              className={`flex w-full items-center rounded-md px-3 py-2 pl-6 text-left text-[12px] transition ${
+                activeFolder === folder
+                  ? "bg-white/[0.06] text-white"
+                  : "text-white/38 hover:bg-white/[0.04] hover:text-white/65"
+              }`}
+              key={folder}
+              onClick={() => handleFolderFilter(folder)}
+              type="button"
+            >
+              {folder}/ ({count})
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+    ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeFolder, entries.length, topFolders],
   );
 
   return (
@@ -165,7 +168,6 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
       tabs={[{ active: true, label: "vault" }]}
     >
       <div className="space-y-8">
-        {/* Hero Search Bar */}
         <section className="space-y-4">
           <div className="relative">
             <input
@@ -188,7 +190,6 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
             )}
           </div>
 
-          {/* Search Chips */}
           <div className="space-y-2">
             <div className="flex flex-wrap gap-2">
               {POPULAR_CHIPS.map((chip) => (
@@ -217,7 +218,6 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
           </div>
         </section>
 
-        {/* Search Results */}
         {isSearching && (
           <section>
             {hasResults ? (
@@ -237,10 +237,8 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
           </section>
         )}
 
-        {/* Zero-Query State */}
         {!isSearching && (
           <>
-            {/* Curated Picks */}
             {pickedEntries.length > 0 && (
               <section className="space-y-3">
                 <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">curated picks</p>
@@ -252,7 +250,6 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
               </section>
             )}
 
-            {/* Topic Clusters */}
             <section className="space-y-3">
               <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">browse by topic</p>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -271,7 +268,6 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
               </div>
             </section>
 
-            {/* Author Spotlight */}
             <section className="space-y-3">
               <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">authors</p>
               <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
@@ -289,7 +285,6 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
               </div>
             </section>
 
-            {/* Folder-filtered list */}
             {activeFolder && (
               <section className="space-y-2">
                 <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">
@@ -303,7 +298,6 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
               </section>
             )}
 
-            {/* Terminal Easter Egg */}
             <section className="overflow-hidden rounded-lg border border-dashed border-white/10">
               <button
                 className="flex w-full items-center gap-2 border-b border-white/7 bg-white/[0.02] px-4 py-3 text-left"
