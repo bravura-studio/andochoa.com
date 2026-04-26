@@ -67,6 +67,20 @@ function createHash(relativePath) {
   return crypto.createHash("sha1").update(relativePath).digest("hex").slice(0, 7);
 }
 
+function extractSnippet(source, maxLength = 100) {
+  const { content } = matter(source);
+  const text = content
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/^#+\s+.*/gm, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/[*_`~>#-]+/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return text.length > maxLength ? `${text.slice(0, maxLength)}…` : text;
+}
+
 function readEntry(filePath) {
   const source = fs.readFileSync(filePath, "utf8");
   const { data } = matter(source);
@@ -87,6 +101,7 @@ function readEntry(filePath) {
     authorLabel: authors.join(", ") || "Unknown",
     publishedAt,
     sourceUrl,
+    snippet: extractSnippet(source),
     topic,
     folderPath,
     fileName,

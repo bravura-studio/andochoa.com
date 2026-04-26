@@ -9,6 +9,7 @@ export type VaultEntry = {
   authorLabel: string;
   publishedAt: string;
   sourceUrl: string | null;
+  snippet: string;
   topic: string;
   folderPath: string;
   fileName: string;
