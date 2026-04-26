@@ -11,7 +11,7 @@ export default function NotFound() {
 
   return (
     <section className="flex min-h-[70vh] items-center justify-center px-4 py-10">
-      <div className="w-full max-w-[500px] overflow-hidden rounded-[16px] border border-dashed border-white/14 bg-white/[0.045] shadow-terminal backdrop-blur-xl">
+      <div className="w-full max-w-[500px] overflow-hidden rounded-[16px] border border-dashed border-white/14 bg-white/[0.045] backdrop-blur-xl">
         <div className="relative border-b border-dashed border-white/10 bg-black/45 px-4 py-3 text-xs text-white/42">
           <div className="flex items-center gap-2">
             <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
