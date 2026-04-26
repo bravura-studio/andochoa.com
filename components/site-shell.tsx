@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
 const activityItems = [
@@ -55,6 +56,11 @@ export function SiteShell({
     setInternalOpen(open);
     onMobileSidebarOpenChange?.(open);
   };
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-background px-3 py-3 pb-[calc(52px+1.5rem)] text-foreground sm:px-5 sm:py-5 lg:pb-5">

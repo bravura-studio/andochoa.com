@@ -278,8 +278,6 @@ export function PostReader({ post, previousPost, nextPost }: PostReaderProps) {
 
           <div className="mt-4 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/34">
             <span className={getPostTypeBadgeClassName(post.type)}>{post.type}</span>
-            <span className="rounded-md border border-white/8 px-2.5 py-1">{post.wordCount} words</span>
-            <span className="rounded-md border border-white/8 px-2.5 py-1">{post.readingTimeMinutes} min read</span>
           </div>
         </header>
 
