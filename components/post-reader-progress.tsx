@@ -90,8 +90,8 @@ export function PostReaderProgress({ postSlug }: PostReaderProgressProps) {
   }, [postSlug]);
 
   return (
-    <div className="sticky top-0 z-20 mb-6 h-[3px] overflow-hidden rounded-full bg-white/[0.15]" ref={progressBarRef}>
-      <div className="h-full bg-white/[0.42] transition-[width] duration-150" style={{ width: `${progress * 100}%` }} />
+    <div className="fixed left-0 right-0 top-0 z-50 h-[3px] overflow-hidden bg-white/[0.10]" ref={progressBarRef}>
+      <div className="h-full bg-white/[0.55] transition-[width] duration-150" style={{ width: `${progress * 100}%` }} />
     </div>
   );
 }

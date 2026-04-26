@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { formatIsoDate } from "@/lib/date";
-import { getPostTypeBadgeClassName } from "@/lib/post-type-styles";
 import type { Post } from "@/lib/posts";
 import { cn } from "@/lib/utils";
 
@@ -31,9 +30,9 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
 
   return (
     <aside>
+      {/* Fix 7: search + filters above the file tree */}
       <div className="border-b border-white/7 px-2 pb-3">
-        <p className="text-[10px] uppercase tracking-[0.28em] text-white/28">post navigator</p>
-        <label className="mt-4 block">
+        <label className="block">
           <span className="sr-only">Search posts</span>
           <input
             className="w-full rounded-md border border-white/8 bg-white/[0.03] px-3 py-2 text-[11px] text-white outline-none transition placeholder:text-white/22 focus:border-white/14"
@@ -44,17 +43,17 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
           />
         </label>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-2 flex flex-wrap gap-1.5">
           {tagOptions.map((filter) => {
             const isActive = filter === activeFilter;
 
             return (
               <button
                 className={cn(
-                  "rounded-md border px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] transition",
+                  "rounded px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] transition",
                   isActive
-                    ? "border-white/14 bg-white/[0.06] text-white"
-                    : "border-white/8 bg-transparent text-white/34 hover:border-white/14 hover:bg-white/[0.04] hover:text-white/68",
+                    ? "bg-white/[0.08] text-white"
+                    : "text-white/34 hover:bg-white/[0.04] hover:text-white/68",
                 )}
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
@@ -67,46 +66,35 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
         </div>
       </div>
 
-      <div className="px-1 py-3">
-        <div className="rounded-md px-3 py-2 text-[12px] text-white/40">▸ posts/</div>
-        {filteredPosts.length > 0 ? (
-          <div className="mt-1 space-y-1">
-            {filteredPosts.map((post) => {
-            const isSelected = post.slug === selectedSlug;
+      {/* Fix 3/6: file-explorer tree aesthetic */}
+      <div className="px-1 py-2">
+        {/* ▾ expanded folder header */}
+        <div className="px-3 py-1.5 text-[12px] text-white/40">▾ posts/</div>
 
-            return (
-              <Link
-                className={cn(
-                  "block rounded-md border border-transparent px-3 py-3 transition",
-                  isSelected
-                    ? "border-white/10 bg-white/[0.06] text-white"
-                    : "text-white/62 hover:border-white/8 hover:bg-white/[0.04] hover:text-white",
-                )}
-                href={`/posts/${post.slug}`}
-                key={post.slug}
-              >
-                <div className="flex items-start gap-2">
-                  <span className="pt-0.5 text-[12px] text-white/28">▸</span>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-3">
-                      <p className="truncate text-[12px] text-white">{post.filename}</p>
-                      <span className={getPostTypeBadgeClassName(post.type)}>{post.type}</span>
-                    </div>
-                    <p className="mt-2 text-[10px] uppercase tracking-[0.18em] text-white/28">{formatIsoDate(post.date)}</p>
-                    <p
-                      className="mt-2 overflow-hidden text-[11px] leading-5 text-white/42"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2,
-                        display: "-webkit-box",
-                      }}
-                    >
-                      {post.description}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            );
+        {filteredPosts.length > 0 ? (
+          <div className="ml-3 mt-0.5">
+            {filteredPosts.map((post) => {
+              const isSelected = post.slug === selectedSlug;
+
+              return (
+                <Link
+                  className={cn(
+                    "block border-l-2 py-2 pl-3 pr-2 transition",
+                    // Fix 8: 2px left border accent on active
+                    isSelected
+                      ? "border-l-white bg-white/[0.04] text-white"
+                      : "border-l-transparent text-white/62 hover:border-l-white/20 hover:bg-white/[0.04] hover:text-white",
+                  )}
+                  href={`/posts/${post.slug}`}
+                  key={post.slug}
+                >
+                  {/* Fix 1: title not filename; Fix 2: compact two-line layout */}
+                  <p className="truncate text-[12px] leading-tight text-white">{post.title}</p>
+                  <p className="mt-0.5 text-[10px] text-white/34">
+                    {formatIsoDate(post.date)} · {post.type}
+                  </p>
+                </Link>
+              );
             })}
           </div>
         ) : (
