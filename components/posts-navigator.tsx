@@ -2,16 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { formatIsoDate } from "@/lib/date";
 import type { Post } from "@/lib/posts";
 import { cn } from "@/lib/utils";
-
-function formatDate(date: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  }).format(new Date(date));
-}
 
 type PostsNavigatorProps = {
   posts: Post[];
@@ -90,7 +83,7 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
                 key={post.slug}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/28">{formatDate(post.date)}</p>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/28">{formatIsoDate(post.date)}</p>
                   <span className="rounded-md border border-white/8 px-2 py-0.5 text-[9px] uppercase tracking-[0.18em] text-white/30">
                     {post.type}
                   </span>

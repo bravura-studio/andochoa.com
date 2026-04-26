@@ -4,6 +4,7 @@ import { Github, Linkedin, Twitter } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { TypingStatus } from "@/components/typing-status";
 import { projects } from "@/config/projects";
+import { formatIsoDate } from "@/lib/date";
 import { getRecentPublishedPosts } from "@/lib/posts";
 import { buildPageMetadata } from "@/lib/site";
 
@@ -17,13 +18,11 @@ export const metadata = buildPageMetadata({
   description: "A Cursor-like welcome workspace for founder notes, projects, and recent writing from Andre Ochoa.",
 });
 
-function formatDate(date: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  }).format(new Date(date));
-}
+const projectStatusStyles = {
+  active: "border-[rgba(34,197,94,0.15)] text-[rgba(34,197,94,0.7)]",
+  paused: "border-[rgba(234,179,8,0.15)] text-[rgba(234,179,8,0.7)]",
+  planned: "border-white/8 text-white/40",
+} as const;
 
 export default function Home() {
   const recentPosts = getRecentPublishedPosts(2);
@@ -50,7 +49,7 @@ export default function Home() {
 
           <div className="shell-card p-4 text-center">
             <div className="relative mx-auto h-12 w-12 overflow-hidden rounded-full border border-dashed border-white/14 bg-black/40">
-              <Image alt="Andre Ochoa profile photo" className="object-cover grayscale" fill sizes="48px" src="/profile.jpg" />
+              <Image alt="Andre Ochoa profile photo" className="object-cover" fill sizes="48px" src="/profile.jpg" />
             </div>
             <p className="mt-3 text-[12px] text-white">Andre Ochoa</p>
             <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/28">Porto, Portugal</p>
@@ -67,6 +66,14 @@ export default function Home() {
                 </Link>
               ))}
             </div>
+            <Link
+              className="mt-3 inline-flex rounded-md border border-dashed border-white/12 px-2.5 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/58 transition hover:bg-white/[0.04] hover:text-white"
+              href="https://cal.com/andochoa/chitchat"
+              rel="noreferrer"
+              target="_blank"
+            >
+              book a call
+            </Link>
           </div>
         </div>
       }
@@ -77,13 +84,28 @@ export default function Home() {
       <section className="flex min-h-[calc(100vh-14rem)] items-center justify-center">
         <div className="w-full max-w-[560px] text-center">
           <div className="relative mx-auto h-[72px] w-[72px] overflow-hidden rounded-full border-2 border-dashed border-white/14 bg-[#111]">
-            <Image alt="Andre Ochoa profile photo" className="object-cover grayscale" fill priority sizes="72px" src="/profile.jpg" />
+            <Image alt="Andre Ochoa profile photo" className="object-cover" fill priority sizes="72px" src="/profile.jpg" />
           </div>
 
           <h1 className="mt-5 text-[28px] font-bold tracking-[-0.05em] text-white sm:text-[32px]">andre ochoa</h1>
 
           <div className="mt-4">
             <TypingStatus />
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            {socialLinks.map(({ href, icon: Icon, label }) => (
+              <Link
+                aria-label={label}
+                className="inline-flex h-8 items-center justify-center rounded-full border border-dashed border-white/12 bg-white/[0.02] px-3 text-white/52 transition hover:bg-white/[0.04] hover:text-white"
+                href={href}
+                key={href}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <Icon className="h-3.5 w-3.5" />
+              </Link>
+            ))}
           </div>
 
           <div className="mt-5 inline-flex rounded-md border border-dashed border-white/12 bg-white/[0.02] px-4 py-3">
@@ -95,7 +117,7 @@ export default function Home() {
               <div className="flex items-center justify-between gap-3">
                 <p className="text-[10px] uppercase tracking-[0.28em] text-white/30">&gt; recent posts</p>
                 <Link className="text-[10px] uppercase tracking-[0.2em] text-white/28 hover:text-white/66" href="/posts">
-                  all
+                  all posts →
                 </Link>
               </div>
 
@@ -106,7 +128,7 @@ export default function Home() {
                     href={`/posts/${post.slug}`}
                     key={post.slug}
                   >
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-white/28">{formatDate(post.date)}</p>
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-white/28">{formatIsoDate(post.date)}</p>
                     <p className="mt-2 text-[13px] text-white">{post.title}</p>
                   </Link>
                 ))}
@@ -120,13 +142,18 @@ export default function Home() {
                 {projects.map((project) => {
                   const body = (
                     <>
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <p className="text-[13px] text-white">{project.name}</p>
                         <p className="mt-1 text-[11px] leading-5 text-white/40">{project.description}</p>
                       </div>
-                      <span className="rounded-md border border-white/8 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-white/40">
-                        {project.status}
-                      </span>
+                      <div className="flex shrink-0 items-start gap-2">
+                        <span
+                          className={`rounded-md border px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] ${projectStatusStyles[project.status]}`}
+                        >
+                          {project.status}
+                        </span>
+                        <span className="pt-0.5 text-[14px] text-white/30">→</span>
+                      </div>
                     </>
                   );
 

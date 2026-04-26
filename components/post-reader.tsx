@@ -1,14 +1,7 @@
 import Image from "next/image";
 import type { HTMLAttributes, LiHTMLAttributes, ReactNode } from "react";
+import { formatIsoDate } from "@/lib/date";
 import type { Post } from "@/lib/posts";
-
-function formatDate(date: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "2-digit",
-    year: "numeric",
-  }).format(new Date(date));
-}
 
 function renderInlineMarkdown(text: string) {
   const segments = text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`|\*[^*]+\*)/g).filter(Boolean);
@@ -252,6 +245,10 @@ type PostReaderProps = {
   post: Post;
 };
 
+function stripPostSignoff(content: string) {
+  return content.replace(/\n+Keep building\. -Ochoa\s*$/u, "");
+}
+
 export function PostReader({ post }: PostReaderProps) {
   return (
     <article className="mx-auto max-w-[65ch]">
@@ -262,7 +259,7 @@ export function PostReader({ post }: PostReaderProps) {
           </div>
           <div>
             <p className="text-[12px] text-white">Andre Ochoa</p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-white/32">{formatDate(post.date)}</p>
+            <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-white/32">{formatIsoDate(post.date)}</p>
           </div>
         </div>
 
@@ -278,11 +275,7 @@ export function PostReader({ post }: PostReaderProps) {
         </div>
       </header>
 
-      <div className="pt-8">{renderMarkdown(post.content)}</div>
-
-      <footer className="mt-10 border-t border-dashed border-white/10 pt-5">
-        <p className="text-[14px] font-semibold text-white/68">Keep building. -Ochoa</p>
-      </footer>
+      <div className="pt-8">{renderMarkdown(stripPostSignoff(post.content))}</div>
     </article>
   );
 }
