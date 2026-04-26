@@ -6,6 +6,7 @@ export type PostStatus = "published" | "draft";
 
 export type Post = {
   slug: string;
+  filename: string;
   title: string;
   date: string;
   status: PostStatus;
@@ -140,6 +141,7 @@ function readPost(filePath: string, sourceDir: string, fallbackStatus: PostStatu
   const file = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(file);
   const filename = path.basename(filePath, path.extname(filePath));
+  const filenameWithExtension = path.basename(filePath);
   const relativeSlug = path.relative(sourceDir, filePath).replace(/\\/g, "/").replace(/\.(md|mdx)$/, "");
   const heading = content
     .split("\n")
@@ -159,6 +161,7 @@ function readPost(filePath: string, sourceDir: string, fallbackStatus: PostStatu
 
   return {
     slug: relativeSlug,
+    filename: filenameWithExtension,
     title,
     date,
     status,
@@ -177,12 +180,14 @@ export function getAllPosts() {
     .sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime());
 }
 
+export function getPublishedPosts() {
+  return getAllPosts().filter((post) => post.status === "published");
+}
+
 export function getRecentPublishedPosts(limit = 3) {
-  return getAllPosts()
-    .filter((post) => post.status === "published")
-    .slice(0, limit);
+  return getPublishedPosts().slice(0, limit);
 }
 
 export function getPostBySlug(slug: string) {
-  return getAllPosts().find((post) => post.slug === slug) ?? null;
+  return getPublishedPosts().find((post) => post.slug === slug) ?? null;
 }

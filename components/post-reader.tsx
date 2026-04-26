@@ -1,6 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { HTMLAttributes, LiHTMLAttributes, ReactNode } from "react";
+import { PostReaderProgress } from "@/components/post-reader-progress";
 import { formatIsoDate } from "@/lib/date";
+import { getPostTypeBadgeClassName } from "@/lib/post-type-styles";
 import type { Post } from "@/lib/posts";
 
 function renderInlineMarkdown(text: string) {
@@ -243,39 +246,64 @@ function renderMarkdown(content: string) {
 
 type PostReaderProps = {
   post: Post;
+  previousPost: Post | null;
+  nextPost: Post | null;
 };
 
 function stripPostSignoff(content: string) {
   return content.replace(/\n+Keep building\. -Ochoa\s*$/u, "");
 }
 
-export function PostReader({ post }: PostReaderProps) {
+export function PostReader({ post, previousPost, nextPost }: PostReaderProps) {
   return (
-    <article className="mx-auto max-w-[65ch]">
-      <header className="border-b border-dashed border-white/10 pb-6">
-        <div className="flex items-center gap-3">
-          <div className="relative h-10 w-10 overflow-hidden rounded-full border border-dashed border-white/14 bg-black/45">
-            <Image alt="Andre Ochoa" className="object-cover grayscale" fill sizes="40px" src="/profile.jpg" />
+    <div className="mx-auto max-w-[65ch]" data-post-reader-container>
+      <PostReaderProgress postSlug={post.slug} />
+
+      <article data-post-reader-article>
+        <header className="border-b border-dashed border-white/10 pb-6">
+          <div className="flex items-center gap-3">
+            <div className="relative h-10 w-10 overflow-hidden rounded-full border border-dashed border-white/14 bg-black/45">
+              <Image alt="Andre Ochoa" className="object-cover" fill sizes="40px" src="/profile.jpg" />
+            </div>
+            <div>
+              <p className="text-[12px] text-white">Andre Ochoa</p>
+              <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-white/32">{formatIsoDate(post.date)}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-[12px] text-white">Andre Ochoa</p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-white/32">{formatIsoDate(post.date)}</p>
+
+          <h1 className="mt-6 max-w-4xl text-[28px] font-semibold leading-tight tracking-[-0.04em] text-white sm:text-[34px]">
+            {post.title}
+          </h1>
+          <p className="mt-3 max-w-[60ch] text-[13px] leading-7 text-white/46">{post.description}</p>
+
+          <div className="mt-4 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/34">
+            <span className={getPostTypeBadgeClassName(post.type)}>{post.type}</span>
+            <span className="rounded-md border border-white/8 px-2.5 py-1">{post.wordCount} words</span>
+            <span className="rounded-md border border-white/8 px-2.5 py-1">{post.readingTimeMinutes} min read</span>
           </div>
-        </div>
+        </header>
 
-        <h1 className="mt-6 max-w-4xl text-[28px] font-semibold leading-tight tracking-[-0.04em] text-white sm:text-[34px]">
-          {post.title}
-        </h1>
-        <p className="mt-3 max-w-[60ch] text-[13px] leading-7 text-white/46">{post.description}</p>
+        <div className="pt-8">{renderMarkdown(stripPostSignoff(post.content))}</div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/34">
-          <span className="rounded-md border border-white/8 px-2.5 py-1">{post.type}</span>
-          <span className="rounded-md border border-white/8 px-2.5 py-1">{post.wordCount} words</span>
-          <span className="rounded-md border border-white/8 px-2.5 py-1">{post.readingTimeMinutes} min read</span>
-        </div>
-      </header>
+        <footer className="mt-10 border-t border-dashed border-white/10 pt-6">
+          <p className="text-[12px] uppercase tracking-[0.2em] text-white/68">Keep building. -Ochoa</p>
+          <div className="flex items-center justify-between gap-6 text-[12px] text-white/56">
+            {previousPost ? (
+              <Link className="mt-6 transition hover:text-white" href={`/posts/${previousPost.slug}`}>
+                ← {previousPost.title}
+              </Link>
+            ) : (
+              <span className="mt-6" />
+            )}
 
-      <div className="pt-8">{renderMarkdown(stripPostSignoff(post.content))}</div>
-    </article>
+            {nextPost ? (
+              <Link className="mt-6 ml-auto text-right transition hover:text-white" href={`/posts/${nextPost.slug}`}>
+                {nextPost.title} →
+              </Link>
+            ) : null}
+          </div>
+        </footer>
+      </article>
+    </div>
   );
 }

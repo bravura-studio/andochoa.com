@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PostsWorkspace } from "@/components/posts-workspace";
-import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { getPostBySlug, getPublishedPosts } from "@/lib/posts";
 import { siteConfig } from "@/lib/site";
 
 export function buildPostWorkspaceMetadata(resolvedSlug: string): Metadata {
@@ -47,5 +47,5 @@ export function renderPostWorkspacePage(resolvedSlug: string) {
     notFound();
   }
 
-  return <PostsWorkspace posts={getAllPosts()} selectedSlug={resolvedSlug} showMobileReader />;
+  return <PostsWorkspace posts={getPublishedPosts()} selectedSlug={resolvedSlug} showMobileReader />;
 }

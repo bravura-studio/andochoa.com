@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { formatIsoDate } from "@/lib/date";
+import { getPostTypeBadgeClassName } from "@/lib/post-type-styles";
 import type { Post } from "@/lib/posts";
 import { cn } from "@/lib/utils";
 
@@ -66,9 +67,11 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
         </div>
       </div>
 
-      <div className="space-y-1 px-1 py-3">
+      <div className="px-1 py-3">
+        <div className="rounded-md px-3 py-2 text-[12px] text-white/40">▸ posts/</div>
         {filteredPosts.length > 0 ? (
-          filteredPosts.map((post) => {
+          <div className="mt-1 space-y-1">
+            {filteredPosts.map((post) => {
             const isSelected = post.slug === selectedSlug;
 
             return (
@@ -82,20 +85,33 @@ export function PostsNavigator({ posts, selectedSlug }: PostsNavigatorProps) {
                 href={`/posts/${post.slug}`}
                 key={post.slug}
               >
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/28">{formatIsoDate(post.date)}</p>
-                  <span className="rounded-md border border-white/8 px-2 py-0.5 text-[9px] uppercase tracking-[0.18em] text-white/30">
-                    {post.type}
-                  </span>
+                <div className="flex items-start gap-2">
+                  <span className="pt-0.5 text-[12px] text-white/28">▸</span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="truncate text-[12px] text-white">{post.filename}</p>
+                      <span className={getPostTypeBadgeClassName(post.type)}>{post.type}</span>
+                    </div>
+                    <p className="mt-2 text-[10px] uppercase tracking-[0.18em] text-white/28">{formatIsoDate(post.date)}</p>
+                    <p
+                      className="mt-2 overflow-hidden text-[11px] leading-5 text-white/42"
+                      style={{
+                        WebkitBoxOrient: "vertical",
+                        WebkitLineClamp: 2,
+                        display: "-webkit-box",
+                      }}
+                    >
+                      {post.description}
+                    </p>
+                  </div>
                 </div>
-                <h2 className="mt-2 text-[13px] text-white">{post.title}</h2>
-                <p className="mt-1 text-[11px] leading-5 text-white/42">{post.description}</p>
               </Link>
             );
-          })
+            })}
+          </div>
         ) : (
-          <div className="rounded-md border border-dashed border-white/10 bg-white/[0.03] px-4 py-5 text-[11px] leading-6 text-white/42">
-            No posts match the current search and tag filter.
+          <div className="mt-1 rounded-md border border-dashed border-white/10 bg-white/[0.03] px-4 py-5 text-[11px] leading-6 text-white/42">
+            no posts found
           </div>
         )}
       </div>
