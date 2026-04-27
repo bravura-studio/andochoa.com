@@ -63,7 +63,7 @@ export function SiteShell({
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-background px-3 py-3 pb-[calc(52px+1.5rem)] text-foreground sm:px-5 sm:py-5 lg:pb-5">
+    <div className="min-h-screen bg-background px-3 py-3 pb-[calc(60px+1.5rem)] text-foreground sm:px-5 sm:py-5 lg:pb-5">
       <div className="shell-frame mx-auto flex min-h-[calc(100dvh-76px)] max-w-[1440px] flex-col sm:min-h-[calc(100dvh-2.5rem)]">
         <div className="shell-chrome flex h-10 items-center gap-2 border-b px-3">
           <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
@@ -161,17 +161,17 @@ export function SiteShell({
           </div>
         </div>
 
-        <nav aria-label="Mobile activity" className="shell-chrome fixed bottom-0 left-3 right-3 z-40 grid h-[52px] grid-cols-4 border-t lg:hidden sm:left-5 sm:right-5">
+        <nav aria-label="Mobile activity" className="shell-chrome fixed bottom-0 left-0 right-0 z-40 grid h-[60px] grid-cols-4 border-t backdrop-blur-md bg-[#0a0a0a]/90 lg:hidden">
           {activityItems.map((item) => (
             <Link
               aria-current={item.key === activityKey ? "page" : undefined}
-              className={`flex flex-col items-center justify-center gap-1 text-[10px] transition ${
+              className={`flex flex-col items-center justify-center gap-1 text-[11px] transition ${
                 item.key === activityKey ? "bg-white/[0.06] text-white" : "text-white/32"
               }`}
               href={item.href}
               key={item.href}
             >
-              <span className="text-sm">{item.icon}</span>
+              <span className="text-base">{item.icon}</span>
               <span>{item.label}</span>
             </Link>
           ))}
