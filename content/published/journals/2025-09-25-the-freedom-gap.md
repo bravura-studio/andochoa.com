@@ -3,8 +3,7 @@ title: "The Freedom Gap"
 date: "2025-09-25"
 type: struggle
 description: "The mantra says Build, Fun, Free. Two out of three isn't enough when the third is the whole point."
-status: draft
-deep_dive_date: 2026-04-27
+status: published
 word_count: 420
 ---
 
