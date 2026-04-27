@@ -23,8 +23,8 @@ export const cvProfile = {
 export const cvExperience: CvEntry[] = [
   {
     company: "BUILD.FUN.FREE",
-    role: "Founder",
-    period: "Current",
+    role: "Founder & Portfolio CEO",
+    period: "2025 — Present",
     summary: "Building products in public and using writing as both distribution and reflection.",
     highlights: [
       "Shaping a portfolio around product strategy, AI leverage, and founder-led execution.",
@@ -33,8 +33,8 @@ export const cvExperience: CvEntry[] = [
   },
   {
     company: "Jscrambler",
-    role: "Developer security products",
-    period: "Previous",
+    role: "Product Leader",
+    period: "Dec 2023 — May 2024",
     summary: "Worked on developer-facing security products with a strong bias toward clarity and practical outcomes.",
     highlights: [
       "Balanced customer context, roadmap tradeoffs, and execution detail across cross-functional teams.",
@@ -43,8 +43,8 @@ export const cvExperience: CvEntry[] = [
   },
   {
     company: "knok",
-    role: "Digital health product work",
-    period: "Previous",
+    role: "Senior Product Manager",
+    period: "Sep 2021 — Sep 2023",
     summary: "Helped shape digital healthcare experiences in a fast-moving environment.",
     highlights: [
       "Worked across operations, product delivery, and user needs where reliability mattered.",
@@ -53,8 +53,8 @@ export const cvExperience: CvEntry[] = [
   },
   {
     company: "Critical TechWorks",
-    role: "Learned product inside large systems",
-    period: "Previous",
+    role: "Product Owner",
+    period: "Feb 2021 — Sep 2021",
     summary: "Developed product instincts inside a large-scale technology organization.",
     highlights: [
       "Operated close to engineering and learned how structure helps, and where it starts to slow good work down.",
@@ -63,8 +63,8 @@ export const cvExperience: CvEntry[] = [
   },
   {
     company: "Sonae MC",
-    role: "Started in finance, learned the business",
-    period: "Earlier",
+    role: "Product Manager",
+    period: "Sep 2017 — Aug 2020",
     summary: "Started from the numbers side and learned how businesses really move underneath the narrative.",
     highlights: [
       "Built fluency in planning, operations, and commercial reality before moving deeper into product.",

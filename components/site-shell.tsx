@@ -152,7 +152,7 @@ export function SiteShell({
               </div>
             </div>
 
-            <div className="shell-content-scroll min-h-0 flex-1 overflow-y-auto bg-background px-4 py-4 sm:px-6 sm:py-6">{children}</div>
+            <div className="shell-content-scroll min-h-0 flex-1 overflow-y-auto bg-background px-4 py-4 sm:px-6 sm:py-6" data-scroll-container="true">{children}</div>
 
             <div className="shell-chrome flex h-6 items-center justify-between border-t px-3 text-[10px] text-white/28">
               <span>Keep building. -Ochoa</span>

@@ -3,17 +3,10 @@ import Link from "next/link";
 import { CalendarDays, Download, Github, Linkedin, Twitter } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { ExperienceTimeline } from "@/components/experience-timeline";
+import { AboutSidebar } from "@/components/about-sidebar";
+import { BackToTop } from "@/components/back-to-top";
 import { cvEducation, cvExperience, cvLinks, cvProfile, cvSkills } from "@/config/cv";
 import { buildPageMetadata } from "@/lib/site";
-
-const outlineSections = [
-  { id: "bio", label: "Bio" },
-  { id: "mantra", label: "Mantra" },
-  { id: "experience", label: "Experience" },
-  { id: "education", label: "Education" },
-  { id: "skills", label: "Skills" },
-  { id: "contact", label: "Contact" },
-];
 
 const socialIconMap: Record<string, React.ReactNode> = {
   X: <Twitter className="h-4 w-4" />,
@@ -40,41 +33,7 @@ export default function AboutPage() {
     <SiteShell
       activityKey="about"
       breadcrumbs={[{ label: "andochoa.com", href: "/" }, { label: "about.md" }]}
-      sidebar={
-        <div className="space-y-5">
-          <div className="space-y-1">
-            {outlineSections.map((section) => (
-              <a
-                className="block rounded-md px-3 py-2 text-[12px] text-white/40 transition hover:bg-white/[0.04] hover:text-white/76"
-                href={`#${section.id}`}
-                key={section.id}
-              >
-                {section.label}
-              </a>
-            ))}
-          </div>
-
-          <div className="space-y-2 border-t border-white/7 pt-4">
-            <a
-              className="flex items-center justify-center gap-2 rounded-md border border-dashed border-white/12 bg-white/[0.03] px-3 py-3 text-[11px] uppercase tracking-[0.18em] text-white/70 transition hover:bg-white/[0.06]"
-              download
-              href="/ochoa-cv.pdf"
-            >
-              <Download className="h-4 w-4" />
-              Download CV
-            </a>
-            <Link
-              className="flex items-center justify-center gap-2 rounded-md border border-dashed border-white/12 bg-white/[0.03] px-3 py-3 text-[11px] uppercase tracking-[0.18em] text-white/70 transition hover:bg-white/[0.06]"
-              href="https://cal.com/andochoa/chitchat"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <CalendarDays className="h-4 w-4" />
-              Book a call
-            </Link>
-          </div>
-        </div>
-      }
+      sidebar={<AboutSidebar />}
       sidebarTitle="about.md"
       statusMeta="about.md · 6 sections"
       tabs={[{ active: true, label: "about.md" }]}
@@ -195,6 +154,7 @@ export default function AboutPage() {
           </div>
         </section>
       </article>
+      <BackToTop triggerSectionId="bio" />
     </SiteShell>
   );
 }
