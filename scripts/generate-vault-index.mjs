@@ -81,6 +81,17 @@ function extractSnippet(source, maxLength = 100) {
   return text.length > maxLength ? `${text.slice(0, maxLength)}…` : text;
 }
 
+const FOLDER_AUTHORS = {
+  "great-writing/jason-fried": "Jason Fried",
+  "great-writing/paulg-essays": "Paul Graham",
+  "great-writing/tim-urban": "Tim Urban",
+  "great-writing/david-perell/writing-examples": "David Perell",
+  "great-writing/david-perell": "David Perell",
+  "great-writing/smart-bear": "Jason Cohen",
+  "great-writing/personal-favorites": "Shaan Puri",
+  "great-writing/founder-stories": "Various",
+};
+
 function readEntry(filePath) {
   const source = fs.readFileSync(filePath, "utf8");
   const { data } = matter(source);
@@ -90,7 +101,17 @@ function readEntry(filePath) {
   const folderPath = path.dirname(relativePath).replace(/\\/g, "/");
   const topic = folderPath.split("/")[0] ?? "uncategorized";
   const sourceUrl = typeof data.source === "string" ? data.source : null;
-  const authors = normalizeAuthor(data.author);
+  let authors = normalizeAuthor(data.author);
+
+  // Infer author from folder path when frontmatter author is empty
+  if (authors.length === 0) {
+    const folderAuthor = Object.entries(FOLDER_AUTHORS)
+      .find(([folder]) => relativePath.startsWith(folder));
+    if (folderAuthor) {
+      authors = [folderAuthor[1]];
+    }
+  }
+
   const publishedAt = normalizeDate(data.published ?? data.date, filePath);
 
   return {
