@@ -17,11 +17,7 @@ export const cvProfile = {
   location: "Portugal",
   summary:
     "Builder with an economics and finance background who crossed into product, code, and entrepreneurship. I like turning rough ideas into useful products, documenting the process in public, and building systems that create more autonomy over time.",
-  bio: [
-    "I spent years moving through consultancy, finance, operations, and product roles while chasing the same question: what happens if I put all that energy into my own work instead of someone else's roadmap?",
-    "That question became BUILD.FUN.FREE. BUILD is the craft: turning ideas into products, packaging, and momentum. FUN is the test: if the work drains me, it is probably the wrong game. FREE is the long-term target: own the schedule, own the upside, and build a life that feels like mine.",
-    "Scripta is where I document that transition in public. The essays, notes, and experiments here are the operating system behind the portfolio, not a polished corporate profile.",
-  ],
+  bio: ["Builder. Product leader turned indie founder. Shipping products with AI agent teams from Porto, Portugal."],
 };
 
 export const cvExperience: CvEntry[] = [
