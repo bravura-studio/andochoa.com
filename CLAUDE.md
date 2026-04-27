@@ -139,6 +139,8 @@ Every issue follows this sequence. No skipping.
 16. Never work in /tmp mirrors. Work directly in /opt/bff/scripta/repos.
 17. NEVER merge PRs. Create the PR, hand off to QA. After QA passes, the FOUNDER merges. Agents do not merge.
 18. NEVER push directly to main. All work goes through feature branch → PR → QA → founder merge.
+19. Mobile sidebar drawer must close when any filter/folder item is selected. Always call setMobileSidebarOpen(false) in sidebar onClick handlers alongside the filter state changes.
+20. Cards that link externally must show explicit affordances: ArrowUpRight icon (muted, brightens on hover), cursor-pointer, title underline on group-hover, domain badge that brightens on hover.
 
 ## Knowledge
 
