@@ -292,14 +292,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
                 ? "bg-white/[0.06] text-white"
                 : "text-white/42 hover:bg-white/[0.04] hover:text-white/72"
             }`}
-            onClick={() => {
-              setActiveFolder("");
-              setRawQuery("");
-              setActiveCluster("");
-              setActiveAuthor("");
-              setMode("browse");
-              setMobileSidebarOpen(false);
-            }}
+            onClick={() => { clearFilters(); setMobileSidebarOpen(false); }}
             type="button"
           >
             vault/ ({entries.length})
