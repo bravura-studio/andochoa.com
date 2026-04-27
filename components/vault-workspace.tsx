@@ -87,12 +87,19 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
   const [activeCluster, setActiveCluster] = useState<string>("");
   const [activeAuthor, setActiveAuthor] = useState<string>("");
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [mode, setMode] = useState<"browse" | "focus">("browse");
 
   const query = useDebounce(rawQuery, 300);
   const isSearching = query.trim().length > 0;
   const hasFilter = isSearching || !!activeCluster || !!activeAuthor || !!activeFolder;
+  const isFocus = mode === "focus";
 
-  const placeholder = useRotatingPlaceholder(PLACEHOLDER_SUGGESTIONS, !isSearching);
+  // Active filter label for display in breadcrumbs, tabs, status bar
+  const activeFilterLabel = isSearching
+    ? query.trim()
+    : activeCluster || activeAuthor || activeFolder || "";
+
+  const placeholder = useRotatingPlaceholder(PLACEHOLDER_SUGGESTIONS, !isSearching && !isFocus);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const clustersRef = useRef<HTMLElement>(null);
@@ -108,6 +115,18 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     scrollEl.addEventListener("scroll", handleScroll, { passive: true });
     return () => scrollEl.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Escape key: return to browse mode
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape" && mode === "focus") {
+        clearFilters();
+      }
+    }
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   const fuse = useMemo(
     () =>
@@ -179,6 +198,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     setActiveCluster("");
     setActiveAuthor("");
     setActiveFolder("");
+    setMode("browse");
   }
 
   function handleChip(term: string) {
@@ -186,6 +206,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     setActiveCluster("");
     setActiveAuthor("");
     setActiveFolder("");
+    setMode("focus");
     inputRef.current?.focus();
     scrollToResults();
   }
@@ -196,7 +217,12 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     setRawQuery("");
     setActiveCluster("");
     setActiveAuthor("");
-    if (next) scrollToResults();
+    if (next) {
+      setMode("focus");
+      scrollToResults();
+    } else {
+      setMode("browse");
+    }
   }
 
   function handleCluster(label: string) {
@@ -205,7 +231,12 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     setRawQuery("");
     setActiveAuthor("");
     setActiveFolder("");
-    if (next) scrollToResults();
+    if (next) {
+      setMode("focus");
+      scrollToResults();
+    } else {
+      setMode("browse");
+    }
   }
 
   function handleAuthor(author: string) {
@@ -214,7 +245,12 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     setRawQuery("");
     setActiveCluster("");
     setActiveFolder("");
-    if (next) scrollToResults();
+    if (next) {
+      setMode("focus");
+      scrollToResults();
+    } else {
+      setMode("browse");
+    }
   }
 
   function handleBackToTop() {
@@ -224,6 +260,25 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     });
     inputRef.current?.focus();
   }
+
+  // Dynamic SiteShell props based on mode
+  const breadcrumbs = isFocus && activeFilterLabel
+    ? [
+        { label: "andochoa.com", href: "/" },
+        { label: "vault", href: "/vault" },
+        { label: activeFilterLabel },
+      ]
+    : [{ label: "andochoa.com", href: "/" }, { label: "vault" }];
+
+  const tabs = isFocus && activeFilterLabel
+    ? [{ active: true, label: `vault/${activeFilterLabel}` }]
+    : [{ active: true, label: "vault" }];
+
+  const statusMeta = isFocus && hasFilter
+    ? activeFilterLabel
+      ? `${displayEntries.length} result${displayEntries.length !== 1 ? "s" : ""} for '${activeFilterLabel}'`
+      : `${displayEntries.length} result${displayEntries.length !== 1 ? "s" : ""}`
+    : `vault · ${entries.length} sources`;
 
   const sidebar = useMemo(
     () => (
@@ -241,6 +296,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
               setRawQuery("");
               setActiveCluster("");
               setActiveAuthor("");
+              setMode("browse");
             }}
             type="button"
           >
@@ -270,205 +326,264 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
   return (
     <SiteShell
       activityKey="vault"
-      breadcrumbs={[{ label: "andochoa.com", href: "/" }, { label: "vault" }]}
+      breadcrumbs={breadcrumbs}
       sidebar={sidebar}
       sidebarTitle="vault"
-      statusMeta={`vault · ${entries.length} entries`}
-      tabs={[{ active: true, label: "vault" }]}
+      statusMeta={statusMeta}
+      tabs={tabs}
     >
       <div className="space-y-8">
-        {/* 1. Search bar — sticky at top of scroll area on mobile */}
+        {/* 1. Search bar — sticky at top */}
         <section className="space-y-4">
           <div className="sticky top-0 z-10 -mx-4 px-4 pb-3 pt-1 sm:-mx-6 sm:px-6 bg-[#0a0a0a]/95 backdrop-blur-sm">
-            <div className="relative">
-              <input
-                ref={inputRef}
-                aria-label="Search vault"
-                className="w-full rounded-lg border border-white/14 bg-white/[0.04] px-5 py-4 text-[15px] text-white outline-none placeholder:text-white/28 focus:border-white/24 focus:bg-white/[0.06] transition"
-                onChange={(e) => {
-                  setRawQuery(e.target.value);
-                  setActiveCluster("");
-                  setActiveAuthor("");
-                  setActiveFolder("");
-                }}
-                placeholder={placeholder}
-                type="search"
-                value={rawQuery}
-              />
-              {rawQuery && (
+            <div className="flex items-center gap-3">
+              <div className="relative flex-1">
+                <input
+                  ref={inputRef}
+                  aria-label="Search vault"
+                  className="w-full rounded-lg border border-white/14 bg-white/[0.04] px-5 py-4 text-[15px] text-white outline-none placeholder:text-white/28 focus:border-white/24 focus:bg-white/[0.06] transition"
+                  onChange={(e) => {
+                    setRawQuery(e.target.value);
+                    setActiveCluster("");
+                    setActiveAuthor("");
+                    setActiveFolder("");
+                    setMode(e.target.value ? "focus" : "browse");
+                  }}
+                  placeholder={placeholder}
+                  type="search"
+                  value={rawQuery}
+                />
+                {rawQuery && (
+                  <button
+                    className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[11px] text-white/36 hover:text-white/60 transition"
+                    onClick={clearFilters}
+                    type="button"
+                  >
+                    <X className="h-3 w-3" />
+                    clear
+                  </button>
+                )}
+              </div>
+              {/* Back to vault button — only in focus mode */}
+              {isFocus && (
                 <button
-                  className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[11px] text-white/36 hover:text-white/60 transition"
-                  onClick={() => setRawQuery("")}
-                  type="button"
-                >
-                  <X className="h-3 w-3" />
-                  clear
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Chips with active state */}
-          <div className="space-y-2">
-            <div className="flex flex-wrap gap-2">
-              {POPULAR_CHIPS.map((chip) => (
-                <button
-                  className={`rounded-full border px-3 py-1 text-[12px] transition ${
-                    rawQuery === chip
-                      ? "border-white/30 bg-white/[0.10] text-white"
-                      : "border-white/10 bg-white/[0.03] text-white/56 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
-                  }`}
-                  key={chip}
-                  onClick={() => handleChip(chip)}
-                  type="button"
-                >
-                  {chip}
-                </button>
-              ))}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {AUTHOR_CHIPS.map((author) => (
-                <button
-                  className={`rounded-full border px-3 py-1 text-[12px] transition ${
-                    rawQuery === author
-                      ? "border-white/20 bg-white/[0.07] text-white/80"
-                      : "border-white/8 bg-white/[0.02] text-white/42 hover:border-white/16 hover:bg-white/[0.04] hover:text-white/72"
-                  }`}
-                  key={author}
-                  onClick={() => handleChip(author)}
-                  type="button"
-                >
-                  {author}
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* 10. Stats bar */}
-        <section>
-          <p className="text-[11px] text-white/28 tracking-wide">
-            {entries.length} sources · {uniqueAuthorCount} authors · {collectionCount} collections ·
-            curated since 2025
-          </p>
-        </section>
-
-        {/* 6. Curated picks — horizontal scroll on mobile */}
-        {pickedEntries.length > 0 && (
-          <section className="space-y-3">
-            <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">curated picks</p>
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none sm:grid sm:grid-cols-2 lg:grid-cols-3">
-              {pickedEntries.map(({ entry, note }) => (
-                <PickCard key={entry.id} entry={entry} note={note} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 8. Cluster cards with active state */}
-        <section className="space-y-3" ref={clustersRef}>
-          <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">browse by topic</p>
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            {vaultClusters.map((cluster) => (
-              <button
-                className={`rounded-lg border p-4 text-left transition ${
-                  activeCluster === cluster.label
-                    ? "border-white/28 bg-white/[0.07]"
-                    : "border-dashed border-white/10 bg-white/[0.02] hover:border-white/18 hover:bg-white/[0.04]"
-                }`}
-                key={cluster.label}
-                onClick={() => handleCluster(cluster.label)}
-                type="button"
-              >
-                <span className="text-[18px]">{cluster.icon}</span>
-                <p className="mt-2 text-[13px] text-white">{cluster.label}</p>
-                <p className="mt-1 text-[11px] text-white/38">{cluster.keywords.slice(0, 3).join(", ")}</p>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* 7. Author spotlight — interactive, horizontal scroll */}
-        <section className="space-y-3">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">authors</p>
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
-            {topAuthors.map(({ author, count }) => {
-              const preview = authorTopEntries.get(author) ?? [];
-              const isActive = activeAuthor === author;
-              return (
-                <button
-                  className={`shrink-0 min-w-[140px] max-w-[180px] rounded-lg border p-4 text-left transition ${
-                    isActive
-                      ? "border-white/28 bg-white/[0.07]"
-                      : "border-dashed border-white/10 bg-white/[0.02] hover:border-white/18 hover:bg-white/[0.04]"
-                  }`}
-                  key={author}
-                  onClick={() => handleAuthor(author)}
-                  type="button"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[11px] text-white/60 font-mono">
-                      {author[0]?.toUpperCase()}
-                    </div>
-                    <span className="rounded px-1.5 py-0.5 text-[10px] text-white/36 border border-white/8 bg-white/[0.03]">
-                      {count}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-[12px] text-white leading-tight">{author}</p>
-                  {isActive && preview.length > 0 && (
-                    <div className="mt-3 space-y-1.5 border-t border-white/8 pt-2">
-                      {preview.map((e) => (
-                        <div key={e.id} className="space-y-0.5">
-                          <p className="text-[10px] text-white/60 leading-snug line-clamp-2">{e.title}</p>
-                          {getDomain(e.sourceUrl) && (
-                            <p className="text-[9px] text-white/28 font-mono">{getDomain(e.sourceUrl)}</p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* 5. Results — only visible after search or filter interaction */}
-        {hasFilter && (
-          <section ref={resultsRef} className="space-y-3">
-            <div className="flex items-center justify-between gap-4">
-              <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">
-                {isSearching
-                  ? hasResults
-                    ? `${displayEntries.length} result${displayEntries.length !== 1 ? "s" : ""} for "${query}"`
-                    : `no results for "${query}"`
-                  : `${displayEntries.length} result${displayEntries.length !== 1 ? "s" : ""}`}
-              </p>
-              {!isSearching && hasFilter && (
-                <button
-                  className="flex shrink-0 items-center gap-1 text-[11px] text-white/36 hover:text-white/60 transition"
+                  className="shrink-0 flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-4 text-[11px] text-white/40 transition hover:border-white/20 hover:text-white/68"
                   onClick={clearFilters}
                   type="button"
                 >
                   <X className="h-3 w-3" />
-                  clear filter
+                  vault
                 </button>
               )}
             </div>
-            {hasResults ? (
-              <div className="space-y-2 animate-in fade-in duration-200">
-                {displayEntries.slice(0, 40).map((entry) => (
-                  <ResultCard key={entry.id} entry={entry} />
+
+            {/* Active non-text filter pill */}
+            {isFocus && !isSearching && hasFilter && (
+              <div className="mt-2 flex items-center gap-2">
+                <span className="text-[11px] text-white/28">filtered by</span>
+                <span className="rounded-full border border-white/18 bg-white/[0.05] px-2.5 py-0.5 text-[11px] text-white/64">
+                  {activeCluster || activeAuthor || activeFolder}
+                </span>
+                <button
+                  className="flex items-center gap-1 text-[11px] text-white/28 hover:text-white/50 transition"
+                  onClick={clearFilters}
+                  type="button"
+                >
+                  <X className="h-2.5 w-2.5" />
+                  clear
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Chips — hidden in focus mode */}
+          <div
+            style={{
+              maxHeight: isFocus ? 0 : 200,
+              opacity: isFocus ? 0 : 1,
+              transform: isFocus ? "translateY(-10px)" : "translateY(0)",
+              overflow: "hidden",
+              transition: "max-height 200ms ease, opacity 200ms ease, transform 200ms ease",
+              pointerEvents: isFocus ? "none" : undefined,
+            }}
+          >
+            <div className="space-y-2">
+              <div className="flex flex-wrap gap-2">
+                {POPULAR_CHIPS.map((chip) => (
+                  <button
+                    className={`rounded-full border px-3 py-1 text-[12px] transition ${
+                      rawQuery === chip
+                        ? "border-white/30 bg-white/[0.10] text-white"
+                        : "border-white/10 bg-white/[0.03] text-white/56 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+                    }`}
+                    key={chip}
+                    onClick={() => handleChip(chip)}
+                    type="button"
+                  >
+                    {chip}
+                  </button>
                 ))}
               </div>
-            ) : (
-              <NoResults query={query} onChip={handleChip} />
+              <div className="flex flex-wrap gap-2">
+                {AUTHOR_CHIPS.map((author) => (
+                  <button
+                    className={`rounded-full border px-3 py-1 text-[12px] transition ${
+                      rawQuery === author
+                        ? "border-white/20 bg-white/[0.07] text-white/80"
+                        : "border-white/8 bg-white/[0.02] text-white/42 hover:border-white/16 hover:bg-white/[0.04] hover:text-white/72"
+                    }`}
+                    key={author}
+                    onClick={() => handleChip(author)}
+                    type="button"
+                  >
+                    {author}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Browse sections — fade out in focus mode */}
+        <div
+          style={{
+            maxHeight: isFocus ? 0 : 10000,
+            opacity: isFocus ? 0 : 1,
+            transform: isFocus ? "translateY(-10px)" : "translateY(0)",
+            overflow: "hidden",
+            transition: "max-height 200ms ease, opacity 200ms ease, transform 200ms ease",
+            pointerEvents: isFocus ? "none" : undefined,
+          }}
+        >
+          <div className="space-y-8">
+            {/* Stats bar */}
+            <section>
+              <p className="text-[11px] text-white/28 tracking-wide">
+                {entries.length} sources · {uniqueAuthorCount} authors · {collectionCount} collections ·
+                curated since 2025
+              </p>
+            </section>
+
+            {/* Curated picks — horizontal scroll on mobile */}
+            {pickedEntries.length > 0 && (
+              <section className="space-y-3">
+                <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">curated picks</p>
+                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none sm:grid sm:grid-cols-2 lg:grid-cols-3">
+                  {pickedEntries.map(({ entry, note }) => (
+                    <PickCard key={entry.id} entry={entry} note={note} />
+                  ))}
+                </div>
+              </section>
             )}
-          </section>
-        )}
+
+            {/* Cluster cards with active state */}
+            <section className="space-y-3" ref={clustersRef}>
+              <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">browse by topic</p>
+              <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+                {vaultClusters.map((cluster) => (
+                  <button
+                    className={`rounded-lg border p-4 text-left transition ${
+                      activeCluster === cluster.label
+                        ? "border-white/28 bg-white/[0.07]"
+                        : "border-dashed border-white/10 bg-white/[0.02] hover:border-white/18 hover:bg-white/[0.04]"
+                    }`}
+                    key={cluster.label}
+                    onClick={() => handleCluster(cluster.label)}
+                    type="button"
+                  >
+                    <span className="text-[18px]">{cluster.icon}</span>
+                    <p className="mt-2 text-[13px] text-white">{cluster.label}</p>
+                    <p className="mt-1 text-[11px] text-white/38">{cluster.keywords.slice(0, 3).join(", ")}</p>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {/* Author spotlight — interactive, horizontal scroll */}
+            <section className="space-y-3">
+              <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">authors</p>
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
+                {topAuthors.map(({ author, count }) => {
+                  const preview = authorTopEntries.get(author) ?? [];
+                  const isActive = activeAuthor === author;
+                  return (
+                    <button
+                      className={`shrink-0 min-w-[140px] max-w-[180px] rounded-lg border p-4 text-left transition ${
+                        isActive
+                          ? "border-white/28 bg-white/[0.07]"
+                          : "border-dashed border-white/10 bg-white/[0.02] hover:border-white/18 hover:bg-white/[0.04]"
+                      }`}
+                      key={author}
+                      onClick={() => handleAuthor(author)}
+                      type="button"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[11px] text-white/60 font-mono">
+                          {author[0]?.toUpperCase()}
+                        </div>
+                        <span className="rounded px-1.5 py-0.5 text-[10px] text-white/36 border border-white/8 bg-white/[0.03]">
+                          {count}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-[12px] text-white leading-tight">{author}</p>
+                      {isActive && preview.length > 0 && (
+                        <div className="mt-3 space-y-1.5 border-t border-white/8 pt-2">
+                          {preview.map((e) => (
+                            <div key={e.id} className="space-y-0.5">
+                              <p className="text-[10px] text-white/60 leading-snug line-clamp-2">{e.title}</p>
+                              {getDomain(e.sourceUrl) && (
+                                <p className="text-[9px] text-white/28 font-mono">{getDomain(e.sourceUrl)}</p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          </div>
+        </div>
+
+        {/* Results — fade in on focus mode, always in DOM */}
+        <div
+          ref={resultsRef}
+          style={{
+            opacity: isFocus ? 1 : 0,
+            transform: isFocus ? "translateY(0)" : "translateY(10px)",
+            transition: "opacity 250ms ease, transform 250ms ease",
+            pointerEvents: isFocus ? undefined : "none",
+          }}
+        >
+          {hasFilter ? (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-[10px] uppercase tracking-[0.22em] text-white/28">
+                  {isSearching
+                    ? hasResults
+                      ? `${displayEntries.length} result${displayEntries.length !== 1 ? "s" : ""} for "${query}"`
+                      : `no results for "${query}"`
+                    : activeAuthor
+                      ? `${displayEntries.length} entr${displayEntries.length !== 1 ? "ies" : "y"} by ${activeAuthor}`
+                      : `${displayEntries.length} result${displayEntries.length !== 1 ? "s" : ""}`}
+                </p>
+              </div>
+              {hasResults ? (
+                <div className="space-y-2 animate-in fade-in duration-200">
+                  {displayEntries.slice(0, 40).map((entry) => (
+                    <ResultCard key={entry.id} entry={entry} />
+                  ))}
+                </div>
+              ) : (
+                <NoResults query={query} onChip={handleChip} />
+              )}
+            </div>
+          ) : null}
+        </div>
       </div>
 
-      {/* 9. Back to top floating button */}
+      {/* Back to top floating button */}
       {showBackToTop && (
         <button
           className="fixed bottom-8 right-8 z-50 flex items-center gap-1.5 rounded-md border border-white/14 bg-[#111111] px-3 py-2 text-[11px] text-white/50 shadow-lg transition hover:border-white/24 hover:text-white/80"
