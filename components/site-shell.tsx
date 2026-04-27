@@ -72,10 +72,8 @@ export function SiteShell({
           <Link aria-label="ANDOCHOA home" className="ml-2 hidden items-center sm:flex" href="/">
             <Image alt="ANDOCHOA wordmark" className="h-6 w-auto object-contain opacity-100" height={24} priority src="/logo.jpg" width={108} />
           </Link>
-          <div className="flex flex-1 justify-center sm:hidden">
-            <Link aria-label="ANDOCHOA home" href="/">
-              <Image alt="ANDOCHOA wordmark" className="h-4 w-auto object-contain opacity-100" height={16} priority src="/logo.jpg" width={72} />
-            </Link>
+          <div className="flex-1 text-center sm:hidden">
+            <Link href="/" className="text-[11px] text-white/30 hover:text-white/50 transition">andochoa.com</Link>
           </div>
           <button
             aria-expanded={mobileSidebarOpen}
