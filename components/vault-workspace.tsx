@@ -120,6 +120,13 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     return () => scrollEl.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Scroll to top when debounced search query updates results
+  useEffect(() => {
+    if (!query.trim()) return;
+    const scrollEl = document.querySelector(".shell-content-scroll") as HTMLElement | null;
+    if (scrollEl) scrollEl.scrollTo({ top: 0, behavior: "smooth" });
+  }, [query]);
+
   // Escape key: return to browse mode
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -207,7 +214,12 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
 
   const scrollToResults = useCallback(() => {
     requestAnimationFrame(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const scrollEl = document.querySelector(".shell-content-scroll") as HTMLElement | null;
+      if (scrollEl) {
+        scrollEl.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     });
   }, []);
 
