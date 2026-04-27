@@ -13,15 +13,15 @@ const outlineSections = [
   { id: "contact", label: "Contact" },
 ];
 
-function getScrollContainer(): HTMLElement | null {
-  return document.querySelector("[data-scroll-container]") as HTMLElement | null;
-}
+type AboutSidebarProps = {
+  onSectionClick?: () => void;
+};
 
-export function AboutSidebar() {
+export function AboutSidebar({ onSectionClick }: AboutSidebarProps = {}) {
   const [activeId, setActiveId] = useState<string>("bio");
 
   useEffect(() => {
-    const scrollContainer = getScrollContainer();
+    const scrollContainer = document.querySelector("[data-scroll-container]") as HTMLElement | null;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -49,13 +49,12 @@ export function AboutSidebar() {
   function handleAnchorClick(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
     e.preventDefault();
     const el = document.getElementById(id);
-    const scrollContainer = getScrollContainer();
-    if (el && scrollContainer) {
-      const elTop = el.offsetTop - scrollContainer.offsetTop;
-      scrollContainer.scrollTo({ top: elTop - 24, behavior: "smooth" });
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
       window.history.pushState(null, "", `#${id}`);
       setActiveId(id);
     }
+    onSectionClick?.();
   }
 
   return (
@@ -65,10 +64,10 @@ export function AboutSidebar() {
           const isActive = activeId === section.id;
           return (
             <a
-              className={`flex items-center gap-0 rounded-md px-3 py-2 text-[12px] transition hover:bg-white/[0.04] ${
+              className={`flex items-center gap-0 rounded-md border-l-2 px-3 py-2 text-[12px] transition ${
                 isActive
-                  ? "border-l-2 border-white/40 pl-[10px] font-semibold text-white"
-                  : "text-white/40 hover:text-white/76"
+                  ? "border-white/80 bg-white/[0.06] text-white"
+                  : "border-transparent text-white/42 hover:bg-white/[0.04] hover:text-white/72"
               }`}
               href={`#${section.id}`}
               key={section.id}
