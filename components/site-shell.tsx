@@ -70,9 +70,13 @@ export function SiteShell({
           <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
           <Link aria-label="ANDOCHOA home" className="ml-2 hidden items-center sm:flex" href="/">
-            <Image alt="ANDOCHOA wordmark" className="h-4 w-auto object-contain opacity-80" height={16} priority src="/logo.jpg" width={90} />
+            <Image alt="ANDOCHOA wordmark" className="h-6 w-auto object-contain opacity-100" height={24} priority src="/logo.jpg" width={108} />
           </Link>
-          <div className="flex-1 text-center text-[11px] text-white/30">andochoa.com</div>
+          <div className="flex flex-1 justify-center sm:hidden">
+            <Link aria-label="ANDOCHOA home" href="/">
+              <Image alt="ANDOCHOA wordmark" className="h-4 w-auto object-contain opacity-100" height={16} priority src="/logo.jpg" width={72} />
+            </Link>
+          </div>
           <button
             aria-expanded={mobileSidebarOpen}
             aria-label={mobileSidebarOpen ? "Close sidebar" : "Open sidebar"}
