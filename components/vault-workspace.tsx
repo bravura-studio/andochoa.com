@@ -218,7 +218,10 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
   }
 
   function handleBackToTop() {
-    inputRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    (document.querySelector(".shell-content-scroll") as HTMLElement | null)?.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     inputRef.current?.focus();
   }
 
