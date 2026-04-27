@@ -101,7 +101,6 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
 
   const placeholder = useRotatingPlaceholder(PLACEHOLDER_SUGGESTIONS, !isSearching && !isFocus);
   const inputRef = useRef<HTMLInputElement>(null);
-  const resultsRef = useRef<HTMLDivElement>(null);
   const clustersRef = useRef<HTMLElement>(null);
 
   // Back-to-top: appear after user scrolls past clusters section
@@ -187,9 +186,31 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     return map;
   }, [topAuthors, entries]);
 
-  const scrollToResults = useCallback(() => {
+  // Cluster entry counts for sidebar display
+  const clusterCounts = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const cluster of vaultClusters) {
+      const kws = cluster.keywords.map((k) => k.toLowerCase());
+      const count = entries.filter((e) => {
+        const text = `${e.title} ${e.folderPath} ${e.snippet} ${e.authorLabel}`.toLowerCase();
+        return kws.some((kw) => text.includes(kw));
+      }).length;
+      map.set(cluster.label, count);
+    }
+    return map;
+  }, [entries]);
+
+  // Sidebar section collapse state
+  const [topicsExpanded, setTopicsExpanded] = useState(true);
+  const [authorsExpanded, setAuthorsExpanded] = useState(true);
+  const [foldersExpanded, setFoldersExpanded] = useState(false);
+
+  const scrollToTop = useCallback(() => {
     requestAnimationFrame(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      (document.querySelector(".shell-content-scroll") as HTMLElement | null)?.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     });
   }, []);
 
@@ -208,7 +229,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     setActiveFolder("");
     setMode("focus");
     inputRef.current?.focus();
-    scrollToResults();
+    scrollToTop();
   }
 
   function handleFolderFilter(folder: string) {
@@ -219,7 +240,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     setActiveAuthor("");
     if (next) {
       setMode("focus");
-      scrollToResults();
+      scrollToTop();
     } else {
       setMode("browse");
     }
@@ -233,7 +254,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     setActiveFolder("");
     if (next) {
       setMode("focus");
-      scrollToResults();
+      scrollToTop();
     } else {
       setMode("browse");
     }
@@ -247,7 +268,7 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
     setActiveFolder("");
     if (next) {
       setMode("focus");
-      scrollToResults();
+      scrollToTop();
     } else {
       setMode("browse");
     }
@@ -280,47 +301,116 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
       : `${displayEntries.length} result${displayEntries.length !== 1 ? "s" : ""}`
     : `vault · ${entries.length} sources`;
 
+  // Active sidebar item — only one at a time; cleared by search or browse mode
+  const sidebarActiveCluster = isSearching || !isFocus ? "" : activeCluster;
+  const sidebarActiveAuthor = isSearching || !isFocus ? "" : activeAuthor;
+  const sidebarActiveFolder = isSearching || !isFocus ? "" : activeFolder;
+
   const sidebar = useMemo(
     () => (
       <div className="space-y-4">
-        <div className="space-y-1">
-          <p className="px-1 text-[10px] uppercase tracking-[0.22em] text-white/28">vault/</p>
+        {/* vault root */}
+        <div className="space-y-0.5">
+          <p className="px-3 py-1 text-[9px] uppercase tracking-[0.2em] text-white/22">
+            vault/ ({entries.length})
+          </p>
+        </div>
+
+        {/* TOPICS */}
+        <div className="space-y-0.5">
           <button
-            className={`flex w-full items-center rounded-md px-3 py-2 text-left text-[12px] transition ${
-              !activeFolder
-                ? "bg-white/[0.06] text-white"
-                : "text-white/42 hover:bg-white/[0.04] hover:text-white/72"
-            }`}
-            onClick={() => {
-              setActiveFolder("");
-              setRawQuery("");
-              setActiveCluster("");
-              setActiveAuthor("");
-              setMode("browse");
-            }}
+            className="flex w-full items-center gap-1 px-3 py-1 text-[9px] uppercase tracking-[0.2em] text-white/22 transition hover:text-white/40"
+            onClick={() => setTopicsExpanded((v) => !v)}
             type="button"
           >
-            vault/ ({entries.length})
+            {topicsExpanded ? "▾" : "▸"} TOPICS
           </button>
-          {topFolders.map(([folder, count]) => (
-            <button
-              className={`flex w-full items-center rounded-md px-3 py-2 pl-6 text-left text-[12px] transition ${
-                activeFolder === folder
-                  ? "bg-white/[0.06] text-white"
-                  : "text-white/38 hover:bg-white/[0.04] hover:text-white/65"
-              }`}
-              key={folder}
-              onClick={() => handleFolderFilter(folder)}
-              type="button"
-            >
-              {folder}/ ({count})
-            </button>
-          ))}
+          {topicsExpanded && vaultClusters.map((cluster) => {
+            const isActive = sidebarActiveCluster === cluster.label;
+            const count = clusterCounts.get(cluster.label) ?? 0;
+            return (
+              <button
+                className={`flex w-full items-center justify-between border-l-2 py-1.5 pl-3 pr-3 text-left text-[12px] transition ${
+                  isActive
+                    ? "border-white/80 bg-white/[0.06] text-white"
+                    : "border-transparent text-white/42 hover:bg-white/[0.04] hover:text-white/72"
+                }`}
+                key={cluster.label}
+                onClick={() => handleCluster(cluster.label)}
+                type="button"
+              >
+                <span>{cluster.label}</span>
+                <span className="text-[10px] text-white/28">{count}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* AUTHORS */}
+        <div className="space-y-0.5">
+          <button
+            className="flex w-full items-center gap-1 px-3 py-1 text-[9px] uppercase tracking-[0.2em] text-white/22 transition hover:text-white/40"
+            onClick={() => setAuthorsExpanded((v) => !v)}
+            type="button"
+          >
+            {authorsExpanded ? "▾" : "▸"} AUTHORS
+          </button>
+          {authorsExpanded && topAuthors.map(({ author, count }) => {
+            const isActive = sidebarActiveAuthor === author;
+            return (
+              <button
+                className={`flex w-full items-center justify-between border-l-2 py-1.5 pl-3 pr-3 text-left text-[12px] transition ${
+                  isActive
+                    ? "border-white/80 bg-white/[0.06] text-white"
+                    : "border-transparent text-white/42 hover:bg-white/[0.04] hover:text-white/72"
+                }`}
+                key={author}
+                onClick={() => handleAuthor(author)}
+                type="button"
+              >
+                <span className="truncate">{author}</span>
+                <span className="ml-2 shrink-0 text-[10px] text-white/28">{count}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* FOLDERS */}
+        <div className="space-y-0.5">
+          <button
+            className="flex w-full items-center gap-1 px-3 py-1 text-[9px] uppercase tracking-[0.2em] text-white/22 transition hover:text-white/40"
+            onClick={() => setFoldersExpanded((v) => !v)}
+            type="button"
+          >
+            {foldersExpanded ? "▾" : "▸"} FOLDERS
+          </button>
+          {foldersExpanded && topFolders.map(([folder, count]) => {
+            const isActive = sidebarActiveFolder === folder;
+            return (
+              <button
+                className={`flex w-full items-center justify-between border-l-2 py-1.5 pl-3 pr-3 text-left text-[12px] transition ${
+                  isActive
+                    ? "border-white/80 bg-white/[0.06] text-white"
+                    : "border-transparent text-white/42 hover:bg-white/[0.04] hover:text-white/72"
+                }`}
+                key={folder}
+                onClick={() => handleFolderFilter(folder)}
+                type="button"
+              >
+                <span>{folder}/</span>
+                <span className="text-[10px] text-white/28">{count}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeFolder, entries.length, topFolders],
+    [
+      sidebarActiveCluster, sidebarActiveAuthor, sidebarActiveFolder,
+      entries.length, topFolders, topAuthors, clusterCounts,
+      topicsExpanded, authorsExpanded, foldersExpanded,
+    ],
   );
 
   return (
@@ -548,7 +638,6 @@ export function VaultWorkspace({ entries }: VaultWorkspaceProps) {
 
         {/* Results — fade in on focus mode, always in DOM */}
         <div
-          ref={resultsRef}
           style={{
             opacity: isFocus ? 1 : 0,
             transform: isFocus ? "translateY(0)" : "translateY(10px)",
