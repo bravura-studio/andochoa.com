@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { buildPageMetadata, siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -31,7 +32,10 @@ export default function RootLayout({
 }>) {
   return (
     <html className="dark" lang="en">
-      <body className={`${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistMono.variable} antialiased`}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
