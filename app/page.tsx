@@ -25,7 +25,7 @@ const projectStatusStyles = {
 } as const;
 
 export default function Home() {
-  const recentPosts = getRecentPublishedPosts(2);
+  const recentPosts = getRecentPublishedPosts(4);
 
   return (
     <SiteShell
