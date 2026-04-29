@@ -3,7 +3,9 @@ title: "The Animal Spirit"
 date: 2025-09-26
 type: reflection
 source: deep_dive
-status: processed
+status: published
+published_as: "2025-09-26-the-animal-spirit"
+published_url: "https://andochoa.com/posts/journals/2025-09-26-the-animal-spirit"
 deep_dive_exchanges: 4
 deep_dive_date: 2026-04-29
 original_voice_note: "20250926_101354_The_Animal_Spirit:_From_Corporate_Friction_to_Entrepreneurial_Freedom.md"

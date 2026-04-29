@@ -10,8 +10,9 @@ tags:
   - build-in-public
   - layoffs
   - intrapreneurship
-status: drafted
-drafted_as: "animal-spirit"
+status: published
+published_as: "2025-09-26-the-animal-spirit"
+published_url: "https://andochoa.com/posts/journals/2025-09-26-the-animal-spirit"
 conversation_session_id: conv_20250926_101354
 topic_type: reflection
 conversation_depth: deep
