@@ -1,6 +1,6 @@
 ---
 title: "The Animal Spirit"
-date: 2025-09-26
+date: "2025-09-26"
 type: reflection
 description: "The entrepreneurial drive that got me fired, promoted, and fired again — until I stopped trying to tame it."
 status: draft
