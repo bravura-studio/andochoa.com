@@ -9,6 +9,9 @@ tags:
   - build_in_public
   - corporate_life
   - entrepreneurship
+status: published
+published_as: "2026-04-28-four-layoffs"
+published_url: "https://andochoa.com/posts/journals/2026-04-28-four-layoffs"
 conversation_session_id: conv_20250925_171513
 topic_type: update
 conversation_depth: standard

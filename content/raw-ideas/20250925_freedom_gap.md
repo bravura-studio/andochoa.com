@@ -3,7 +3,9 @@ title: "The Freedom Gap"
 date: 2025-09-25
 type: struggle
 source: deep_dive
-status: processed
+status: published
+published_as: "2025-09-25-the-freedom-gap"
+published_url: "https://andochoa.com/posts/journals/2025-09-25-the-freedom-gap"
 deep_dive_exchanges: 4
 deep_dive_date: 2026-04-27
 original_voice_note: "20250925_010619_BUILD.FUN.FREE_Mantra_&_Product_Urgency_Strategy.md"
