@@ -3,7 +3,7 @@ title: "The Animal Spirit"
 date: "2025-09-26"
 type: reflection
 description: "The entrepreneurial drive that got me fired, promoted, and fired again — until I stopped trying to tame it."
-status: draft
+status: published
 deep_dive_date: 2026-04-29
 word_count: 480
 ---
