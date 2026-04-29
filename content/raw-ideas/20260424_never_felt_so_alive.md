@@ -3,7 +3,9 @@ title: "Never Felt So Alive"
 date: 2026-04-24
 type: reflection
 source: deep_dive
-status: processed
+status: published
+published_as: "2026-04-24-never-felt-so-alive"
+published_url: "https://andochoa.com/posts/journals/2026-04-24-never-felt-so-alive"
 deep_dive_exchanges: 4
 ---
 

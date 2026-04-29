@@ -20,6 +20,9 @@ claude_analysis:
       - building products
       - learning new skills and being productive
     style_similarity_score: 0.3
+status: published
+published_as: "2025-09-11-hello-world"
+published_url: "https://andochoa.com/posts/journals/2025-09-11-hello-world"
 ---
 # Hello World
 
