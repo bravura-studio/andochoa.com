@@ -14,7 +14,7 @@ export const projects: PortfolioProject[] = [
     name: "Tmaker",
     description: "mini-tool factory",
     status: "paused",
-    url: "https://tmaker.com",
+    url: "https://tmaker.io",
   },
   {
     slug: "scripta",
