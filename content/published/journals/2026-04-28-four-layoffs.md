@@ -3,7 +3,7 @@ title: "It Took Four Layoffs to Ask the Right Question"
 date: "2026-04-28"
 type: reflection
 description: "I got laid off four times. None of them were about my work. That's exactly the problem."
-status: draft
+status: published
 word_count: 890
 ---
 
