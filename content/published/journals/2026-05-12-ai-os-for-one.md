@@ -3,7 +3,7 @@ title: "Building the System That Builds the Company"
 date: "2026-05-12"
 type: wisdom
 description: "I'm no longer building products. I'm building the system that builds them. It runs on a single server for $158 a month."
-status: draft
+status: published
 word_count: 2100
 ---
 
