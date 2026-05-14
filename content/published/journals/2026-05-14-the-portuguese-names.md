@@ -3,7 +3,7 @@ title: "The Portuguese Names"
 date: "2026-05-14"
 type: reflection
 description: "Why my AI agents are named after Portuguese poets, explorers, and architects — and why it matters more than you'd think."
-status: draft
+status: published
 word_count: 520
 ---
 
