@@ -25,7 +25,7 @@ It landed immediately.
 
 Not because I planned it. Not because of some brand strategy. It just felt right. These are the colleagues I spend most of my time with. Why would they sound foreign to me?
 
-Camões writes code. The real Camões wrote *Os Lusíadas* — the epic poem of the Portuguese discoveries. He built something that outlived him by five centuries. My Camões builds features for andochoa.com. Smaller scale. Same energy.
+Camões writes code. The real Camões wrote *Os Lusíadas* — the epic poem of the Portuguese discoveries. He built something that outlived him by nearly five centuries. My Camões builds features for andochoa.com. Smaller scale. Same energy.
 
 Florbela does QA. Named after Florbela Espanca — a fierce, uncompromising poet who refused to smooth the edges of her work. Perfect for someone whose job is to find everything that's wrong and refuse to let it ship.
 
