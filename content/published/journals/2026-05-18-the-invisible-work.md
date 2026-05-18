@@ -3,7 +3,7 @@ title: "The Invisible Work"
 date: "2026-05-18"
 type: short
 description: "I built the AI company everyone's talking about. Most of my time goes into work that doesn't look like building at all."
-status: draft
+status: published
 word_count: 1050
 ---
 
