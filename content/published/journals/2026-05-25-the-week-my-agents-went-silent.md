@@ -3,7 +3,7 @@ title: "The Week My Agents Went Silent"
 date: "2026-05-25"
 type: struggle
 description: "My AI CEO agent ran a perfect diagnosis of a system failure. Then zero words reached my phone. The system was working. It just couldn't talk."
-status: draft
+status: published
 deep_dive_date: "2026-05-25"
 word_count: 950
 ---
