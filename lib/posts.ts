@@ -22,7 +22,6 @@ export type Post = {
 const CONTENT_ROOT = path.join(process.cwd(), "content");
 const SOURCES: Array<{ dir: string; status: PostStatus }> = [
   { dir: path.join(CONTENT_ROOT, "published"), status: "published" },
-  { dir: path.join(CONTENT_ROOT, "drafts"), status: "draft" },
 ];
 
 function titleizeFilename(value: string) {
