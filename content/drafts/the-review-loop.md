@@ -7,7 +7,7 @@ status: draft
 tags: ["agents", "build-in-public", "striva"]
 ---
 
-Last week I wrote about PRD-0034. A full day writing ten implementation units for a dental booking calendar. Slot-intent suppression. Collision guards. 258 tests. For three dentists.
+Last week I wrote about [PRD-0034](/posts/journals/2026-06-08-prd-0034). A full day writing ten implementation units for a dental booking calendar. Slot-intent suppression. Collision guards. 258 tests. For three dentists.
 
 This week the agent took that spec and shipped it.
 
@@ -21,7 +21,7 @@ Here's the part nobody talks about.
 
 Lines of code I read: zero. Lines I skimmed: zero. Trust: one hundred percent.
 
-That sounds insane. It's not. It's a system.
+That sounds insane. It's not. It's [a system](/posts/journals/2026-05-12-ai-os-for-one).
 
 The agent ships a unit. I read the summary. Then I start asking questions. Not reading code — asking questions. Does this handle the case where a shift change happens mid-day? What happens if two receptionists drag-and-drop at the same time? Show me the migration. Why btree_gist and not a regular index?
 
@@ -45,9 +45,13 @@ This is the loop. Spec → implement → question → review → fix → questio
 
 ---
 
-People ask me what my role is now. I used to write code. Then I wrote specs. Now I mostly ask questions.
+People ask me what my role is now. I spent eight years as a Product Manager at tech companies. I always wrote the PRD. Then I watched teams of engineers scramble to flesh out the same features in fifteen days.
 
-That sounds like less. It's actually more. The questions carry the entire weight. A bad question wastes a loop. A good question catches a design flaw before it becomes a production bug. The skill isn't coding anymore. It's knowing what to ask and when to stop asking.
+Now I do it in forty-eight hours. Alone. With my agents.
+
+The job hasn't changed. I still write the spec. I still make the product decisions. I still decide what "right" looks like. What changed is who builds it — and how fast.
+
+The questions carry the entire weight. A bad question wastes a loop. A good question catches a design flaw before it becomes a production bug. The skill isn't engineering anymore. It's knowing what to ask and when to stop asking.
 
 The next frontier is loop engineering — making the loop keep going so I touch the product development workflow even less. I just refine what I want. Product decisions. Taste. Craft.
 
@@ -57,10 +61,10 @@ Then I go back to the couch. The World Cup is still on.
 
 ---
 
-PRD-0034 was the audition. The spec that had to be right because my friends' trust was on the line.
+[PRD-0034](/posts/journals/2026-06-08-prd-0034) was the audition. The spec that had to be right because my friends' trust was on the line.
 
 The review loop was the performance. Thirteen commits, two days, zero lines read. Not because I don't care about the code. Because I found a better way to care about it.
 
-She'll book an appointment and nothing will fight her. That hasn't changed. What changed is how we got there.
+She'll book an appointment and [nothing will fight her](/posts/journals/2026-06-08-prd-0034). That hasn't changed. What changed is how we got there.
 
 Keep building. -Ochoa
