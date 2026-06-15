@@ -3,7 +3,9 @@ title: "The Review Loop"
 date: "2026-06-15"
 type: reflection
 description: "My AI agent shipped 13 commits for a healthcare feature while I watched the World Cup. I didn't read a single line of code. Here's what I did instead."
-status: draft
+status: published
+deep_dive_date: "2026-06-15"
+word_count: 720
 tags: ["agents", "build-in-public", "striva"]
 ---
 
