@@ -12,7 +12,7 @@
 
 ## Structure
 
-- (No entries yet — add corrections as they come)
+- **Journal drafts go in `content/drafts/journals/`, date-prefixed** — `content/drafts/journals/<YYYY-MM-DD>-<slug>.md`, NOT the top-level `content/drafts/`. The site loader (`lib/posts.ts`) renders `content/published/` recursively; every published article lives at `content/published/journals/<YYYY-MM-DD>-<slug>.md`. Drafts must mirror that path so publishing is a clean move. (Learned: 2026-07-28, House Money draft — deep-dive skill had stale `content/drafts/<slug>.md` path; skill now fixed.)
 
 ## Word Choice
 

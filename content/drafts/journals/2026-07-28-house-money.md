@@ -3,7 +3,7 @@ title: "House Money"
 date: "2026-07-28"
 type: reflection
 description: "I took a day job to pay the bills. I thought it would kill the dream. It freed it."
-status: draft
+status: ready_for_review
 deep_dive_date: "2026-07-28"
 word_count: 360
 ---
