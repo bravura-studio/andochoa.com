@@ -1,5 +1,5 @@
 /**
- * Generates public/ochoa-cv.pdf — clean branded CV, one page
+ * Generates public/ochoa-cv.pdf — clean branded CV, full text (flows across pages)
  * Run: node scripts/gen-cv-pdf.mjs
  */
 import PDFDocument from "pdfkit";
@@ -35,30 +35,50 @@ const experience = [
     role:    "Founder & Portfolio CEO",
     period:  "2025 — Present",
     summary: "Building a portfolio of products with AI-powered agent teams.",
+    highlights: [
+      "Shaping a portfolio around product strategy, AI leverage, and founder-led execution.",
+      "Turning live work into essays, prompts, and operating principles that compound.",
+    ],
   },
   {
     company: "Jscrambler",
     role:    "Product Leader",
     period:  "Dec 2023 — May 2024",
     summary: "Product vision, strategy and discovery. Shape Up method.",
+    highlights: [
+      "Balanced customer context, roadmap tradeoffs, and execution detail across cross-functional teams.",
+      "Translated technical constraints into product decisions users could actually feel.",
+    ],
   },
   {
     company: "knok",
     role:    "Senior Product Manager",
     period:  "Sep 2021 — Sep 2023",
     summary: "Product discovery & delivery. Upload times +50%, scheduling +20%.",
+    highlights: [
+      "Worked across operations, product delivery, and user needs where reliability mattered.",
+      "Built comfort navigating ambiguity, stakeholder friction, and iterative product discovery.",
+    ],
   },
   {
     company: "Critical TechWorks",
     role:    "Product Owner",
     period:  "Feb 2021 — Sep 2021",
     summary: "Data pipelines to AWS. Migrated 10TB+.",
+    highlights: [
+      "Operated close to engineering and learned where structure helps, and where it slows good work down.",
+      "Strengthened the habit of turning messy inputs into concrete next steps.",
+    ],
   },
   {
     company: "Sonae MC",
     role:    "Product Manager",
     period:  "Sep 2017 — Aug 2020",
     summary: "Analytical P&L model. +20% sales margin, -15% stock cost.",
+    highlights: [
+      "Built fluency in planning, operations, and commercial reality before moving deeper into product.",
+      "Carried that operator lens forward into every later role.",
+    ],
   },
 ];
 
@@ -100,6 +120,9 @@ const M      = 44;
 const CW     = PW - M * 2;
 const PIC_SZ = 68;
 
+const FOOTER_H = 26;            // reserved strip at the bottom of every page
+const BOTTOM   = PH - M - FOOTER_H;
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function hline(doc, y, color = DIM) {
   doc.save().moveTo(M, y).lineTo(PW - M, y).strokeColor(color).lineWidth(0.4).stroke().restore();
@@ -116,13 +139,31 @@ function sectionLabel(doc, text, y) {
 }
 
 // ── Build ─────────────────────────────────────────────────────────────────────
-const doc    = new PDFDocument({ size: "A4", margins: { top: 0, bottom: 0, left: 0, right: 0 } });
+const doc    = new PDFDocument({
+  size: "A4",
+  margins: { top: 0, bottom: 0, left: 0, right: 0 },
+  bufferPages: true,
+});
 const stream = createWriteStream(OUT);
 doc.pipe(stream);
 const finished = new Promise((res, rej) => { stream.on("finish", res); stream.on("error", rej); });
 
-// Background
-doc.rect(0, 0, PW, PH).fill(BG);
+function paintBackground() {
+  doc.rect(0, 0, PW, PH).fill(BG);
+}
+
+function newPage() {
+  doc.addPage();
+  paintBackground();
+  return M;
+}
+
+/** Returns a y that has `h` points of room left above the footer, adding a page if needed. */
+function ensureSpace(y, h) {
+  return y + h > BOTTOM ? newPage() : y;
+}
+
+paintBackground();
 
 let y = M;
 
@@ -167,32 +208,61 @@ y += 10;
 // ── Experience ────────────────────────────────────────────────────────────────
 y = sectionLabel(doc, "Experience", y);
 
-for (const exp of experience) {
-  const entryH = 30;
-  accentBar(doc, M, y, entryH - 2);
+const iX = M + 8;
+const iW = CW - 8;
+const bX = iX + 8;
+const bW = iW - 8;
 
-  const iX = M + 8;
-  const iW = CW - 8;
+for (const exp of experience) {
+  // Measure the whole entry first so the accent bar and page break match it.
+  doc.font("Courier-Bold").fontSize(8.5);
+  const roleH = doc.heightOfString(exp.role, { width: iW - 84 });
+
+  const summaryText = `${exp.company}  ·  ${exp.summary}`;
+  doc.font("Courier").fontSize(7.5);
+  const summaryH = doc.heightOfString(summaryText, { width: iW, lineGap: 1 });
+
+  doc.font("Courier").fontSize(7);
+  const bulletHs = exp.highlights.map((h) => doc.heightOfString(h, { width: bW, lineGap: 1.5 }));
+  const bulletsH = bulletHs.reduce((acc, h) => acc + h + 3, 0);
+
+  const entryH = roleH + 3 + summaryH + (bulletsH ? bulletsH + 2 : 0);
+
+  y = ensureSpace(y, entryH);
+  accentBar(doc, M, y, entryH);
 
   doc.font("Courier-Bold").fontSize(8.5).fillColor(FG)
      .text(exp.role, iX, y, { width: iW - 84 });
   doc.font("Courier").fontSize(6.5).fillColor(DIM)
      .text(exp.period, M + CW - 82, y + 1, { width: 82, align: "right" });
-  doc.font("Courier").fontSize(7.5).fillColor(MUTED)
-     .text(`${exp.company}  ·  ${exp.summary}`, iX, y + 13, { width: iW, lineGap: 1 });
 
-  y += entryH + 4;
+  let ey = y + roleH + 3;
+  doc.font("Courier").fontSize(7.5).fillColor(MUTED)
+     .text(summaryText, iX, ey, { width: iW, lineGap: 1 });
+  ey += summaryH + (bulletsH ? 2 : 0);
+
+  exp.highlights.forEach((h, i) => {
+    doc.save().circle(iX + 2.5, ey + 3.5, 0.9).fill(SOFT).restore();
+    doc.font("Courier").fontSize(7).fillColor(SOFT)
+       .text(h, bX, ey, { width: bW, lineGap: 1.5 });
+    ey += bulletHs[i] + 3;
+  });
+
+  y += entryH + 8;
 }
 
+y = ensureSpace(y, 20);
 hline(doc, y);
 y += 10;
 
 // ── Skills ────────────────────────────────────────────────────────────────────
-y = sectionLabel(doc, "Skills", y);
-
 const SCOLS = 4;
 const sColW = Math.floor((CW - (SCOLS - 1) * 6) / SCOLS);
 const sRowH = 15;
+const skillsH = Math.ceil(skills.length / SCOLS) * sRowH;
+
+y = ensureSpace(y, 13 + skillsH);
+y = sectionLabel(doc, "Skills", y);
 
 skills.forEach((s, i) => {
   const col = i % SCOLS;
@@ -202,15 +272,18 @@ skills.forEach((s, i) => {
   doc.font("Courier").fontSize(7).fillColor(MUTED).text(s, px, py, { width: sColW });
 });
 
-y += Math.ceil(skills.length / SCOLS) * sRowH + 10;
+y += skillsH + 10;
+y = ensureSpace(y, 20);
 hline(doc, y);
 y += 10;
 
 // ── Education ─────────────────────────────────────────────────────────────────
+y = ensureSpace(y, 13 + 28);
 y = sectionLabel(doc, "Education", y);
 
 for (const edu of education) {
   const entryH = 22;
+  y = ensureSpace(y, entryH + 6);
   accentBar(doc, M, y, entryH - 2);
 
   doc.font("Courier-Bold").fontSize(8).fillColor(FG)
@@ -223,10 +296,12 @@ for (const edu of education) {
   y += entryH + 6;
 }
 
+y = ensureSpace(y, 20);
 hline(doc, y);
 y += 10;
 
 // ── Contact ───────────────────────────────────────────────────────────────────
+y = ensureSpace(y, 13 + 22);
 y = sectionLabel(doc, "Contact", y);
 
 const LCOLS = links.length;
@@ -240,17 +315,23 @@ links.forEach((lnk, i) => {
      .text(lnk.value, px, y + 9, { width: lColW });
 });
 
-y += 26;
+// ── Footer (every page) ───────────────────────────────────────────────────────
+const { start, count } = doc.bufferedPageRange();
 
-// ── Footer ────────────────────────────────────────────────────────────────────
-hline(doc, y);
-y += 7;
-doc.font("Courier").fontSize(6).fillColor(DIM)
-   .text(
-     `${profile.url}  ·  BUILD.FUN.FREE  ·  ${profile.location}`,
-     M, y, { width: CW, align: "center", characterSpacing: 1 }
-   );
+for (let i = start; i < start + count; i += 1) {
+  doc.switchToPage(i);
+  const fy = PH - M - FOOTER_H + 6;
+  hline(doc, fy);
+  doc.font("Courier").fontSize(6).fillColor(DIM)
+     .text(
+       count > 1
+         ? `${profile.url}  ·  BUILD.FUN.FREE  ·  ${profile.location}  ·  ${i - start + 1}/${count}`
+         : `${profile.url}  ·  BUILD.FUN.FREE  ·  ${profile.location}`,
+       M, fy + 7, { width: CW, align: "center", characterSpacing: 1 }
+     );
+}
 
+doc.flushPages();
 doc.end();
 await finished;
-console.log(`✓  PDF written → ${OUT}`);
+console.log(`✓  PDF written → ${OUT} (${count} page${count > 1 ? "s" : ""})`);
