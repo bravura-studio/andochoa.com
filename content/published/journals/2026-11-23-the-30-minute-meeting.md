@@ -3,7 +3,7 @@ title: "The 30-Minute Meeting"
 date: "2026-11-23"
 type: reflection
 description: "She asked for the meeting. Then moved it three times. What a half-hour actually measures."
-status: draft
+status: published
 deep_dive_date: "2026-11-23"
 word_count: 410
 ---
